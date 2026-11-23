@@ -45,7 +45,8 @@ public class ProjectorRenderer implements BlockEntityRenderer<ProjectorBlockEnti
 		pose.translate(0, 2.0F, 1.0F);
 		pose.scale(1.0F, -1.0F, -1.0F);
 		pose.translate(0.5F, 0.5F, 0.5F);
-		body.renderAll(pose, buf.getBuffer(net.minecraft.client.renderer.RenderType.entityCutout(TEX)), light, overlay, tile, null, 180-dir.toYRot(), 0);
+		if (!reika.rotarycraft.client.OriginalModels.renderFacing("projector", tile.hasLevel() ? tile.getBlockMetadata() : 0, tile.hasLevel(), pose, buf, light, overlay)) //private original-models pack
+			body.renderAll(pose, buf.getBuffer(net.minecraft.client.renderer.RenderType.entityCutout(TEX)), light, overlay, tile, null, 180-dir.toYRot(), 0);
 		pose.popPose();
 		if (!tile.canShow() || tile.getLevel() == null)
 			return;

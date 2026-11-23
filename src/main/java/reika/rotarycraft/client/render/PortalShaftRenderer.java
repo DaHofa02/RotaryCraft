@@ -33,6 +33,10 @@ public class PortalShaftRenderer extends MachineRenderer<PortalShaftBlockEntity>
 		pose.scale(1.0F, -1.0F, -1.0F);
 		pose.translate(0.5F, 0.5F, 0.5F);
 		int meta = tile.hasLevel() ? tile.getBlockMetadata() : 2;
+		if (reika.rotarycraft.client.OriginalModels.renderFacing("portal_shaft", meta, tile.hasLevel(), pose, buf, light, overlay)) { //private original-models pack
+			pose.popPose();
+			return;
+		}
 		if (meta < 2) {
 			pose.mulPose(TechneModel.rotation(90, 0, 1, 0));
 		}

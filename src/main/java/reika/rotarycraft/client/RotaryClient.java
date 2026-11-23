@@ -172,6 +172,18 @@ public final class RotaryClient {
 		RotaryModelLayers.register(e);
 	}
 
+	private static <T extends net.minecraft.world.level.block.entity.BlockEntity> void originalOnly(EntityRenderersEvent.RegisterRenderers e,
+			net.minecraft.world.level.block.entity.BlockEntityType<T> type) {
+		String id = net.minecraft.core.registries.BuiltInRegistries.BLOCK_ENTITY_TYPE.getKey(type).getPath();
+		e.registerBlockEntityRenderer(type, ctx -> new reika.rotarycraft.client.render.OriginalModelRenderer<>(id, null));
+	}
+
+	/** The optional private original-models pack is read on every resource reload. */
+	@SubscribeEvent
+	public static void reloadListeners(net.neoforged.neoforge.client.event.RegisterClientReloadListenersEvent e) {
+		e.registerReloadListener(OriginalModels.INSTANCE);
+	}
+
 	@SubscribeEvent
 	public static void renderers(EntityRenderersEvent.RegisterRenderers e) {
 		e.registerBlockEntityRenderer(RotaryBlockEntities.SHAFT.get(), ctx -> new IORenderer<>(new ShaftRenderer(ctx)));
@@ -224,7 +236,13 @@ public final class RotaryClient {
 		e.registerBlockEntityRenderer(RotaryBlockEntities.AIR_COMPRESSOR.get(), ctx -> new IORenderer<>(new reika.rotarycraft.client.render.ConverterRenderer<>(ctx, "air_compressor")));
 		e.registerBlockEntityRenderer(RotaryBlockEntities.PNEUMATIC_ENGINE.get(), ctx -> new IORenderer<>(new reika.rotarycraft.client.render.ConverterRenderer<>(ctx, "pneumatic_engine")));
 		e.registerBlockEntityRenderer(RotaryBlockEntities.FORCE_FIELD.get(), ctx -> new reika.rotarycraft.client.render.DomeRenderer<>(ctx, 0x2a50a0ff));
-		e.registerBlockEntityRenderer(RotaryBlockEntities.CONTAINMENT.get(), ctx -> new reika.rotarycraft.client.render.DomeRenderer<>(ctx, 0x2aff4060));
+		e.registerBlockEntityRenderer(RotaryBlockEntities.CONTAINMENT.get(), ctx -> new reika.rotarycraft.client.render.OriginalModelRenderer<>("containment",
+				new reika.rotarycraft.client.render.DomeRenderer<>(ctx, 0x2aff4060)));
+		//cubes in the port, models in the original: drawn only with the private original-models pack (OriginalModels)
+		for (var t : java.util.List.of(RotaryBlockEntities.TNT_CANNON, RotaryBlockEntities.BLOCK_CANNON, RotaryBlockEntities.SONIC_WEAPON, RotaryBlockEntities.RAILGUN,
+				RotaryBlockEntities.FREEZE_GUN, RotaryBlockEntities.LASER_GUN, RotaryBlockEntities.LANDMINE, RotaryBlockEntities.EMP, RotaryBlockEntities.AIR_GUN,
+				RotaryBlockEntities.DISTILLERY, RotaryBlockEntities.FLAME_TURRET, RotaryBlockEntities.ANTI_AIR_GUN, RotaryBlockEntities.MULTI_CANNON, RotaryBlockEntities.BOILER))
+			originalOnly(e, t.get());
 		e.registerBlockEntityRenderer(RotaryBlockEntities.PILE_DRIVER.get(), ctx -> new IORenderer<>(new reika.rotarycraft.client.render.PileDriverRenderer(ctx)));
 		e.registerBlockEntityRenderer(RotaryBlockEntities.SONIC_BORER.get(), ctx -> new IORenderer<>(new reika.rotarycraft.client.render.SonicBorerRenderer(ctx)));
 		e.registerBlockEntityRenderer(RotaryBlockEntities.SPY_CAM.get(), ctx -> new IORenderer<>(new reika.rotarycraft.client.render.SpyCamRenderer(ctx)));

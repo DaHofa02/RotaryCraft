@@ -19,11 +19,13 @@ import reika.rotarycraft.content.blockentity.RotaryCraftBlockEntity;
 public class ConverterRenderer<T extends RotaryCraftBlockEntity> extends MachineRenderer<T> {
 
 	private final ResourceLocation texture;
+	private final String name;
 	private final ModelConverter model;
 
 	public ConverterRenderer(BlockEntityRendererProvider.Context ctx, String name) {
 		model = new ModelConverter(ctx.bakeLayer(RotaryModelLayers.CONVERTER));
 		texture = ResourceLocation.fromNamespaceAndPath(RotaryCraft.MOD_ID, "textures/machine/own/"+name+".png");
+		this.name = name;
 	}
 
 	@Override
@@ -33,6 +35,10 @@ public class ConverterRenderer<T extends RotaryCraftBlockEntity> extends Machine
 		pose.scale(1.0F, -1.0F, -1.0F);
 		pose.translate(0.5F, 0.5F, 0.5F);
 		int meta = tile.hasLevel() ? tile.getBlockMetadata()%4 : 0;
+		if (reika.rotarycraft.client.OriginalModels.renderFacing(name, meta, tile.hasLevel(), pose, buf, light, overlay)) { //private original-models pack
+			pose.popPose();
+			return;
+		}
 		if (meta != 0)
 			pose.mulPose(TechneModel.rotation(meta == 1 ? 180 : meta == 2 ? 90 : 270, 0, 1, 0));
 		model.renderAll(pose, consumer(buf, texture), light, overlay, tile, null, tile.phi, 0);

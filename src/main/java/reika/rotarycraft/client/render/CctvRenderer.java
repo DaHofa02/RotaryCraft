@@ -31,7 +31,8 @@ public class CctvRenderer extends MachineRenderer<CctvBlockEntity> {
 		pose.translate(0, 2.0F, 1.0F);
 		pose.scale(1.0F, -1.0F, -1.0F);
 		pose.translate(0.5F, 0.5F, 0.5F);
-		model.renderAll(pose, consumer(buf, TEX), light, overlay, tile, null, 180-tile.yaw, -tile.theta);
+		if (!reika.rotarycraft.client.OriginalModels.renderFacing("cctv", 0, tile.hasLevel(), pose, buf, light, overlay)) //private original-models pack
+			model.renderAll(pose, consumer(buf, TEX), light, overlay, tile, null, 180-tile.yaw, -tile.theta);
 		pose.popPose();
 	}
 }

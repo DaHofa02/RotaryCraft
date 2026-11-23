@@ -38,6 +38,11 @@ public class AdvancedGearRenderer extends MachineRenderer<AdvancedGearBlockEntit
 		pose.translate(0, 2.0F, 1.0F);
 		pose.scale(1.0F, -1.0F, -1.0F);
 		pose.translate(0.5F, 0.5F, 0.5F);
+		String original = switch (tile.kind) { case WORM -> "worm_gear"; case HIGH -> "high_gear"; case COIL -> "industrial_coil"; case BEDROCK_COIL -> "bedrock_coil"; case CVT -> "cvt"; };
+		if (reika.rotarycraft.client.OriginalModels.renderFacing(original, tile.getBlockMetadata(), tile.hasLevel(), pose, buf, light, overlay)) { //private original-models pack
+			pose.popPose();
+			return;
+		}
 		if (tile.hasLevel() && tile.getBlockMetadata()%4 >= 2)
 			pose.mulPose(TechneModel.rotation(90, 0, 1, 0));
 		model.renderAll(pose, consumer(buf, switch (tile.kind) { case WORM -> WORM; case HIGH -> HIGH; case COIL -> COIL; case BEDROCK_COIL -> BEDROCK_COIL; case CVT -> CVT; }), light, overlay, tile, null, tile.phi, 0);
