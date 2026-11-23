@@ -81,6 +81,15 @@ public class WorktableMenu extends AbstractContainerMenu {
 		}
 	}
 
+	/** Button 0: switch the automation between grid slots and ME pattern mode (own addition). */
+	@Override
+	public boolean clickMenuButton(Player player, int id) {
+		if (id != 0)
+			return false;
+		tile.togglePatternMode();
+		return true;
+	}
+
 	@Override
 	public boolean stillValid(Player player) {
 		return tile != null && !tile.isRemoved() && tile.isPlayerAccessible(player);

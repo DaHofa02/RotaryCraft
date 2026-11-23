@@ -831,6 +831,26 @@ public class PowerTransmissionTests {
 		});
 	}
 
+	/** The GUI's reasons why a stage stops: power, speed, water, full output; power set by hand (checked within the same tick). */
+	@GameTest(template = PLATFORM, timeoutTicks = 20)
+	public static void extractorReportsWhyStagesStop(GameTestHelper h) {
+		ExtractorBlockEntity ex = place(h, RotaryBlocks.EXTRACTOR.get(), 4, 2, 4, 0, ExtractorBlockEntity.class);
+		ex.getInventory().setStackInSlot(1, rc(CraftingPart.GOLDOREDUST, 1));
+		h.assertTrue(ex.getStageProblem(1) == ExtractorBlockEntity.LOW_POWER, "unpowered: "+ex.getStageProblem(1));
+		ex.omega = 1024;
+		ex.torque = 64;
+		ex.power = 65536;
+		h.assertTrue(ex.getStageProblem(1) == ExtractorBlockEntity.LOW_SPEED, "1024 rad/s: "+ex.getStageProblem(1));
+		ex.omega = 2048;
+		ex.torque = 32;
+		h.assertTrue(ex.getStageProblem(1) == ExtractorBlockEntity.NO_WATER, "dry: "+ex.getStageProblem(1));
+		ex.addWater(1000);
+		h.assertTrue(ex.getStageProblem(1) == ExtractorBlockEntity.RUNNING, "with water: "+ex.getStageProblem(1));
+		ex.getInventory().setStackInSlot(5, rc(CraftingPart.GOLDORESLURRY, 63));
+		h.assertTrue(ex.getStageProblem(1) == ExtractorBlockEntity.OUTPUT_FULL, "full output: "+ex.getStageProblem(1));
+		h.succeed();
+	}
+
 	/** Not enough torque for stage 1 with the gas engine alone (128 Nm < 512 Nm). */
 	@GameTest(template = PLATFORM, timeoutTicks = 700)
 	public static void extractorNeedsTorque(GameTestHelper h) {
@@ -838,6 +858,8 @@ public class PowerTransmissionTests {
 		ex.getInventory().setStackInSlot(0, new ItemStack(Items.IRON_ORE));
 		h.runAtTickTime(650, () -> {
 			h.assertTrue(ex.getInventory().getStackInSlot(0).is(Items.IRON_ORE) && ex.getCookTime(0) == 0, "stage 1 ran at "+ex.torque+" Nm");
+			h.assertTrue(ex.getStageProblem(0) == ExtractorBlockEntity.LOW_TORQUE && ex.getStageProblem(1) == ExtractorBlockEntity.NO_INPUT,
+					"reasons "+ex.getStageProblem(0)+", "+ex.getStageProblem(1));
 			h.succeed();
 		});
 	}

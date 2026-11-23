@@ -55,6 +55,42 @@ public class ExtractorScreen extends AbstractContainerScreen<ExtractorMenu> {
 		//drill type marker (original foreground layer)
 		g.blit(t, j+10, k+33, ext.isBedrock() ? 190 : 182, 142, 7, 18);
 		this.drawPowerTab(g, j, k);
+		this.drawStatusPanel(g, j, k);
+	}
+
+	private static final int PANEL_W = 130;
+
+	/** Own addition: a panel left of the GUI with the water level and, per stage, its progress and why it is not running. */
+	private void drawStatusPanel(GuiGraphics g, int j, int k) {
+		ExtractorBlockEntity ext = menu.tile;
+		int x = j-PANEL_W-2, y = k+4;
+		g.fill(x, y, x+PANEL_W, y+104, 0xff373737);
+		g.fill(x+1, y+1, x+PANEL_W-1, y+103, 0xffc6c6c6);
+		int water = ext.getWater();
+		g.drawString(font, Component.translatable("gui.rotarycraft.extractor.water", String.format(java.util.Locale.ROOT, "%,d", water),
+				String.format(java.util.Locale.ROOT, "%,d", ExtractorBlockEntity.CAPACITY)), x+4, y+5, water > 0 ? 0xff404040 : 0xffa02020, false);
+		for (int i = 0; i < 4; i++) {
+			int ly = y+18+i*21;
+			int problem = ext.getSyncedStageProblem(i);
+			g.drawString(font, Component.translatable("gui.rotarycraft.extractor.stage."+i), x+4, ly, 0xff202020, false);
+			int n = ext.getNumberConsecutiveOperations(i);
+			String pct = problem != ExtractorBlockEntity.RUNNING ? "" : n > 1 ? n+"\u00d7/t" : Math.round(ext.getStageProgress(i)*100)+" %";
+			g.drawString(font, pct, x+PANEL_W-4-font.width(pct), ly, 0xff202020, false);
+			if (problem == ExtractorBlockEntity.RUNNING) { //progress bar under the name
+				g.fill(x+4, ly+10, x+PANEL_W-4, ly+12, 0xff8b8b8b);
+				g.fill(x+4, ly+10, x+4+(int)((PANEL_W-8)*(n > 1 ? 1 : ext.getStageProgress(i))), ly+12, 0xff30a030);
+			}
+			else {
+				Object need = switch (problem) {
+					case ExtractorBlockEntity.LOW_POWER -> String.format(java.util.Locale.ROOT, "%,d", ExtractorBlockEntity.MIN_POWER[i]);
+					case ExtractorBlockEntity.LOW_SPEED -> String.format(java.util.Locale.ROOT, "%,d", ExtractorBlockEntity.MIN_SPEED[i]);
+					case ExtractorBlockEntity.LOW_TORQUE -> String.format(java.util.Locale.ROOT, "%,d", ExtractorBlockEntity.MIN_TORQUE[i]);
+					default -> "";
+				};
+				g.drawString(font, Component.translatable("gui.rotarycraft.extractor.problem."+problem, need), x+4, ly+10,
+						problem == ExtractorBlockEntity.NO_INPUT ? 0xff606060 : 0xffa02020, false);
+			}
+		}
 	}
 
 	/** Original GuiExtractor.drawPowerTab. */

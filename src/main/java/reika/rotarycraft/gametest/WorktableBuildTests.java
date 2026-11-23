@@ -100,4 +100,58 @@ public class WorktableBuildTests {
 		p.leave();
 		h.succeed();
 	}
+
+	private static net.minecraft.world.item.ItemStack rcItem(String id, int n) {
+		return new net.minecraft.world.item.ItemStack(net.minecraft.core.registries.BuiltInRegistries.ITEM.get(
+				net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(RotaryCraft.MOD_ID, id)), n);
+	}
+
+	/** Puts stacks in like an AE2 pattern provider: each into the first slots that take it, equal items merged. */
+	private static net.neoforged.neoforge.items.IItemHandler patternWorktable(GameTestHelper h, BlockPos at, Direction from) {
+		h.setBlock(at, RotaryBlocks.WORKTABLE.get());
+		var te = (reika.rotarycraft.content.blockentity.WorktableBlockEntity)h.getBlockEntity(at);
+		te.togglePatternMode();
+		h.assertTrue(te.isPatternMode(), "pattern mode not on");
+		return h.getLevel().getCapability(net.neoforged.neoforge.capabilities.Capabilities.ItemHandler.BLOCK, h.absolutePos(at), from);
+	}
+
+	/**
+	 * ME pattern mode (own addition): the heater's ingredients put in from the west in any order (4 steel ingots as one stack) are laid out
+	 * and crafted; the heater goes back west into the chest standing there.
+	 */
+	@GameTest(template = PLATFORM, timeoutTicks = 40)
+	public static void worktablePatternModeCraftsUnorderedInput(GameTestHelper h) {
+		BlockPos table = new BlockPos(4, 1, 4), chest = table.west();
+		h.setBlock(chest, Blocks.CHEST);
+		var in = patternWorktable(h, table, Direction.WEST);
+		for (var is : new net.minecraft.world.item.ItemStack[] {rcItem("combustor", 1), rcItem("steelingot", 4), rcItem("basepanel", 2),
+				new net.minecraft.world.item.ItemStack(Items.IRON_BARS), rcItem("tungsteningot", 1)})
+			h.assertTrue(net.neoforged.neoforge.items.ItemHandlerHelper.insertItemStacked(in, is, false).isEmpty(), "not taken: "+is);
+		h.succeedWhen(() -> {
+			var box = (net.minecraft.world.level.block.entity.ChestBlockEntity)h.getBlockEntity(chest);
+			int heaters = 0;
+			for (int i = 0; i < box.getContainerSize(); i++)
+				if (box.getItem(i).is(rcItem("heater", 1).getItem()))
+					heaters += box.getItem(i).getCount();
+			h.assertTrue(heaters == 1, "heaters in the chest: "+heaters);
+			for (int i = 0; i < 18; i++)
+				h.assertTrue(in.getStackInSlot(i).isEmpty(), "left in slot "+i+": "+in.getStackInSlot(i));
+		});
+	}
+
+	/** Items that are no recipe are moved into the grid, where the player sees them, instead of blocking the buffer for good. */
+	@GameTest(template = PLATFORM, timeoutTicks = 20)
+	public static void worktablePatternModeHandsBackNonRecipes(GameTestHelper h) {
+		BlockPos table = new BlockPos(4, 1, 4);
+		var in = patternWorktable(h, table, Direction.NORTH);
+		net.neoforged.neoforge.items.ItemHandlerHelper.insertItemStacked(in, new net.minecraft.world.item.ItemStack(Items.DIRT, 3), false);
+		var te = (reika.rotarycraft.content.blockentity.WorktableBlockEntity)h.getBlockEntity(table);
+		h.succeedWhen(() -> {
+			int dirt = 0;
+			for (int i = 0; i < 9; i++)
+				if (te.getInventory().getStackInSlot(i).is(Items.DIRT))
+					dirt += te.getInventory().getStackInSlot(i).getCount();
+			h.assertTrue(dirt == 3, "dirt in the grid: "+dirt);
+		});
+	}
 }

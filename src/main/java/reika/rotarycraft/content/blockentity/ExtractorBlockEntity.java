@@ -217,47 +217,72 @@ public class ExtractorBlockEntity extends PowerReceiverBlockEntity {
 	}
 
 	private boolean canProcess(int i) {
-		if (power < MIN_POWER[i] || omega < MIN_SPEED[i] || torque < MIN_TORQUE[i])
-			return false;
+		return this.getStageProblem(i) == RUNNING;
+	}
 
-		if (i == 0 && !bedrock && drillTime <= 0 && RotaryConfig.EXTRACTORMAINTAIN.get())
-			return false;
+	/** Why a stage does not run, for the GUI (not in the original, whose canProcess only said yes or no). */
+	public static final int RUNNING = 0, NO_INPUT = 1, LOW_POWER = 2, LOW_SPEED = 3, LOW_TORQUE = 4, NO_WATER = 5, OUTPUT_FULL = 6,
+			DRILL_WORN = 7, BONUS_FULL = 8, WRONG_ITEM = 9;
 
-		if ((i == 1 || i == 2) && tank.isEmpty())
-			return false;
-
+	/** The original canProcess checks, in the original order apart from an empty input, which is reported first. */
+	public int getStageProblem(int i) {
 		ItemStack in = inv.getStackInSlot(i);
 		if (in.isEmpty())
-			return false;
+			return NO_INPUT;
+		if (power < MIN_POWER[i])
+			return LOW_POWER;
+		if (omega < MIN_SPEED[i])
+			return LOW_SPEED;
+		if (torque < MIN_TORQUE[i])
+			return LOW_TORQUE;
+
+		if (i == 0 && !bedrock && drillTime <= 0 && RotaryConfig.EXTRACTORMAINTAIN.get())
+			return DRILL_WORN;
+
+		if ((i == 1 || i == 2) && tank.isEmpty())
+			return NO_WATER;
+
 		ItemStack out = inv.getStackInSlot(i+4);
 		if (!out.isEmpty() && out.getCount()+1 >= out.getMaxStackSize())
-			return false;
+			return OUTPUT_FULL;
 		ItemStack b = inv.getStackInSlot(8);
 		if (!b.isEmpty()) {
 			if (b.getCount()+1 > b.getMaxStackSize())
-				return false;
+				return BONUS_FULL;
 			if (!inv.getStackInSlot(3).isEmpty()) {
 				Bonus bonus = Bonus.getBonusForIngredient(inv.getStackInSlot(3));
 				if (bonus != null) {
 					if (!ItemStack.isSameItemSameComponents(bonus.getBonusItem(), b))
-						return false;
+						return BONUS_FULL;
 				}
 			}
 		}
 		Ore ore = ExtractorOres.getOre(in);
 		if (ore == null)
-			return false;
+			return WRONG_ITEM;
 		if (ExtractorOres.getInputStage(in) != i) //original: the slot only accepts its own stage
-			return false;
+			return WRONG_ITEM;
 
 		ItemStack itemstack = ExtractorOres.getExtractionResult(in);
 		if (itemstack.isEmpty())
-			return false;
+			return WRONG_ITEM;
 		if (out.isEmpty())
-			return true;
+			return RUNNING;
 		if (!ItemStack.isSameItem(out, itemstack))
-			return false;
-		return out.getCount() < out.getMaxStackSize();
+			return OUTPUT_FULL;
+		return out.getCount() < out.getMaxStackSize() ? RUNNING : OUTPUT_FULL;
+	}
+
+	/** {@link #getStageProblem} per stage as last synced, for the GUI. */
+	private int[] stageProblems = {NO_INPUT, NO_INPUT, NO_INPUT, NO_INPUT};
+
+	public int getSyncedStageProblem(int stage) {
+		return stageProblems[stage];
+	}
+
+	/** Progress of a stage's current operation, 0 to 1 (against the real operation time, unlike the original's bars). */
+	public double getStageProgress(int stage) {
+		return Math.min(1, extractorCookTime[stage]/(double)this.getOperationTime(stage));
 	}
 
 	private void processItem(int i) {
@@ -417,6 +442,10 @@ public class ExtractorBlockEntity extends PowerReceiverBlockEntity {
 	protected void writeSyncTag(CompoundTag NBT, HolderLookup.Provider registries) {
 		super.writeSyncTag(NBT, registries);
 		NBT.putIntArray("CookTime", extractorCookTime);
+		int[] problems = new int[4];
+		for (int i = 0; i < 4; i++)
+			problems[i] = this.getStageProblem(i);
+		NBT.putIntArray("problems", problems);
 		NBT.putInt("drill", drillTime);
 		NBT.putBoolean("bedrock", bedrock);
 		NBT.put("tank", tank.writeToNBT(registries, new CompoundTag()));
@@ -427,6 +456,9 @@ public class ExtractorBlockEntity extends PowerReceiverBlockEntity {
 		super.readSyncTag(NBT, registries);
 		int[] ct = NBT.getIntArray("CookTime");
 		extractorCookTime = ct.length == 4 ? ct : new int[4];
+		int[] pr = NBT.getIntArray("problems");
+		if (pr.length == 4)
+			stageProblems = pr;
 		drillTime = NBT.getInt("drill");
 		bedrock = NBT.getBoolean("bedrock");
 		tank.readFromNBT(registries, NBT.getCompound("tank"));

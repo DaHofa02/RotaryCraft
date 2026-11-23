@@ -29,6 +29,16 @@ public class WorktableScreen extends AbstractContainerScreen<WorktableMenu> {
 		imageHeight = 166;
 	}
 
+	private net.minecraft.client.gui.components.Button mode;
+
+	@Override
+	protected void init() {
+		super.init();
+		mode = net.minecraft.client.gui.components.Button.builder(Component.empty(), b -> minecraft.gameMode.handleInventoryButtonClick(menu.containerId, 0))
+				.bounds(leftPos+imageWidth-38, topPos+3, 34, 12).build();
+		this.addRenderableWidget(mode);
+	}
+
 	private boolean isReadyToCraft() {
 		for (int i = 9; i < 18; i++)
 			if (menu.slots.get(i).hasItem())
@@ -61,6 +71,9 @@ public class WorktableScreen extends AbstractContainerScreen<WorktableMenu> {
 
 	@Override
 	public void render(GuiGraphics g, int mx, int my, float partial) {
+		boolean me = menu.tile.isPatternMode();
+		mode.setMessage(Component.translatable(me ? "gui.rotarycraft.worktable.mode.me" : "gui.rotarycraft.worktable.mode.grid"));
+		mode.setTooltip(net.minecraft.client.gui.components.Tooltip.create(Component.translatable(me ? "gui.rotarycraft.worktable.mode.me.tip" : "gui.rotarycraft.worktable.mode.grid.tip")));
 		super.render(g, mx, my, partial);
 		this.renderTooltip(g, mx, my);
 	}
