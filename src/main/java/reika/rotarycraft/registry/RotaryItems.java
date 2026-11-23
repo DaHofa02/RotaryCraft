@@ -82,6 +82,8 @@ public final class RotaryItems {
 	public static final DeferredItem<EngineUpgradeItem> UPGRADE_FLUX = ITEMS.register("upgrade_flux", () -> new EngineUpgradeItem(EngineUpgradeItem.Upgrades.FLUX, new Item.Properties()));
 	public static final DeferredItem<EngineUpgradeItem> UPGRADE_LODESTONE = ITEMS.register("upgrade_lodestone", () -> new EngineUpgradeItem(EngineUpgradeItem.Upgrades.LODESTONE, new Item.Properties()));
 	/** The port's own handbook (2026-11-18). */
+	/** Original ItemRegistry.SPAWNER: a mob spawner taken with the bedrock pickaxe. */
+	public static final DeferredItem<reika.rotarycraft.content.item.SpawnerItem> SPAWNER = ITEMS.register("spawner", () -> new reika.rotarycraft.content.item.SpawnerItem(new Item.Properties()));
 	public static final DeferredItem<reika.rotarycraft.content.item.HandbookItem> HANDBOOK = ITEMS.register("handbook", () -> new reika.rotarycraft.content.item.HandbookItem(new Item.Properties()));
 	/** Bedrock tools and armour (2026-11-18, own implementation; see BedrockTools). */
 	public static final net.neoforged.neoforge.registries.DeferredRegister<net.minecraft.world.item.ArmorMaterial> ARMOR_MATERIALS =

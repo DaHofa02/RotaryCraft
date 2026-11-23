@@ -55,6 +55,9 @@ public final class RotaryConfig {
 	public static final ModConfigSpec.BooleanValue ALLOWITEMCANNON;
 	public static final ModConfigSpec.BooleanValue ALLOWCHUNKLOADER;
 	public static final ModConfigSpec.BooleanValue NOMINERS;
+	public static final ModConfigSpec.BooleanValue BEDPICKSPAWNERS;
+	public static final ModConfigSpec.BooleanValue SPAWNERLEAK;
+	public static final ModConfigSpec.BooleanValue HANDBOOK;
 	/** Own additions: conversion to other power systems. */
 	public static final ModConfigSpec.IntValue WATTS_PER_FE;
 	public static final ModConfigSpec.IntValue CREATE_WATTS_PER_SU;
@@ -105,6 +108,9 @@ public final class RotaryConfig {
 		ALLOWITEMCANNON = b.comment("Enable Item Cannon (recipe)").define("allowItemCannon", true);
 		ALLOWCHUNKLOADER = b.comment("Enable Chunk Loader (recipe)").define("allowChunkLoader", true);
 		NOMINERS = b.comment("Disable Automining Machines (borer and sonic borer recipes)").define("noMiners", false);
+		BEDPICKSPAWNERS = b.comment("Allow Bedrock Pickaxe to Harvest Spawners (as a spawner item that keeps its mob)").define("bedrockPickSpawners", true);
+		SPAWNERLEAK = b.comment("Spawn Mobs When Harvesting Spawners By Hand (12-36 of its mobs; the original's default was on)").define("spawnerLeak", false);
+		HANDBOOK = b.comment("Spawn with RC Handbook (once per player, on the first join)").define("handbookOnJoin", true);
 		b.pop();
 		b.push("conversion");
 		WATTS_PER_FE = b.comment("Shaft power (W) per 1 FE a tick: magnetic engine, dynamo, steam turbine, air compressor / pneumatic engine (mL of air)").defineInRange("wattsPerFE", 520, 1, Integer.MAX_VALUE);

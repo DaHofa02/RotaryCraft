@@ -5,6 +5,7 @@
 package reika.rotarycraft.gametest;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.core.Direction;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
@@ -140,6 +141,44 @@ public class BedrockToolTests {
 		axe.getItem().inventoryTick(axe, h.getLevel(), p.player, 1, false);
 		h.assertTrue(axe.getEnchantmentLevel(reg.getOrThrow(Enchantments.SILK_TOUCH)) == 0 && axe.getEnchantmentLevel(reg.getOrThrow(Enchantments.EFFICIENCY)) == 3, "axe silk touch");
 		h.assertTrue(!BedrockTools.force(BedrockTools.withForced(RotaryItems.BEDROCK_SCYTHE.get(), h.getLevel().registryAccess()), h.getLevel().registryAccess()), "scythe changed twice");
+		p.leave();
+		h.succeed();
+	}
+
+	/**
+	 * A spawner mined with the bedrock pickaxe drops as a spawner item that keeps its mob; placed again it is a zombie spawner. An iron
+	 * pickaxe gets nothing from it (vanilla).
+	 */
+	@GameTest(template = PLATFORM, timeoutTicks = 20)
+	public static void bedrockPickaxeTakesSpawners(GameTestHelper h) {
+		BlockPos at = new BlockPos(4, 1, 4), back = new BlockPos(4, 1, 6), other = new BlockPos(2, 1, 4);
+		for (BlockPos q : new BlockPos[] {at, other}) {
+			h.setBlock(q, net.minecraft.world.level.block.Blocks.SPAWNER);
+			((net.minecraft.world.level.block.entity.SpawnerBlockEntity)h.getBlockEntity(q)).setEntityId(net.minecraft.world.entity.EntityType.ZOMBIE, h.getLevel().random);
+		}
+		SimPlayer p = new SimPlayer(h, GameType.SURVIVAL);
+		p.give(RotaryItems.BEDROCK_PICKAXE.get(), 1);
+		p.give(net.minecraft.world.item.Items.IRON_PICKAXE, 1);
+		java.util.List<ItemStack> got = p.mine(at, RotaryItems.BEDROCK_PICKAXE.get());
+		ItemStack sp = got.stream().filter(i -> i.is(RotaryItems.SPAWNER.get())).findFirst().orElse(ItemStack.EMPTY);
+		h.assertTrue(!sp.isEmpty() && reika.rotarycraft.content.item.SpawnerItem.mob(sp).orElse(null) == net.minecraft.world.entity.EntityType.ZOMBIE, "dropped "+got);
+		h.assertTrue(p.mine(other, net.minecraft.world.item.Items.IRON_PICKAXE).stream().noneMatch(i -> i.is(RotaryItems.SPAWNER.get())), "iron pickaxe took a spawner");
+		p.hold(sp);
+		p.useOn(back.below(), net.minecraft.core.Direction.UP);
+		h.assertBlockPresent(net.minecraft.world.level.block.Blocks.SPAWNER, back);
+		CompoundTag data = ((net.minecraft.world.level.block.entity.SpawnerBlockEntity)h.getBlockEntity(back)).getSpawner().save(new CompoundTag());
+		h.assertTrue(data.getCompound("SpawnData").getCompound("entity").getString("id").equals("minecraft:zombie"), "placed spawner "+data);
+		p.leave();
+		h.succeed();
+	}
+
+	/** The handbook on the first join: given once, not again (it is remembered in the player's persisted data). */
+	@GameTest(template = PLATFORM, timeoutTicks = 20)
+	public static void handbookGivenOnceOnJoin(GameTestHelper h) {
+		SimPlayer p = new SimPlayer(h, GameType.SURVIVAL);
+		h.assertTrue(reika.rotarycraft.content.PlayerEvents.giveHandbookOnce(p.player), "no book on the first join");
+		h.assertTrue(!reika.rotarycraft.content.PlayerEvents.giveHandbookOnce(p.player), "a second book");
+		h.assertTrue(p.count(RotaryItems.HANDBOOK.get()) == 1, "books: "+p.count(RotaryItems.HANDBOOK.get()));
 		p.leave();
 		h.succeed();
 	}

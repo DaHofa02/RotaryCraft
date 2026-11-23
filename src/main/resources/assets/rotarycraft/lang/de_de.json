@@ -424,5 +424,8 @@
   "gui.rotarycraft.create.shaft_in": "Welle rein: %s rad/s, %s Nm (%s W)",
   "gui.rotarycraft.create.shaft_out": "Welle raus: %s rad/s, %s Nm (%s W)",
   "gui.rotarycraft.create.load": "Stresslast: %s SU je RPM (Rechtsklick: verdoppeln, Schleichen: halbieren)",
-  "item.rotarycraft.bedrock_bit_chisel": "Grundgestein-Meißel (Chisels & Bits)"
+  "item.rotarycraft.bedrock_bit_chisel": "Grundgestein-Meißel (Chisels & Bits)",
+  "item.rotarycraft.spawner": "Monster-Spawner",
+  "item.rotarycraft.spawner.mob": "Monster-Spawner (%s)",
+  "item.rotarycraft.spawner.desc": "Setzen stellt den Spawner wieder auf"
 }

@@ -433,5 +433,8 @@
   "gui.rotarycraft.create.shaft_in": "Shaft in: %s rad/s, %s Nm (%s W)",
   "gui.rotarycraft.create.shaft_out": "Shaft out: %s rad/s, %s Nm (%s W)",
   "gui.rotarycraft.create.load": "Stress load: %s SU per RPM (right-click: double, sneak: halve)",
-  "item.rotarycraft.bedrock_bit_chisel": "Bedrock Chisel (Chisels & Bits)"
+  "item.rotarycraft.bedrock_bit_chisel": "Bedrock Chisel (Chisels & Bits)",
+  "item.rotarycraft.spawner": "Mob Spawner",
+  "item.rotarycraft.spawner.mob": "Mob Spawner (%s)",
+  "item.rotarycraft.spawner.desc": "Place it to put the spawner back"
 }
