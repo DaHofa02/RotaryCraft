@@ -12,6 +12,8 @@ import net.neoforged.fml.ModList;
 public final class OptionalMods {
 
 	public static final String PNEUMATICCRAFT = "pneumaticcraft";
+	public static final String CREATE = "create";
+	public static final String CHISELS_AND_BITS = "chiselsandbits";
 
 	private OptionalMods() {}
 
@@ -21,5 +23,13 @@ public final class OptionalMods {
 
 	public static boolean pneumaticCraft() {
 		return isLoaded(PNEUMATICCRAFT);
+	}
+
+	public static boolean create() {
+		return isLoaded(CREATE);
+	}
+
+	public static boolean chiselsAndBits() {
+		return isLoaded(CHISELS_AND_BITS);
 	}
 }

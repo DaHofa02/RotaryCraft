@@ -53,6 +53,10 @@ public final class RotaryCraft {
 		RotaryMenus.MENUS.register(modBus);
 		RotaryRecipeTypes.TYPES.register(modBus);
 		RotaryRecipeTypes.SERIALIZERS.register(modBus);
+		if (reika.rotarycraft.compat.OptionalMods.create()) //the Create converters only exist with Create; no Create class is loaded otherwise
+			reika.rotarycraft.compat.create.CreateCompat.register(modBus);
+		if (reika.rotarycraft.compat.OptionalMods.chiselsAndBits())
+			reika.rotarycraft.compat.chisel.ChiselCompat.register(modBus);
 
 		modBus.addListener(this::registerCapabilities);
 		modBus.addListener(RotaryNetwork::register);

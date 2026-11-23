@@ -1,0 +1,19 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "create"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "rotarycraft:create_to_rotary"
+    }
+  ],
+  "result": {
+    "id": "rotarycraft:rotary_to_create",
+    "count": 1
+  }
+}

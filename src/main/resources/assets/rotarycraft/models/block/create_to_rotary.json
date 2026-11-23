@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "particle": "rotarycraft:block/steel",
+    "north": "create:block/andesite_casing",
+    "south": "rotarycraft:block/steel_dark_top",
+    "east": "rotarycraft:block/steel",
+    "west": "rotarycraft:block/steel",
+    "up": "rotarycraft:block/steel",
+    "down": "rotarycraft:block/steel"
+  }
+}

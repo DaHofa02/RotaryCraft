@@ -1,6 +1,39 @@
-// RotaryCraft needs no mod beyond NeoForge. Optional: PneumaticCraft (air compressor, pneumatic engine), compile-time only here.
+// RotaryCraft needs no mod beyond NeoForge. Optional: PneumaticCraft (air compressor, pneumatic engine), Create (SU converters) and
+// Chisels & Bits (bedrock chisel),
+// compile-time only here.
+configurations {
+    createJar { canBeConsumed = false }
+    chiselsBitsJar { canBeConsumed = false }
+}
+
+// Create bundles Ponder, Flywheel and Registrate inside its jar (jar-in-jar); its classes need them to compile against, so they are
+// unpacked from the Create jar onto the compile classpath (nothing of it ends up in RotaryCraft's jar).
+def createJarJar = tasks.register('extractCreateJarJar', Sync) {
+    from({ zipTree(configurations.createJar.singleFile) }) {
+        include 'META-INF/jarjar/*.jar'
+        eachFile { path = name }
+        includeEmptyDirs = false
+    }
+    into layout.buildDirectory.dir('createJarJar')
+}
+
+// Chisels & Bits keeps its classes in two bundled jars (api, core); the same unpacking, without the NeoForge jars it also bundles.
+def chiselsBitsJarJar = tasks.register('extractChiselsBitsJarJar', Sync) {
+    from({ zipTree(configurations.chiselsBitsJar.singleFile) }) {
+        include 'META-INF/jarjar/chisels-and-bits-*.jar'
+        eachFile { path = name }
+        includeEmptyDirs = false
+    }
+    into layout.buildDirectory.dir('chiselsBitsJarJar')
+}
+
 dependencies {
     compileOnly "maven.modrinth:pneumaticcraft-repressurized:${pneumaticcraft_version}"
+    compileOnly "maven.modrinth:create:${create_version}"
+    createJar("maven.modrinth:create:${create_version}") { transitive = false }
+    compileOnly files(createJarJar).asFileTree.matching { include '*.jar' }
+    chiselsBitsJar("curse.maven:chisels-bits-231095:${chiselsbits_file}") { transitive = false }
+    compileOnly files(chiselsBitsJarJar).asFileTree.matching { include '*.jar' }
 }
 
 // Dev-only: starts the client straight into the "showcase" world (see tools/make_showcase.sh) for visual checks.

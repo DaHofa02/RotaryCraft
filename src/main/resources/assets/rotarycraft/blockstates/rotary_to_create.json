@@ -1,0 +1,27 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "rotarycraft:block/rotary_to_create"
+    },
+    "facing=east": {
+      "model": "rotarycraft:block/rotary_to_create",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "rotarycraft:block/rotary_to_create",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "rotarycraft:block/rotary_to_create",
+      "y": 270
+    },
+    "facing=up": {
+      "model": "rotarycraft:block/rotary_to_create",
+      "x": 270
+    },
+    "facing=down": {
+      "model": "rotarycraft:block/rotary_to_create",
+      "x": 90
+    }
+  }
+}

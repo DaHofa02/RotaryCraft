@@ -33,6 +33,12 @@ public final class RotaryConfig {
 	public static final ModConfigSpec.IntValue FANRANGE;
 	public static final ModConfigSpec.IntValue SPILLERRANGE;
 	public static final ModConfigSpec.BooleanValue ATTACKBLOCKS;
+	/** Own additions: conversion to other power systems. */
+	public static final ModConfigSpec.IntValue WATTS_PER_FE;
+	public static final ModConfigSpec.IntValue CREATE_WATTS_PER_SU;
+	public static final ModConfigSpec.DoubleValue CREATE_LOSS;
+	public static final ModConfigSpec.IntValue CREATE_RADS_PER_RPM;
+	public static final ModConfigSpec.IntValue CREATE_MAX_RPM;
 
 	static {
 		ModConfigSpec.Builder b = new ModConfigSpec.Builder();
@@ -55,6 +61,14 @@ public final class RotaryConfig {
 		FANRANGE = b.comment("Max Fan Range").defineInRange("fanRange", 128, 0, Integer.MAX_VALUE);
 		SPILLERRANGE = b.comment("Liquid Spiller Range, Use Zero to Disable").defineInRange("spillerRange", 16, 0, 64);
 		ATTACKBLOCKS = b.comment("Block Damage from Destructive Machines").define("attackBlocks", true);
+		b.push("conversion");
+		WATTS_PER_FE = b.comment("Shaft power (W) per 1 FE a tick: magnetic engine, dynamo, steam turbine, air compressor / pneumatic engine (mL of air)").defineInRange("wattsPerFE", 520, 1, Integer.MAX_VALUE);
+		b.push("create");
+		CREATE_WATTS_PER_SU = b.comment("Shaft power (W) per stress unit (SU) of Create, both converter directions").defineInRange("wattsPerSU", 16, 1, Integer.MAX_VALUE);
+		CREATE_LOSS = b.comment("Share of the power lost in each converter direction").defineInRange("loss", 0.05, 0, 0.99);
+		CREATE_RADS_PER_RPM = b.comment("Shaft speed (rad/s) per Create RPM: RotaryCraft -> Create gives speed/this RPM, Create -> RotaryCraft gives RPM*this rad/s").defineInRange("radsPerRpm", 16, 1, 65536);
+		CREATE_MAX_RPM = b.comment("Highest Create speed (RPM) the RotaryCraft -> Create converter gives").defineInRange("maxRpm", 256, 1, 256);
+		b.pop(2);
 		SPEC = b.build();
 	}
 

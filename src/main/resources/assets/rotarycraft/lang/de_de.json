@@ -417,5 +417,12 @@
   "gui.rotarycraft.worktable.mode.grid": "Raster",
   "gui.rotarycraft.worktable.mode.me": "ME",
   "gui.rotarycraft.worktable.mode.grid.tip": "Automatisierung füllt das Raster Feld für Feld (Trichter, Rohre); Redstone stellt her. Klick für ME-Mustermodus.",
-  "gui.rotarycraft.worktable.mode.me.tip": "ME-Mustermodus: die Zutaten eines Rezepts von beliebiger Seite in beliebiger Reihenfolge einlegen (AE2-Musteranbieter mit Verarbeitungsmuster). Die Werkbank ordnet sie an, stellt her und gibt das Ergebnis an diese Seite zurück. Klick für Rastermodus."
+  "gui.rotarycraft.worktable.mode.me.tip": "ME-Mustermodus: die Zutaten eines Rezepts von beliebiger Seite in beliebiger Reihenfolge einlegen (AE2-Musteranbieter mit Verarbeitungsmuster). Die Werkbank ordnet sie an, stellt her und gibt das Ergebnis an diese Seite zurück. Klick für Rastermodus.",
+  "block.rotarycraft.rotary_to_create": "Wellenleistung-zu-Stress-Wandler",
+  "block.rotarycraft.create_to_rotary": "Stress-zu-Wellenleistung-Wandler",
+  "message.rotarycraft.create_to_rotary.impact": "Stresslast: %s SU je RPM",
+  "gui.rotarycraft.create.shaft_in": "Welle rein: %s rad/s, %s Nm (%s W)",
+  "gui.rotarycraft.create.shaft_out": "Welle raus: %s rad/s, %s Nm (%s W)",
+  "gui.rotarycraft.create.load": "Stresslast: %s SU je RPM (Rechtsklick: verdoppeln, Schleichen: halbieren)",
+  "item.rotarycraft.bedrock_bit_chisel": "Grundgestein-Meißel (Chisels & Bits)"
 }

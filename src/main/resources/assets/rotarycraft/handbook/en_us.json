@@ -60,7 +60,7 @@
     },
     {
      "id": "magnetic_engine",
-     "text": "Turns Forge Energy (FE) at its back into shaft power. Six tiers (magnet upgrades) from 8 Nm up to 8192 Nm; choose the speed in its GUI. It heats up with power; liquid nitrogen keeps it cool, without it it explodes at 500 C. 520 W of shaft power per FE a tick."
+     "text": "Turns Forge Energy (FE) at its back into shaft power. Six tiers (magnet upgrades) from 8 Nm up to 8192 Nm; choose the speed in its GUI. It heats up with power; liquid nitrogen keeps it cool, without it it explodes at 500 C. 520 W of shaft power per FE a tick (config: wattsPerFE)."
     },
     {
      "id": "fuel_engine",
@@ -356,7 +356,15 @@
     },
     {
      "id": "air_compressor",
-     "text": "Needs PneumaticCraft. Pumps shaft power as compressed air into the PneumaticCraft machine in front, 1 mL per 520 W a tick."
+     "text": "Needs PneumaticCraft. Pumps shaft power as compressed air into the PneumaticCraft machine in front, 1 mL per 520 W a tick (config: wattsPerFE)."
+    },
+    {
+     "id": "rotary_to_create",
+     "text": "Needs Create. Shaft power goes in at its back (steel side), a Create shaft turns at its front (casing side): speed/16 RPM, at most 256 RPM, with a stress capacity of power/16 W less 5 % SU. Ratio, loss and speed mapping are in the config (conversion.create)."
+    },
+    {
+     "id": "create_to_rotary",
+     "text": "Needs Create. A Create shaft drives it at the casing side; it takes a stress load you choose (right-click doubles it, sneak-right-click halves it, 1 to 1024 SU per RPM) and gives shaft power at the steel side: RPM*16 rad/s and load*RPM*16 W less 5 %. Overstressed, it stops."
     }
    ]
   },

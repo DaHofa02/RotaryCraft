@@ -102,6 +102,7 @@ class ResourceCompletenessTest {
 		known.add("handbook");
 		known.addAll(List.of("bedrock_pickaxe", "bedrock_axe", "bedrock_shovel", "bedrock_sword", "bedrock_hoe", "bedrock_shears", "bedrock_scythe", "bedrock_paxel", "bedrock_helmet", "bedrock_chestplate", "bedrock_leggings", "bedrock_boots"));
 		known.addAll(List.of("gear_upgrade_2", "gear_upgrade_4", "gear_upgrade_8", "gear_upgrade_16")); //models with fill overrides, no own texture
+		known.addAll(List.of("rotary_to_create", "create_to_rotary", "bedrock_bit_chisel")); //optional (Create, Chisels & Bits), registered in compat/
 		Pattern p = Pattern.compile("\"(?:item|id)\"\\s*:\\s*\"rotarycraft:([a-z0-9_]+)\"");
 		List<String> bad = new ArrayList<>();
 		int count = 0;

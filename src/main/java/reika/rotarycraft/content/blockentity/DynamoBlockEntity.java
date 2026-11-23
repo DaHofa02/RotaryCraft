@@ -54,7 +54,7 @@ public class DynamoBlockEntity extends PowerReceiverBlockEntity implements Upgra
 	public int getGeneratedFE() {
 		long tq = Math.min(torque, upgraded ? MAXTORQUE_UPGRADE : MAXTORQUE);
 		long om = Math.min(omega, MAXOMEGA);
-		return (int)(tq*om/MagneticEngineBlockEntity.WATTS_PER_FE);
+		return (int)(tq*om/MagneticEngineBlockEntity.wattsPerFE());
 	}
 
 	@Override

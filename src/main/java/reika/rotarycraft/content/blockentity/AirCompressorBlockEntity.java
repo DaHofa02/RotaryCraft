@@ -34,7 +34,7 @@ public class AirCompressorBlockEntity extends PowerReceiverBlockEntity {
 	}
 
 	public int getAirPerTick() {
-		return (int)(power/MagneticEngineBlockEntity.WATTS_PER_FE);
+		return (int)(power/MagneticEngineBlockEntity.wattsPerFE());
 	}
 
 	@Override

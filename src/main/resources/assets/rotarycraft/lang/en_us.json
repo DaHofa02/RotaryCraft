@@ -426,5 +426,12 @@
   "gui.rotarycraft.worktable.mode.grid": "Grid",
   "gui.rotarycraft.worktable.mode.me": "ME",
   "gui.rotarycraft.worktable.mode.grid.tip": "Automation fills the grid slot by slot (hoppers, pipes); redstone crafts. Click for ME pattern mode.",
-  "gui.rotarycraft.worktable.mode.me.tip": "ME pattern mode: put a recipe's ingredients in from any side, in any order (AE2 pattern provider with a processing pattern). The worktable lays them out, crafts, and sends the result back to that side. Click for grid mode."
+  "gui.rotarycraft.worktable.mode.me.tip": "ME pattern mode: put a recipe's ingredients in from any side, in any order (AE2 pattern provider with a processing pattern). The worktable lays them out, crafts, and sends the result back to that side. Click for grid mode.",
+  "block.rotarycraft.rotary_to_create": "Shaft Power to Stress Converter",
+  "block.rotarycraft.create_to_rotary": "Stress to Shaft Power Converter",
+  "message.rotarycraft.create_to_rotary.impact": "Stress load: %s SU per RPM",
+  "gui.rotarycraft.create.shaft_in": "Shaft in: %s rad/s, %s Nm (%s W)",
+  "gui.rotarycraft.create.shaft_out": "Shaft out: %s rad/s, %s Nm (%s W)",
+  "gui.rotarycraft.create.load": "Stress load: %s SU per RPM (right-click: double, sneak: halve)",
+  "item.rotarycraft.bedrock_bit_chisel": "Bedrock Chisel (Chisels & Bits)"
 }

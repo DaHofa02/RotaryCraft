@@ -45,7 +45,13 @@ public class MagneticEngineBlockEntity extends IOMachineBlockEntity implements S
 
 	public static final int TIERS = 6;
 	public static final int MAXTEMP = 500;
+	/** Default of the config value {@link #wattsPerFE()}. */
 	public static final int WATTS_PER_FE = 520;
+
+	/** Shaft power (W) per FE a tick, from the config (default 520). */
+	public static int wattsPerFE() {
+		return reika.rotarycraft.RotaryConfig.WATTS_PER_FE.get();
+	}
 	private static final int[] STORAGE_STEP = {1, 3, 24, 187, 1491, 11925};
 
 	public enum RedstoneMode {
@@ -197,7 +203,7 @@ public class MagneticEngineBlockEntity extends IOMachineBlockEntity implements S
 
 	/** FE per tick at the current speed, after efficiency. */
 	public int getConsumption() {
-		long ideal = (long)this.getTargetSpeed()*torqueOf(tier)/WATTS_PER_FE;
+		long ideal = (long)this.getTargetSpeed()*torqueOf(tier)/wattsPerFE();
 		return (int)Math.ceil(ideal/efficiencyOf(tier, efficient));
 	}
 
