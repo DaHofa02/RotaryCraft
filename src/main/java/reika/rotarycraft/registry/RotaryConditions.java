@@ -43,7 +43,8 @@ public final class RotaryConditions {
 		}
 	}
 
-	/** True when a boolean RotaryCraft option is on. Known options: table_machines ("Crafting Table can Make Machines"), rotate_hose ("Rotate Hose/Pipe/Fuel Line Recipes"). */
+	/** True when a boolean RotaryCraft option is on. Known options: table_machines ("Crafting Table can Make Machines"), rotate_hose ("Rotate Hose/Pipe/Fuel Line Recipes"),
+	 * allow_tnt_cannon, allow_emp, allow_light_bridge, allow_item_cannon, allow_chunk_loader, allow_miners (the machine switches). */
 	public record ConfigCondition(String option) implements ICondition {
 
 		public static final MapCodec<ConfigCondition> CODEC = RecordCodecBuilder.mapCodec(i -> i.group(
@@ -54,6 +55,12 @@ public final class RotaryConditions {
 			return switch (option) {
 				case "table_machines" -> RotaryConfig.TABLEMACHINES.get();
 				case "rotate_hose" -> RotaryConfig.ROTATEHOSE.get();
+				case "allow_tnt_cannon" -> RotaryConfig.ALLOWTNTCANNON.get();
+				case "allow_emp" -> RotaryConfig.ALLOWEMP.get();
+				case "allow_light_bridge" -> RotaryConfig.ALLOWLIGHTBRIDGE.get();
+				case "allow_item_cannon" -> RotaryConfig.ALLOWITEMCANNON.get();
+				case "allow_chunk_loader" -> RotaryConfig.ALLOWCHUNKLOADER.get();
+				case "allow_miners" -> !RotaryConfig.NOMINERS.get();
 				default -> false;
 			};
 		}

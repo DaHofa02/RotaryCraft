@@ -111,7 +111,7 @@ public class BlowerBlockEntity extends PowerReceiverBlockEntity {
 					max -= n;
 				}
 			}
-			else if (tte == null && world.getBlockState(tg).isAir()) {
+			else if (tte == null && world.getBlockState(tg).isAir() && reika.rotarycraft.RotaryConfig.BLOWERSPILL.get()) {
 				ItemStack out = source.extractItem(slot, is.getCount(), false);
 				for (int i = 0; i < out.getCount(); i++) {
 					ItemEntity ei = new ItemEntity(world, tg.getX()+0.5, tg.getY()+0.5, tg.getZ()+0.5, out.copyWithCount(1));

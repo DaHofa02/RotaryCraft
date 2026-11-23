@@ -125,7 +125,7 @@ public class BaitBoxBlockEntity extends PowerReceiverBlockEntity implements net.
 	}
 
 	public int getRange() {
-		return (int)Math.min(MAXRANGE, 8+(power-MINPOWER)/4096);
+		return (int)Math.min(reika.rotarycraft.RotaryConfig.BAITRANGE.get(), 8+(power-MINPOWER)/4096);
 	}
 
 	private boolean has(Predicate<ItemStack> p) {

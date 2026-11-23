@@ -340,6 +340,8 @@ public final class BedrockTools {
 
 	/** Raises the stack's built-in enchantments to their levels (and takes silk touch off the axe); returns whether it changed anything. */
 	public static boolean force(ItemStack is, HolderLookup.Provider reg) {
+		if (!reika.rotarycraft.RotaryConfig.PREENCHANT.get()) //config "Lock enchants on bedrock tools" off
+			return false;
 		HolderLookup.RegistryLookup<Enchantment> lookup = reg.lookupOrThrow(Registries.ENCHANTMENT);
 		ItemEnchantments now = is.getTagEnchantments();
 		Map<ResourceKey<Enchantment>, Integer> want = forced(is.getItem());

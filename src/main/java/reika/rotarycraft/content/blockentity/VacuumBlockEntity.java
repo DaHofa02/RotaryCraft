@@ -77,7 +77,7 @@ public class VacuumBlockEntity extends PowerReceiverBlockEntity implements Screw
 	}
 
 	public int getRange() {
-		return (int)Math.min(8+power/FALLOFF, MAXRANGE);
+		return (int)Math.min(8+power/reika.rotarycraft.RotaryConfig.VACPOWER.get(), reika.rotarycraft.RotaryConfig.VACUUMRANGE.get());
 	}
 
 	@Override

@@ -116,11 +116,12 @@ public class LightBridgeBlockEntity extends PowerReceiverBlockEntity {
 	}
 
 	public int getRange() {
-		return (int)Math.min(DISTANCE_LIMIT, power*DISTANCE_LIMIT/MIN_POWER);
+		int limit = reika.rotarycraft.RotaryConfig.BRIDGERANGE.get();
+		return (int)Math.min(limit, power*limit/MIN_POWER);
 	}
 
 	public int getMaxRange() {
-		return DISTANCE_LIMIT;
+		return reika.rotarycraft.RotaryConfig.BRIDGERANGE.get();
 	}
 
 	/** Original BreakAction.breakBlock. */

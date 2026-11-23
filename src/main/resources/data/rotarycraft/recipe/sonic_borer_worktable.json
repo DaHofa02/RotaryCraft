@@ -26,5 +26,11 @@
   "result": {
     "id": "rotarycraft:sonic_borer",
     "count": 1
-  }
+  },
+  "neoforge:conditions": [
+    {
+      "type": "rotarycraft:config",
+      "option": "allow_miners"
+    }
+  ]
 }

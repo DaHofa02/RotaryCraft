@@ -98,7 +98,7 @@ public abstract class TurretBlockEntity extends PowerReceiverBlockEntity {
 		if (!e.isAlive())
 			return false;
 		if (e instanceof Player p)
-			return targetPlayers && !p.isCreative() && !p.isSpectator() && !p.getUUID().equals(this.getPlacerUUID());
+			return targetPlayers && reika.rotarycraft.RotaryConfig.TURRETPLAYERS.get() && !p.isCreative() && !p.isSpectator() && !p.getUUID().equals(this.getPlacerUUID());
 		return e instanceof Enemy;
 	}
 

@@ -162,7 +162,7 @@ public class FloodlightBlockEntity extends PowerReceiverBlockEntity implements U
 	}
 
 	public int getMaxRange() {
-		return fresnel ? FRESNEL_RANGE : MAX_RANGE;
+		return fresnel ? FRESNEL_RANGE : reika.rotarycraft.RotaryConfig.FLOODLIGHTRANGE.get();
 	}
 
 	public static boolean isLens(ItemStack is) {

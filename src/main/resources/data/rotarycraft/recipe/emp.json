@@ -31,6 +31,10 @@
     {
       "type": "rotarycraft:config",
       "option": "table_machines"
+    },
+    {
+      "type": "rotarycraft:config",
+      "option": "allow_emp"
     }
   ]
 }

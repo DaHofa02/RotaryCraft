@@ -26,5 +26,11 @@
   "result": {
     "id": "rotarycraft:item_cannon",
     "count": 1
-  }
+  },
+  "neoforge:conditions": [
+    {
+      "type": "rotarycraft:config",
+      "option": "allow_item_cannon"
+    }
+  ]
 }

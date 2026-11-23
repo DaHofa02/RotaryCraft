@@ -34,7 +34,7 @@ public abstract class DomeBlockEntity extends PowerReceiverBlockEntity {
 
 	/** Range from the power alone. */
 	public int getPowerRange() {
-		return power < MINPOWER ? 0 : (int)Math.min(MAX_RANGE, 2+(power-MINPOWER)/falloff);
+		return power < MINPOWER ? 0 : (int)Math.min(reika.rotarycraft.RotaryConfig.FORCERANGE.get(), 2+(power-MINPOWER)/falloff);
 	}
 
 	public int getRange() {

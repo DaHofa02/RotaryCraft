@@ -34,7 +34,7 @@ import reika.rotarycraft.registry.RotaryItems;
  * cooldown has run out it looks at its 18 slots: sawdust clears the sky, silver iodide brings rain, silver iodide with redstone a
  * thunderstorm and silver iodide with glowstone dust a superstorm (thunder with a lightning strike 1 tick in 20 somewhere within 64 blocks).
  * If the weather is not already as wanted, the items are used up (fired into the sky with a bang) and the cooldown is set to 200-599 ticks.
- * Changes: the BANRAIN config and the WeatherControlEvent are left out; the ore dictionary's "dustWood" is just the port's sawdust.
+ * Changes: the WeatherControlEvent is left out (the BANRAIN option is the config banRain); the ore dictionary's "dustWood" is just the port's sawdust.
  */
 public class WeatherControllerBlockEntity extends PowerReceiverBlockEntity {
 
@@ -176,7 +176,7 @@ public class WeatherControllerBlockEntity extends PowerReceiverBlockEntity {
 			mode = RainMode.SUN;
 			is = sawdust();
 		}
-		else if (silverio) {
+		else if (silverio && !reika.rotarycraft.RotaryConfig.BANRAIN.get()) { //config banRain: silver iodide does nothing
 			mode = RainMode.RAIN;
 			is = silverIodide();
 			if (redstone) {

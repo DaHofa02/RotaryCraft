@@ -1,10 +1,4 @@
 {
-  "neoforge:conditions": [
-    {
-      "type": "neoforge:mod_loaded",
-      "modid": "chiselsandbits"
-    }
-  ],
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "pattern": [
@@ -22,5 +16,11 @@
   "result": {
     "id": "rotarycraft:bedrock_bit_chisel",
     "count": 1
-  }
+  },
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "chiselsandbits"
+    }
+  ]
 }

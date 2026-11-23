@@ -107,7 +107,7 @@ public class PlayerDetectorBlockEntity extends PowerReceiverBlockEntity {
 	}
 
 	public int getMaxRange() {
-		return (int)Math.min(power/FALLOFF, MAX_RANGE);
+		return (int)Math.min(power/FALLOFF, reika.rotarycraft.RotaryConfig.DETECTORRANGE.get());
 	}
 
 	/** Original PacketRegistry.DETECTOR: the range typed into the GUI (up to three digits). */

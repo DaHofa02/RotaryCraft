@@ -122,7 +122,7 @@ public class BeamMirrorBlockEntity extends RotaryCraftBlockEntity {
 		int time = (int)(level.getDayTime()%24000);
 		if (time > 13500 && time < 22500)
 			return 0;
-		int ir = Math.min(MAXRANGE, (int)ReikaMathLibrary.doubpow(2, 7*AmbientTemperature.getSunIntensity(level, true, 0)));
+		int ir = Math.min(reika.rotarycraft.RotaryConfig.FLOODLIGHTRANGE.get(), (int)ReikaMathLibrary.doubpow(2, 7*AmbientTemperature.getSunIntensity(level, true, 0)));
 		Direction d = this.getFacing();
 		for (int i = 1; i < ir; i++) {
 			BlockPos c = worldPosition.relative(d, i);

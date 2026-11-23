@@ -26,5 +26,11 @@
   "result": {
     "id": "rotarycraft:light_bridge",
     "count": 1
-  }
+  },
+  "neoforge:conditions": [
+    {
+      "type": "rotarycraft:config",
+      "option": "allow_light_bridge"
+    }
+  ]
 }

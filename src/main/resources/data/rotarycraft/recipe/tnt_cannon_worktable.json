@@ -23,5 +23,11 @@
   "result": {
     "id": "rotarycraft:tnt_cannon",
     "count": 1
-  }
+  },
+  "neoforge:conditions": [
+    {
+      "type": "rotarycraft:config",
+      "option": "allow_tnt_cannon"
+    }
+  ]
 }

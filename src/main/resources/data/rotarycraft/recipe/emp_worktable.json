@@ -26,5 +26,11 @@
   "result": {
     "id": "rotarycraft:emp",
     "count": 1
-  }
+  },
+  "neoforge:conditions": [
+    {
+      "type": "rotarycraft:config",
+      "option": "allow_emp"
+    }
+  ]
 }

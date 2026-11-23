@@ -91,7 +91,7 @@ public class AutoBreederBlockEntity extends PowerReceiverBlockEntity implements 
 	}
 
 	public int getRange() {
-		return (int)Math.min(MAXRANGE, 8+(power-MINPOWER)/2048);
+		return (int)Math.min(reika.rotarycraft.RotaryConfig.BREEDERRANGE.get(), 8+(power-MINPOWER)/2048);
 	}
 
 	private int getFeedSlot(Animal ent) {

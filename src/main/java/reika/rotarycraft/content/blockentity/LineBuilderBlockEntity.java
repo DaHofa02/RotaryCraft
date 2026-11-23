@@ -125,7 +125,7 @@ public class LineBuilderBlockEntity extends PowerReceiverBlockEntity implements 
 
 	public boolean canShift(Level world) {
 		int r = this.getLineLength()+1;
-		return r > 0 && r <= MAXRANGE && isSoft(world, worldPosition.relative(dir, r));
+		return r > 0 && r <= reika.rotarycraft.RotaryConfig.LINEBUILDER.get() && isSoft(world, worldPosition.relative(dir, r));
 	}
 
 	/** Original getLineLength: the number of solid blocks in front of it, or Integer.MIN_VALUE when it may not push them. */
@@ -134,7 +134,7 @@ public class LineBuilderBlockEntity extends PowerReceiverBlockEntity implements 
 		BlockPos p = worldPosition.relative(dir, i);
 		if (this.isImmovable(p))
 			return Integer.MIN_VALUE;
-		while (!isSoft(level, p) && i <= MAXRANGE) {
+		while (!isSoft(level, p) && i <= reika.rotarycraft.RotaryConfig.LINEBUILDER.get()) {
 			p = worldPosition.relative(dir, ++i);
 			if (this.isImmovable(p))
 				return Integer.MIN_VALUE;

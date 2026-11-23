@@ -79,7 +79,7 @@ public class ChunkLoaderBlockEntity extends PowerReceiverBlockEntity {
 	}
 
 	public int getLoadingRadius() {
-		return Math.min(MAX_RADIUS, BASE_RADIUS+(int)(power-MINSPEED)/FALLOFF);
+		return Math.min(reika.rotarycraft.RotaryConfig.CHUNKLOADERSIZE.get(), BASE_RADIUS+(int)(power-MINSPEED)/FALLOFF);
 	}
 
 	public boolean isLoading() {
@@ -119,7 +119,7 @@ public class ChunkLoaderBlockEntity extends PowerReceiverBlockEntity {
 	}
 
 	public int getMaxRange() {
-		return MAX_RADIUS*16;
+		return reika.rotarycraft.RotaryConfig.CHUNKLOADERSIZE.get()*16;
 	}
 
 	@Override

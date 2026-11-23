@@ -26,5 +26,11 @@
   "result": {
     "id": "rotarycraft:chunk_loader",
     "count": 1
-  }
+  },
+  "neoforge:conditions": [
+    {
+      "type": "rotarycraft:config",
+      "option": "allow_chunk_loader"
+    }
+  ]
 }

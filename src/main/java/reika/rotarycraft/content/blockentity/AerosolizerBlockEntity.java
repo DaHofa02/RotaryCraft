@@ -169,7 +169,7 @@ public class AerosolizerBlockEntity extends PowerReceiverBlockEntity implements 
 		int[] reach = new int[6];
 		for (int d = 0; d < 6; d++) {
 			int r = 0;
-			for (int i = 1; i < MAXRANGE; i++) {
+			for (int i = 1, max = reika.rotarycraft.RotaryConfig.AERORANGE.get(); i < max; i++) {
 				BlockPos c = pos.relative(dirs[d], i);
 				if (world.getBlockState(c).isSolidRender(world, c))
 					break;
