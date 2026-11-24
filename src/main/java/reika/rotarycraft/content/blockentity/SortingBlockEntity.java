@@ -4,6 +4,7 @@
 package reika.rotarycraft.content.blockentity;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import net.minecraft.core.BlockPos;
@@ -38,7 +39,7 @@ public class SortingBlockEntity extends PowerReceiverBlockEntity {
 
 	public SortingBlockEntity(BlockPos pos, BlockState state) {
 		super(RotaryBlockEntities.SORTING.get(), pos, state, 1, 1, 1024);
-		java.util.Arrays.fill(mappings, ItemStack.EMPTY);
+		Arrays.fill(mappings, ItemStack.EMPTY);
 	}
 
 	@Override
@@ -191,7 +192,7 @@ public class SortingBlockEntity extends PowerReceiverBlockEntity {
 	@Override
 	protected void readSyncTag(CompoundTag NBT, HolderLookup.Provider registries) {
 		super.readSyncTag(NBT, registries);
-		java.util.Arrays.fill(mappings, ItemStack.EMPTY);
+		Arrays.fill(mappings, ItemStack.EMPTY);
 		ListTag li = NBT.getList("Items", 10);
 		for (int i = 0; i < li.size(); i++) {
 			CompoundTag tag = li.getCompound(i);

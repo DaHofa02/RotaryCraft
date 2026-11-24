@@ -4,6 +4,8 @@
 package reika.rotarycraft.content.blockentity;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,6 +17,8 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.Clearable;
+import net.minecraft.world.Containers;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingInput;
@@ -23,9 +27,13 @@ import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
+import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.ItemHandlerHelper;
 import net.neoforged.neoforge.items.ItemStackHandler;
 
+import reika.rotarycraft.api.interfaces.ChargeableTool;
+import reika.rotarycraft.content.item.CoilItem;
 import reika.rotarycraft.content.item.EngineUpgradeItem;
 import reika.rotarycraft.content.recipe.WorktableRecipe;
 import reika.rotarycraft.lib.data.InventoryHelper;
@@ -42,7 +50,7 @@ import reika.rotarycraft.registry.RotarySounds;
  * integrated redstone upgrade pulses by itself every 6 ticks. Chargeable tools are charged from wound coils. Not ported yet (their
  * items do not exist): jetpack and bedrock armour upgrades.
  */
-public class WorktableBlockEntity extends RotaryCraftBlockEntity implements UpgradeableMachine, net.minecraft.world.Clearable {
+public class WorktableBlockEntity extends RotaryCraftBlockEntity implements UpgradeableMachine, Clearable {
 
 	/** Vanilla Clearable: commands such as /setblock and /fill empty the inventory before replacing the block, so nothing drops. */
 	@Override
@@ -153,7 +161,7 @@ public class WorktableBlockEntity extends RotaryCraftBlockEntity implements Upgr
 				empty++;
 			else if (coilslot == -1 && is.is(RotaryItems.SPRING.get()))
 				coilslot = i;
-			else if (toolslot == -1 && is.getItem() instanceof reika.rotarycraft.api.interfaces.ChargeableTool)
+			else if (toolslot == -1 && is.getItem() instanceof ChargeableTool)
 				toolslot = i;
 		}
 		if (coilslot == -1) {
@@ -165,9 +173,9 @@ public class WorktableBlockEntity extends RotaryCraftBlockEntity implements Upgr
 			return;
 		ItemStack coil = inv.getStackInSlot(coilslot);
 		ItemStack tool = inv.getStackInSlot(toolslot).copy();
-		int newcoil = ((reika.rotarycraft.api.interfaces.ChargeableTool)tool.getItem()).setCharged(tool, reika.rotarycraft.content.item.CoilItem.getCharge(coil),
+		int newcoil = ((ChargeableTool)tool.getItem()).setCharged(tool, CoilItem.getCharge(coil),
 				coil.is(RotaryItems.STRONGCOIL.get()));
-		ItemStack coilOut = reika.rotarycraft.content.item.CoilItem.withCharge(coil.copy(), newcoil);
+		ItemStack coilOut = CoilItem.withCharge(coil.copy(), newcoil);
 		inv.setStackInSlot(toolslot, ItemStack.EMPTY);
 		inv.setStackInSlot(coilslot, ItemStack.EMPTY);
 		inv.setStackInSlot(9, tool);
@@ -236,7 +244,7 @@ public class WorktableBlockEntity extends RotaryCraftBlockEntity implements Upgr
 		if (units.isEmpty())
 			return null;
 		List<RecipeHolder<WorktableRecipe>> all = new ArrayList<>(world.getRecipeManager().getAllRecipesFor(RotaryRecipeTypes.WORKTABLE.get()));
-		all.sort(java.util.Comparator.comparing(h -> h.id().toString()));
+		all.sort(Comparator.comparing(h -> h.id().toString()));
 		for (RecipeHolder<WorktableRecipe> h : all) {
 			WorktableRecipe wr = h.value();
 			if (wr.isRecycling())
@@ -249,7 +257,7 @@ public class WorktableBlockEntity extends RotaryCraftBlockEntity implements Upgr
 			if (needed != units.size())
 				continue;
 			ItemStack[] grid = new ItemStack[9];
-			java.util.Arrays.fill(grid, ItemStack.EMPTY);
+			Arrays.fill(grid, ItemStack.EMPTY);
 			if (assign(layout, 0, units, new boolean[units.size()], grid) && wr.matches(CraftingInput.of(3, 3, List.of(grid)), world)) {
 				out.add(wr);
 				return grid;
@@ -298,13 +306,13 @@ public class WorktableBlockEntity extends RotaryCraftBlockEntity implements Upgr
 		this.handleCrafting(found.get(0), null, false);
 		if (bufferSide == null)
 			return;
-		IItemHandler target = world.getCapability(net.neoforged.neoforge.capabilities.Capabilities.ItemHandler.BLOCK, pos.relative(bufferSide), bufferSide.getOpposite());
+		IItemHandler target = world.getCapability(Capabilities.ItemHandler.BLOCK, pos.relative(bufferSide), bufferSide.getOpposite());
 		if (target == null)
 			return;
 		for (int i = 9; i < 18; i++) {
 			ItemStack is = inv.getStackInSlot(i);
 			if (!is.isEmpty())
-				inv.setStackInSlot(i, net.neoforged.neoforge.items.ItemHandlerHelper.insertItemStacked(target, is, false));
+				inv.setStackInSlot(i, ItemHandlerHelper.insertItemStacked(target, is, false));
 		}
 	}
 
@@ -371,7 +379,7 @@ public class WorktableBlockEntity extends RotaryCraftBlockEntity implements Upgr
 		ItemStack cmp = is.copy();
 		cmp.remove(RotaryComponents.GEARBOX_DATA.get());
 		List<RecipeHolder<WorktableRecipe>> all = new ArrayList<>(level.getRecipeManager().getAllRecipesFor(RotaryRecipeTypes.WORKTABLE.get()));
-		all.sort(java.util.Comparator.comparing(h -> h.id().toString())); //the original searched in registration order; recipe ids give a fixed order
+		all.sort(Comparator.comparing(h -> h.id().toString())); //the original searched in registration order; recipe ids give a fixed order
 		for (RecipeHolder<WorktableRecipe> h : all) {
 			WorktableRecipe wr = h.value();
 			if (wr.isRecycling())
@@ -616,10 +624,10 @@ public class WorktableBlockEntity extends RotaryCraftBlockEntity implements Upgr
 	@Override
 	public void onBlockBroken(Level world, BlockPos pos) {
 		for (int i = 0; i < inv.getSlots(); i++)
-			net.minecraft.world.Containers.dropItemStack(world, pos.getX(), pos.getY(), pos.getZ(), inv.getStackInSlot(i).copy());
+			Containers.dropItemStack(world, pos.getX(), pos.getY(), pos.getZ(), inv.getStackInSlot(i).copy());
 		for (int i = 0; i < buffer.getSlots(); i++)
-			net.minecraft.world.Containers.dropItemStack(world, pos.getX(), pos.getY(), pos.getZ(), buffer.getStackInSlot(i).copy());
+			Containers.dropItemStack(world, pos.getX(), pos.getY(), pos.getZ(), buffer.getStackInSlot(i).copy());
 		if (this.hasRedstoneUpgrade())
-			net.minecraft.world.Containers.dropItemStack(world, pos.getX()+0.5, pos.getY()+0.5, pos.getZ()+0.5, new ItemStack(RotaryItems.UPGRADE_REDSTONE.get()));
+			Containers.dropItemStack(world, pos.getX()+0.5, pos.getY()+0.5, pos.getZ()+0.5, new ItemStack(RotaryItems.UPGRADE_REDSTONE.get()));
 	}
 }

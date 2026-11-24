@@ -10,6 +10,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
@@ -39,7 +40,7 @@ public class DryingBedBlock extends MachineBlock {
 			return tool;
 		if (world.getBlockEntity(pos) instanceof DryingBedBlockEntity tr && tr.isPlayerAccessible(ep)) {
 			var liq = FluidUtil.getFluidContained(is);
-			if (liq.isPresent() && is.getItem() instanceof net.minecraft.world.item.BucketItem) {
+			if (liq.isPresent() && is.getItem() instanceof BucketItem) {
 				FluidStack f = liq.get();
 				int size = is.getCount();
 				if (!world.isClientSide && tr.addLiquid(new FluidStack(f.getFluid(), size*f.getAmount())) && !ep.isCreative())

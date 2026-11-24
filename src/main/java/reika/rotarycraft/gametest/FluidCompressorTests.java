@@ -11,6 +11,7 @@ import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
@@ -93,7 +94,7 @@ public class FluidCompressorTests {
 			h.assertTrue(side.fill(new FluidStack(Fluids.WATER, 5000), IFluidHandler.FluidAction.EXECUTE) == 2500, "not 2500 mB");
 			h.assertTrue(side.fill(new FluidStack(Fluids.LAVA, 100), IFluidHandler.FluidAction.EXECUTE) == 0, "lava went in");
 			h.assertTrue(side.drain(500, IFluidHandler.FluidAction.EXECUTE).getAmount() == 500, "no water out");
-			h.setBlock(new BlockPos(6, 2, 4), net.minecraft.world.level.block.Blocks.AIR); //engine gone
+			h.setBlock(new BlockPos(6, 2, 4), Blocks.AIR); //engine gone
 			SimpleFluidContent c = te.collectComponents().get(RotaryComponents.TANK_FLUID.get());
 			h.assertTrue(c != null && c.getAmount() == 2000 && c.is(Fluids.WATER), "item data "+c);
 		});

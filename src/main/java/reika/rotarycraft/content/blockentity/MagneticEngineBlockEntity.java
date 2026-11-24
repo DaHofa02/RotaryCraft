@@ -11,8 +11,10 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.energy.IEnergyStorage;
@@ -20,12 +22,14 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 
+import reika.rotarycraft.RotaryConfig;
 import reika.rotarycraft.api.power.PowerGenerator;
 import reika.rotarycraft.content.item.EngineUpgradeItem;
 import reika.rotarycraft.content.piping.PipeConnector;
 import reika.rotarycraft.content.piping.PipeType;
 import reika.rotarycraft.content.power.PowerSourceList;
 import reika.rotarycraft.api.power.ShaftMerger;
+import reika.rotarycraft.content.power.PowerSourceTracker;
 import reika.rotarycraft.content.power.SimpleProvider;
 import reika.rotarycraft.lib.math.ReikaMathLibrary;
 import reika.rotarycraft.lib.world.AmbientTemperature;
@@ -50,7 +54,7 @@ public class MagneticEngineBlockEntity extends IOMachineBlockEntity implements S
 
 	/** Shaft power (W) per FE a tick, from the config (default 520). */
 	public static int wattsPerFE() {
-		return reika.rotarycraft.RotaryConfig.WATTS_PER_FE.get();
+		return RotaryConfig.WATTS_PER_FE.get();
 	}
 	private static final int[] STORAGE_STEP = {1, 3, 24, 187, 1491, 11925};
 
@@ -111,7 +115,7 @@ public class MagneticEngineBlockEntity extends IOMachineBlockEntity implements S
 		this(RotaryBlockEntities.MAGNETIC_ENGINE.get(), pos, state);
 	}
 
-	protected MagneticEngineBlockEntity(net.minecraft.world.level.block.entity.BlockEntityType<?> type, BlockPos pos, BlockState state) {
+	protected MagneticEngineBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
 		super(type, pos, state);
 	}
 
@@ -280,14 +284,14 @@ public class MagneticEngineBlockEntity extends IOMachineBlockEntity implements S
 	}
 
 	@Override
-	public boolean canUpgradeWith(net.minecraft.world.item.ItemStack is) {
+	public boolean canUpgradeWith(ItemStack is) {
 		if (EngineUpgradeItem.is(is, EngineUpgradeItem.Upgrades.EFFICIENCY))
 			return !efficient;
 		return is.getItem() instanceof EngineUpgradeItem u && u.getUpgrade().magnetTier() == tier+1;
 	}
 
 	@Override
-	public void upgrade(net.minecraft.world.item.ItemStack is) {
+	public void upgrade(ItemStack is) {
 		if (EngineUpgradeItem.is(is, EngineUpgradeItem.Upgrades.EFFICIENCY))
 			efficient = true;
 		else
@@ -305,7 +309,7 @@ public class MagneticEngineBlockEntity extends IOMachineBlockEntity implements S
 	}
 
 	@Override
-	public PowerSourceList getPowerSources(reika.rotarycraft.content.power.PowerSourceTracker io, ShaftMerger caller) {
+	public PowerSourceList getPowerSources(PowerSourceTracker io, ShaftMerger caller) {
 		PowerSourceList psl = new PowerSourceList();
 		if (power > 0)
 			psl.addSource(this);

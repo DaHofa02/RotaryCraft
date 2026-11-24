@@ -33,6 +33,7 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemStackHandler;
+import net.neoforged.neoforge.items.wrapper.RangedWrapper;
 
 import reika.rotarycraft.content.piping.PipeConnector;
 import reika.rotarycraft.content.piping.PipeType;
@@ -85,7 +86,7 @@ public class DefoliatorBlockEntity extends PowerReceiverBlockEntity implements P
 
 	/** Original: poison potions in, only empty bottles out. */
 	public IItemHandler getItemHandler(@Nullable Direction side) {
-		return new net.neoforged.neoforge.items.wrapper.RangedWrapper(inv, 0, 2) {
+		return new RangedWrapper(inv, 0, 2) {
 			@Override
 			public ItemStack extractItem(int slot, int amount, boolean simulate) {
 				return inv.getStackInSlot(slot).is(Items.GLASS_BOTTLE) ? super.extractItem(slot, amount, simulate) : ItemStack.EMPTY;

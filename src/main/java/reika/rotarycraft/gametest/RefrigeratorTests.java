@@ -30,6 +30,7 @@ import reika.rotarycraft.content.blockentity.engine.EngineBlockEntity;
 import reika.rotarycraft.content.item.CraftingPart;
 import reika.rotarycraft.registry.GearboxTypes;
 import reika.rotarycraft.registry.RotaryBlocks;
+import reika.rotarycraft.registry.RotaryDamage;
 import reika.rotarycraft.registry.RotaryFluids;
 import reika.rotarycraft.registry.RotaryItems;
 
@@ -105,7 +106,7 @@ public class RefrigeratorTests {
 		h.runAtTickTime(5, () -> h.setBlock(new BlockPos(4, 1, 4), Blocks.AIR));
 		h.runAtTickTime(10, () -> {
 			h.assertTrue(Math.abs(cow.getHealth()-(cow.getMaxHealth()-8)) < 0.01, "cow health "+cow.getHealth());
-			h.assertTrue(cow.getLastDamageSource() != null && cow.getLastDamageSource().is(reika.rotarycraft.registry.RotaryDamage.FREEZE), "damage "+cow.getLastDamageSource());
+			h.assertTrue(cow.getLastDamageSource() != null && cow.getLastDamageSource().is(RotaryDamage.FREEZE), "damage "+cow.getLastDamageSource());
 			h.succeed();
 		});
 	}

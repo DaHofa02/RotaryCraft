@@ -7,6 +7,8 @@ import java.util.Collection;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -159,7 +161,7 @@ public abstract class PowerReceiverBlockEntity extends IOMachineBlockEntity {
 			if (o != 0) {
 				if (first != 0 && o != first) {
 					if (level.random.nextInt(5) == 0)
-						level.playSound(null, worldPosition, net.minecraft.sounds.SoundEvents.BLAZE_HURT, net.minecraft.sounds.SoundSource.BLOCKS, 1, 1);
+						level.playSound(null, worldPosition, SoundEvents.BLAZE_HURT, SoundSource.BLOCKS, 1, 1);
 					return;
 				}
 				first = o;

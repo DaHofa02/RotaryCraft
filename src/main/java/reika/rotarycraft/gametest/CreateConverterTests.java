@@ -23,8 +23,12 @@ import reika.rotarycraft.compat.create.CreateToRotaryBlockEntity;
 import reika.rotarycraft.compat.create.RotaryToCreateBlockEntity;
 import reika.rotarycraft.compat.create.StressConverterBlock;
 import reika.rotarycraft.content.blockentity.DynamometerBlockEntity;
+import reika.rotarycraft.content.blockentity.RotaryCraftBlockEntity;
 import reika.rotarycraft.content.blockentity.engine.EngineBlockEntity;
 import reika.rotarycraft.registry.RotaryBlocks;
+
+import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
+import com.simibubi.create.content.kinetics.motor.CreativeMotorBlockEntity;
 
 /** The Create converters with the default config (16 W per SU, 5 % loss, 16 rad/s per RPM); they pass without Create (nothing to test). */
 @GameTestHolder(RotaryCraft.MOD_ID)
@@ -46,7 +50,7 @@ public class CreateConverterTests {
 	private static <T> T rc(GameTestHelper h, Block block, int x, int z, int meta, Class<T> cls) {
 		BlockPos p = new BlockPos(x, 1, z);
 		h.setBlock(p, block);
-		var te = (reika.rotarycraft.content.blockentity.RotaryCraftBlockEntity)h.getBlockEntity(p);
+		var te = (RotaryCraftBlockEntity)h.getBlockEntity(p);
 		te.setBlockMetadata(meta);
 		return cls.cast(te);
 	}
@@ -68,7 +72,7 @@ public class CreateConverterTests {
 			h.assertTrue(te.getOmega() == 256 && te.getTorque() == 4, "shaft in "+te.getOmega()+" rad/s "+te.getTorque()+" Nm");
 			h.assertTrue(te.getGeneratedSpeed() == 16, "speed "+te.getGeneratedSpeed());
 			h.assertTrue(Math.abs(te.getStressUnits()-60.8F) < 0.01F, "SU "+te.getStressUnits());
-			var s = (com.simibubi.create.content.kinetics.base.KineticBlockEntity)h.getBlockEntity(shaft);
+			var s = (KineticBlockEntity)h.getBlockEntity(shaft);
 			h.assertTrue(Math.abs(s.getSpeed()) == 16, "Create shaft at "+s.getSpeed()+" RPM");
 		});
 	}
@@ -85,7 +89,7 @@ public class CreateConverterTests {
 		}
 		BlockPos motor = new BlockPos(0, 1, 4), conv = new BlockPos(1, 1, 4);
 		h.setBlock(motor, with(create("creative_motor").defaultBlockState(), "facing", Direction.EAST));
-		((com.simibubi.create.content.kinetics.motor.CreativeMotorBlockEntity)h.getBlockEntity(motor)).generatedSpeed.setValue(256);
+		((CreativeMotorBlockEntity)h.getBlockEntity(motor)).generatedSpeed.setValue(256);
 		h.setBlock(conv, CreateCompat.CREATE_TO_ROTARY.get().defaultBlockState().setValue(StressConverterBlock.FACING, Direction.WEST));
 		DynamometerBlockEntity dyna = rc(h, RotaryBlocks.DYNAMOMETER.get(), 2, 4, 1, DynamometerBlockEntity.class);
 		int[] stage = {0};

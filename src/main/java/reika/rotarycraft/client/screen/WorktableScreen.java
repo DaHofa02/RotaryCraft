@@ -4,6 +4,8 @@
 package reika.rotarycraft.client.screen;
 
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -29,12 +31,12 @@ public class WorktableScreen extends AbstractContainerScreen<WorktableMenu> {
 		imageHeight = 166;
 	}
 
-	private net.minecraft.client.gui.components.Button mode;
+	private Button mode;
 
 	@Override
 	protected void init() {
 		super.init();
-		mode = net.minecraft.client.gui.components.Button.builder(Component.empty(), b -> minecraft.gameMode.handleInventoryButtonClick(menu.containerId, 0))
+		mode = Button.builder(Component.empty(), b -> minecraft.gameMode.handleInventoryButtonClick(menu.containerId, 0))
 				.bounds(leftPos+imageWidth-38, topPos+3, 34, 12).build();
 		this.addRenderableWidget(mode);
 	}
@@ -73,7 +75,7 @@ public class WorktableScreen extends AbstractContainerScreen<WorktableMenu> {
 	public void render(GuiGraphics g, int mx, int my, float partial) {
 		boolean me = menu.tile.isPatternMode();
 		mode.setMessage(Component.translatable(me ? "gui.rotarycraft.worktable.mode.me" : "gui.rotarycraft.worktable.mode.grid"));
-		mode.setTooltip(net.minecraft.client.gui.components.Tooltip.create(Component.translatable(me ? "gui.rotarycraft.worktable.mode.me.tip" : "gui.rotarycraft.worktable.mode.grid.tip")));
+		mode.setTooltip(Tooltip.create(Component.translatable(me ? "gui.rotarycraft.worktable.mode.me.tip" : "gui.rotarycraft.worktable.mode.grid.tip")));
 		super.render(g, mx, my, partial);
 		this.renderTooltip(g, mx, my);
 	}

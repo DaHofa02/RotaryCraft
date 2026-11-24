@@ -5,6 +5,7 @@ package reika.rotarycraft.client.screen;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractButton;
+import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
@@ -64,7 +65,7 @@ public class BlastFurnaceScreen extends AbstractContainerScreen<BlastFurnaceMenu
 				this.defaultButtonNarrationText(out);
 			}
 		};
-		b.setTooltip(net.minecraft.client.gui.components.Tooltip.create(tip));
+		b.setTooltip(Tooltip.create(tip));
 		this.addRenderableWidget(b);
 	}
 

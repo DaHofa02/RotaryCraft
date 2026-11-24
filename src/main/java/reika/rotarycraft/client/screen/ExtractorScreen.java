@@ -14,6 +14,8 @@ import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.content.blockentity.ExtractorBlockEntity;
 import reika.rotarycraft.content.menu.ExtractorMenu;
 
+import java.util.Locale;
+
 /**
  * Original: GuiExtractor (extractorgui.png, extractorgui2.png with drill wear) - progress of the four stages, drill type, and the power
  * tab with one bar per stage for power, speed and torque against that stage's minimum.
@@ -67,8 +69,8 @@ public class ExtractorScreen extends AbstractContainerScreen<ExtractorMenu> {
 		g.fill(x, y, x+PANEL_W, y+104, 0xff373737);
 		g.fill(x+1, y+1, x+PANEL_W-1, y+103, 0xffc6c6c6);
 		int water = ext.getWater();
-		g.drawString(font, Component.translatable("gui.rotarycraft.extractor.water", String.format(java.util.Locale.ROOT, "%,d", water),
-				String.format(java.util.Locale.ROOT, "%,d", ExtractorBlockEntity.CAPACITY)), x+4, y+5, water > 0 ? 0xff404040 : 0xffa02020, false);
+		g.drawString(font, Component.translatable("gui.rotarycraft.extractor.water", String.format(Locale.ROOT, "%,d", water),
+				String.format(Locale.ROOT, "%,d", ExtractorBlockEntity.CAPACITY)), x+4, y+5, water > 0 ? 0xff404040 : 0xffa02020, false);
 		for (int i = 0; i < 4; i++) {
 			int ly = y+18+i*21;
 			int problem = ext.getSyncedStageProblem(i);
@@ -82,9 +84,9 @@ public class ExtractorScreen extends AbstractContainerScreen<ExtractorMenu> {
 			}
 			else {
 				Object need = switch (problem) {
-					case ExtractorBlockEntity.LOW_POWER -> String.format(java.util.Locale.ROOT, "%,d", ExtractorBlockEntity.MIN_POWER[i]);
-					case ExtractorBlockEntity.LOW_SPEED -> String.format(java.util.Locale.ROOT, "%,d", ExtractorBlockEntity.MIN_SPEED[i]);
-					case ExtractorBlockEntity.LOW_TORQUE -> String.format(java.util.Locale.ROOT, "%,d", ExtractorBlockEntity.MIN_TORQUE[i]);
+					case ExtractorBlockEntity.LOW_POWER -> String.format(Locale.ROOT, "%,d", ExtractorBlockEntity.MIN_POWER[i]);
+					case ExtractorBlockEntity.LOW_SPEED -> String.format(Locale.ROOT, "%,d", ExtractorBlockEntity.MIN_SPEED[i]);
+					case ExtractorBlockEntity.LOW_TORQUE -> String.format(Locale.ROOT, "%,d", ExtractorBlockEntity.MIN_TORQUE[i]);
 					default -> "";
 				};
 				g.drawString(font, Component.translatable("gui.rotarycraft.extractor.problem."+problem, need), x+4, ly+10,

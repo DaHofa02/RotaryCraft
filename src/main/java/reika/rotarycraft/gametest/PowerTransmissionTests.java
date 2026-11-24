@@ -10,9 +10,13 @@ import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.ChestBlockEntity;
+import net.minecraft.world.level.block.entity.FurnaceBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
 import net.neoforged.neoforge.capabilities.Capabilities;
@@ -52,6 +56,9 @@ import reika.rotarycraft.registry.MaterialRegistry;
 import reika.rotarycraft.registry.RotaryBlocks;
 import reika.rotarycraft.registry.RotaryFluids;
 import reika.rotarycraft.registry.RotaryItems;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @GameTestHolder(RotaryCraft.MOD_ID)
 @PrefixGameTestTemplate(false)
@@ -483,7 +490,7 @@ public class PowerTransmissionTests {
 		poweredHeater(h);
 		BlockPos fp = new BlockPos(4, 1, 4);
 		h.setBlock(fp, Blocks.FURNACE);
-		net.minecraft.world.level.block.entity.FurnaceBlockEntity furn = (net.minecraft.world.level.block.entity.FurnaceBlockEntity)h.getBlockEntity(fp);
+		FurnaceBlockEntity furn = (FurnaceBlockEntity)h.getBlockEntity(fp);
 		furn.setItem(0, new ItemStack(Items.RAW_IRON, 4));
 		h.succeedWhen(() -> h.assertTrue(furn.getItem(2).is(Items.IRON_INGOT), "furnace output "+furn.getItem(2)+", input "+furn.getItem(0)));
 	}
@@ -571,7 +578,7 @@ public class PowerTransmissionTests {
 		FrictionHeaterBlockEntity heater = place(h, RotaryBlocks.FRICTION_HEATER.get(), 3, 4, 0, FrictionHeaterBlockEntity.class);
 		BlockPos fp = new BlockPos(2, 1, 4);
 		h.setBlock(fp, Blocks.FURNACE);
-		net.minecraft.world.level.block.entity.FurnaceBlockEntity furn = (net.minecraft.world.level.block.entity.FurnaceBlockEntity)h.getBlockEntity(fp);
+		FurnaceBlockEntity furn = (FurnaceBlockEntity)h.getBlockEntity(fp);
 		furn.setItem(0, rc(CraftingPart.TUNGSTENFLAKES, 2));
 		h.succeedWhen(() -> {
 			h.assertTrue(heater.omega == 2048 && heater.torque == 2048, "heater input "+heater.omega+" rad/s @ "+heater.torque+" Nm");
@@ -592,7 +599,7 @@ public class PowerTransmissionTests {
 		EngineBlockEntity b = place(h, RotaryBlocks.MICRO_ENGINE.get(), 5, 2, 3, EngineBlockEntity.class);
 		a.addFuel(100000);
 		b.addFuel(100000);
-		java.util.List<GearboxBlockEntity> boxes = new java.util.ArrayList<>();
+		List<GearboxBlockEntity> boxes = new ArrayList<>();
 		for (int[] g : new int[][] {{6, 4, 12, 16}, {5, 3, 15, 16}, {4, 4, 12, 16}, {3, 4, 0, 2}}) {
 			GearboxBlockEntity gbx = place(h, RotaryBlocks.GEARBOX.get(), g[0], g[1], g[2], GearboxBlockEntity.class);
 			gbx.applyComponentsFromItemStack(GearboxBlock.gearboxItem(GearboxTypes.BEDROCK, g[3]));
@@ -731,7 +738,7 @@ public class PowerTransmissionTests {
 		h.setBlock(chest, Blocks.CHEST);
 		h.succeedWhen(() -> {
 			h.assertBlockPresent(Blocks.AIR, head);
-			var c = (net.minecraft.world.level.block.entity.ChestBlockEntity)h.getBlockEntity(chest);
+			var c = (ChestBlockEntity)h.getBlockEntity(chest);
 			h.assertTrue(c.getItem(0).is(RotaryItems.part(CraftingPart.BEDROCKDUST)) && c.getItem(0).getCount() == 2, "chest has "+c.getItem(0));
 		});
 	}
@@ -825,8 +832,8 @@ public class PowerTransmissionTests {
 		h.succeedWhen(() -> {
 			ItemStack f = ex.getInventory().getStackInSlot(7);
 			h.assertTrue(f.is(RotaryItems.part(CraftingPart.IRONOREFLAKES)) && f.getCount() >= 1 && f.getCount() <= 2, "flakes slot "+f);
-			h.assertTrue(h.getLevel().getRecipeManager().getRecipeFor(net.minecraft.world.item.crafting.RecipeType.SMELTING,
-					new net.minecraft.world.item.crafting.SingleRecipeInput(f), h.getLevel()).map(r -> r.value().getResultItem(h.getLevel().registryAccess()).is(Items.IRON_INGOT)).orElse(false),
+			h.assertTrue(h.getLevel().getRecipeManager().getRecipeFor(RecipeType.SMELTING,
+					new SingleRecipeInput(f), h.getLevel()).map(r -> r.value().getResultItem(h.getLevel().registryAccess()).is(Items.IRON_INGOT)).orElse(false),
 					"iron flakes do not smelt to iron");
 		});
 	}

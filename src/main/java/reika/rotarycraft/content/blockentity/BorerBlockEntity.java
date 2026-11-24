@@ -37,8 +37,10 @@ import net.neoforged.neoforge.items.ItemHandlerHelper;
 import com.mojang.authlib.GameProfile;
 
 import reika.rotarycraft.RotaryConfig;
+import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.content.block.BorerBlock;
 import reika.rotarycraft.content.block.MiningPipeBlock;
+import reika.rotarycraft.lib.math.ReikaEngLibrary;
 import reika.rotarycraft.lib.math.ReikaMathLibrary;
 import reika.rotarycraft.registry.RotaryBlockEntities;
 import reika.rotarycraft.registry.RotaryBlocks;
@@ -346,7 +348,7 @@ public class BorerBlockEntity extends PowerReceiverBlockEntity {
 			this.calcReqPower(world, pos);
 		}
 		catch (RuntimeException e) {
-			reika.rotarycraft.RotaryCraft.LOGGER.error("{} triggered an exception mining a chunk, probably during worldgen!", this.getName(), e);
+			RotaryCraft.LOGGER.error("{} triggered an exception mining a chunk, probably during worldgen!", this.getName(), e);
 			reqpow = -1;
 		}
 	}
@@ -434,8 +436,8 @@ public class BorerBlockEntity extends PowerReceiverBlockEntity {
 		if (reqpow < 0)
 			return "Infinity - Blocked";
 		return String.format("Required Power: %.3f%sW; Required Torque: %.3f%sNm", ReikaMathLibrary.getThousandBase(reqpow),
-				reika.rotarycraft.lib.math.ReikaEngLibrary.getSIPrefix(reqpow), ReikaMathLibrary.getThousandBase(mintorque),
-				reika.rotarycraft.lib.math.ReikaEngLibrary.getSIPrefix(mintorque));
+				ReikaEngLibrary.getSIPrefix(reqpow), ReikaMathLibrary.getThousandBase(mintorque),
+				ReikaEngLibrary.getSIPrefix(mintorque));
 	}
 
 	/** Original support: sand and gravel resting on the top of the cut become sandstone and stone. */
@@ -523,7 +525,7 @@ public class BorerBlockEntity extends PowerReceiverBlockEntity {
 			this.dig((ServerLevel)world, pos);
 		}
 		catch (RuntimeException e) {
-			reika.rotarycraft.RotaryCraft.LOGGER.error("{} triggered an exception mining a chunk, probably during worldgen!", this.getName(), e);
+			RotaryCraft.LOGGER.error("{} triggered an exception mining a chunk, probably during worldgen!", this.getName(), e);
 		}
 	}
 

@@ -25,6 +25,7 @@ import reika.rotarycraft.content.power.PowerSourceList;
 import reika.rotarycraft.content.power.PowerSourceTracker;
 import reika.rotarycraft.api.power.ShaftMerger;
 import reika.rotarycraft.content.power.SimpleProvider;
+import reika.rotarycraft.lib.math.ReikaMathLibrary;
 import reika.rotarycraft.registry.RotaryBlockEntities;
 import reika.rotarycraft.registry.RotaryItems;
 import reika.rotarycraft.registry.RotarySounds;
@@ -248,7 +249,7 @@ public class BeltHubBlockEntity extends PowerReceiverBlockEntity implements Simp
 
 	@Override
 	protected void animateWithTick(Level world, BlockPos pos) {
-		phi += (float)reika.rotarycraft.lib.math.ReikaMathLibrary.doubpow(reika.rotarycraft.lib.math.ReikaMathLibrary.logbase(omega+1, 2), 1.05);
+		phi += (float)ReikaMathLibrary.doubpow(ReikaMathLibrary.logbase(omega+1, 2), 1.05);
 	}
 
 	@Override
@@ -310,7 +311,7 @@ public class BeltHubBlockEntity extends PowerReceiverBlockEntity implements Simp
 
 	/** Original ItemScrewdriver: sneaking switches between driving and receiving end. */
 	@Override
-	public boolean onShiftRightClick(Level world, BlockPos pos, net.minecraft.core.Direction side) {
+	public boolean onShiftRightClick(Level world, BlockPos pos, Direction side) {
 		isReceivingEnd = !isReceivingEnd;
 		this.syncAllData();
 		return true;
@@ -318,7 +319,7 @@ public class BeltHubBlockEntity extends PowerReceiverBlockEntity implements Simp
 
 	/** Original ItemScrewdriver: cycles through the 12 metadata (6 directions, then splitting) and drops the belt connection. */
 	@Override
-	public boolean onRightClick(Level world, BlockPos pos, net.minecraft.core.Direction side) {
+	public boolean onRightClick(Level world, BlockPos pos, Direction side) {
 		int m = this.getBlockMetadata();
 		this.setBlockMetadata(m < 11 ? m+1 : 0);
 		this.reset();

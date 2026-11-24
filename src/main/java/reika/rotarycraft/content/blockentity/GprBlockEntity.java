@@ -12,8 +12,11 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.MapColor;
 
+import reika.rotarycraft.api.interfaces.Screwdriverable;
 import reika.rotarycraft.lib.math.ReikaMathLibrary;
 import reika.rotarycraft.registry.RotaryBlockEntities;
+
+import java.util.Locale;
 
 /**
  * Original: Reika.RotaryCraft.TileEntities.Surveying.TileEntityGPR (ground-penetrating radar) - with 32768 W from any side it scans,
@@ -23,7 +26,7 @@ import reika.rotarycraft.registry.RotaryBlockEntities;
  * Changes: the colours are the blocks' map colours (the original's BlockColorMapper table is not ported); other mods' GPRReactive
  * blocks and the achievements are left out.
  */
-public class GprBlockEntity extends PowerReceiverBlockEntity implements reika.rotarycraft.api.interfaces.Screwdriverable {
+public class GprBlockEntity extends PowerReceiverBlockEntity implements Screwdriverable {
 
 	public static final int MAX_HEIGHT = 96;
 	public static final int MAX_WIDTH = 81;
@@ -59,7 +62,7 @@ public class GprBlockEntity extends PowerReceiverBlockEntity implements reika.ro
 	/** Original BlockVector toString of getLookDirection: the scan point and the slice direction. */
 	public String getLookDescription() {
 		BlockPos p = this.getScanPoint();
-		return p.getX()+", "+p.getY()+", "+p.getZ()+" "+this.getSliceDirection().getName().toUpperCase(java.util.Locale.ROOT);
+		return p.getX()+", "+p.getY()+", "+p.getZ()+" "+this.getSliceDirection().getName().toUpperCase(Locale.ROOT);
 	}
 
 	public void shift(Direction dir, int amt) {

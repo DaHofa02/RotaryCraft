@@ -20,6 +20,7 @@ import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
 import reika.rotarycraft.RotaryCraft;
+import reika.rotarycraft.content.block.SortingBlock;
 import reika.rotarycraft.content.blockentity.RotaryCraftBlockEntity;
 import reika.rotarycraft.content.blockentity.SortingBlockEntity;
 import reika.rotarycraft.content.blockentity.engine.EngineBlockEntity;
@@ -53,7 +54,7 @@ public class SortingTests {
 	@GameTest(template = PLATFORM)
 	public static void sorterMapsRowsToSides(GameTestHelper h) {
 		SortingBlockEntity te = place(h, RotaryBlocks.SORTING.get(), 4, 2, 4, 0, SortingBlockEntity.class);
-		h.assertTrue(te.getFacing() == Direction.EAST && h.getBlockState(new BlockPos(4, 2, 4)).getValue(reika.rotarycraft.content.block.SortingBlock.FACING) == Direction.EAST, "facing");
+		h.assertTrue(te.getFacing() == Direction.EAST && h.getBlockState(new BlockPos(4, 2, 4)).getValue(SortingBlock.FACING) == Direction.EAST, "facing");
 		te.setMapping(0, new ItemStack(Items.COBBLESTONE, 5));
 		te.setMapping(9, new ItemStack(Items.DIRT));
 		te.setMapping(26, new ItemStack(Items.SAND));

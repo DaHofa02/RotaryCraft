@@ -27,6 +27,7 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemStackHandler;
 
+import reika.rotarycraft.RotaryConfig;
 import reika.rotarycraft.content.blockentity.PowerReceiverBlockEntity;
 
 /**
@@ -98,7 +99,7 @@ public abstract class TurretBlockEntity extends PowerReceiverBlockEntity {
 		if (!e.isAlive())
 			return false;
 		if (e instanceof Player p)
-			return targetPlayers && reika.rotarycraft.RotaryConfig.TURRETPLAYERS.get() && !p.isCreative() && !p.isSpectator() && !p.getUUID().equals(this.getPlacerUUID());
+			return targetPlayers && RotaryConfig.TURRETPLAYERS.get() && !p.isCreative() && !p.isSpectator() && !p.getUUID().equals(this.getPlacerUUID());
 		return e instanceof Enemy;
 	}
 

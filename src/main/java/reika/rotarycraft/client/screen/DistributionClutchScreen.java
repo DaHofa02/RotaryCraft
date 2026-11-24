@@ -14,6 +14,8 @@ import net.minecraft.world.entity.player.Inventory;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.content.menu.DistributionClutchMenu;
 
+import java.util.Locale;
+
 /**
  * Original: Reika.RotaryCraft.GUIs.Machine.GuiDistributionClutch - per side (north, south, west, east) a 9x9 switch (buttons.png: grey
  * for the input and the always-on output side, green when on) and a text field for the requested torque.
@@ -101,7 +103,7 @@ public class DistributionClutchScreen extends AbstractContainerScreen<Distributi
 	protected void renderLabels(GuiGraphics g, int mx, int my) {
 		g.drawString(font, title, imageWidth/2-font.width(title)/2, 5, 4210752, false);
 		for (int i = 0; i < 4; i++)
-			g.drawString(font, DistributionClutchMenu.SIDES[i].getName().toUpperCase(java.util.Locale.ROOT), 119, 29+i*20, 4210752, false);
+			g.drawString(font, DistributionClutchMenu.SIDES[i].getName().toUpperCase(Locale.ROOT), 119, 29+i*20, 4210752, false);
 	}
 
 	@Override

@@ -5,6 +5,7 @@
 package reika.rotarycraft.gametest;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.world.Container;
@@ -58,7 +59,7 @@ public class BlowerTests {
 	@GameTest(template = PLATFORM)
 	public static void blowerFollowsTheOriginalNumbers(GameTestHelper h) {
 		BlowerBlockEntity te = place(h, RotaryBlocks.BLOWER.get(), 4, 2, 4, 5, BlowerBlockEntity.class);
-		h.assertTrue(te.getFacingDir() == net.minecraft.core.Direction.UP, "facing "+te.getFacingDir());
+		h.assertTrue(te.getFacingDir() == Direction.UP, "facing "+te.getFacingDir());
 		te.power = 65536;
 		h.assertTrue(te.getNumberTransferrableItems() == 64, te.getNumberTransferrableItems()+" items a tick");
 		h.assertTrue(te.isItemTransferrable(new ItemStack(Items.DIRT)), "empty blacklist blocks dirt");

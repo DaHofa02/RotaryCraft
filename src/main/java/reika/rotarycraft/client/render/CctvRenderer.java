@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 
 import reika.rotarycraft.RotaryCraft;
+import reika.rotarycraft.client.OriginalModels;
 import reika.rotarycraft.client.RotaryModelLayers;
 import reika.rotarycraft.client.model.ModelCctv;
 import reika.rotarycraft.content.blockentity.CctvBlockEntity;
@@ -31,7 +32,7 @@ public class CctvRenderer extends MachineRenderer<CctvBlockEntity> {
 		pose.translate(0, 2.0F, 1.0F);
 		pose.scale(1.0F, -1.0F, -1.0F);
 		pose.translate(0.5F, 0.5F, 0.5F);
-		if (!reika.rotarycraft.client.OriginalModels.renderFacing("cctv", 0, tile.hasLevel(), pose, buf, light, overlay)) //private original-models pack
+		if (!OriginalModels.renderFacing("cctv", 0, tile.hasLevel(), pose, buf, light, overlay)) //private original-models pack
 			model.renderAll(pose, consumer(buf, TEX), light, overlay, tile, null, 180-tile.yaw, -tile.theta);
 		pose.popPose();
 	}

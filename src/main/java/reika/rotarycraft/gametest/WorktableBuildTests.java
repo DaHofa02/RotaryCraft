@@ -5,18 +5,26 @@ package reika.rotarycraft.gametest;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SlabBlock;
+import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.state.properties.SlabType;
 
+import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.ItemHandlerHelper;
 
 import reika.rotarycraft.RotaryCraft;
+import reika.rotarycraft.content.blockentity.WorktableBlockEntity;
 import reika.rotarycraft.registry.RotaryBlocks;
 
 /** Original RotaryEventManager.buildWorktables (see WorktableBuilder): the Worktable built in the world by a (simulated) survival player. */
@@ -101,18 +109,18 @@ public class WorktableBuildTests {
 		h.succeed();
 	}
 
-	private static net.minecraft.world.item.ItemStack rcItem(String id, int n) {
-		return new net.minecraft.world.item.ItemStack(net.minecraft.core.registries.BuiltInRegistries.ITEM.get(
-				net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(RotaryCraft.MOD_ID, id)), n);
+	private static ItemStack rcItem(String id, int n) {
+		return new ItemStack(BuiltInRegistries.ITEM.get(
+				ResourceLocation.fromNamespaceAndPath(RotaryCraft.MOD_ID, id)), n);
 	}
 
 	/** Puts stacks in like an AE2 pattern provider: each into the first slots that take it, equal items merged. */
-	private static net.neoforged.neoforge.items.IItemHandler patternWorktable(GameTestHelper h, BlockPos at, Direction from) {
+	private static IItemHandler patternWorktable(GameTestHelper h, BlockPos at, Direction from) {
 		h.setBlock(at, RotaryBlocks.WORKTABLE.get());
-		var te = (reika.rotarycraft.content.blockentity.WorktableBlockEntity)h.getBlockEntity(at);
+		var te = (WorktableBlockEntity)h.getBlockEntity(at);
 		te.togglePatternMode();
 		h.assertTrue(te.isPatternMode(), "pattern mode not on");
-		return h.getLevel().getCapability(net.neoforged.neoforge.capabilities.Capabilities.ItemHandler.BLOCK, h.absolutePos(at), from);
+		return h.getLevel().getCapability(Capabilities.ItemHandler.BLOCK, h.absolutePos(at), from);
 	}
 
 	/**
@@ -124,11 +132,11 @@ public class WorktableBuildTests {
 		BlockPos table = new BlockPos(4, 1, 4), chest = table.west();
 		h.setBlock(chest, Blocks.CHEST);
 		var in = patternWorktable(h, table, Direction.WEST);
-		for (var is : new net.minecraft.world.item.ItemStack[] {rcItem("combustor", 1), rcItem("steelingot", 4), rcItem("basepanel", 2),
-				new net.minecraft.world.item.ItemStack(Items.IRON_BARS), rcItem("tungsteningot", 1)})
-			h.assertTrue(net.neoforged.neoforge.items.ItemHandlerHelper.insertItemStacked(in, is, false).isEmpty(), "not taken: "+is);
+		for (var is : new ItemStack[] {rcItem("combustor", 1), rcItem("steelingot", 4), rcItem("basepanel", 2),
+				new ItemStack(Items.IRON_BARS), rcItem("tungsteningot", 1)})
+			h.assertTrue(ItemHandlerHelper.insertItemStacked(in, is, false).isEmpty(), "not taken: "+is);
 		h.succeedWhen(() -> {
-			var box = (net.minecraft.world.level.block.entity.ChestBlockEntity)h.getBlockEntity(chest);
+			var box = (ChestBlockEntity)h.getBlockEntity(chest);
 			int heaters = 0;
 			for (int i = 0; i < box.getContainerSize(); i++)
 				if (box.getItem(i).is(rcItem("heater", 1).getItem()))
@@ -144,8 +152,8 @@ public class WorktableBuildTests {
 	public static void worktablePatternModeHandsBackNonRecipes(GameTestHelper h) {
 		BlockPos table = new BlockPos(4, 1, 4);
 		var in = patternWorktable(h, table, Direction.NORTH);
-		net.neoforged.neoforge.items.ItemHandlerHelper.insertItemStacked(in, new net.minecraft.world.item.ItemStack(Items.DIRT, 3), false);
-		var te = (reika.rotarycraft.content.blockentity.WorktableBlockEntity)h.getBlockEntity(table);
+		ItemHandlerHelper.insertItemStacked(in, new ItemStack(Items.DIRT, 3), false);
+		var te = (WorktableBlockEntity)h.getBlockEntity(table);
 		h.succeedWhen(() -> {
 			int dirt = 0;
 			for (int i = 0; i < 9; i++)

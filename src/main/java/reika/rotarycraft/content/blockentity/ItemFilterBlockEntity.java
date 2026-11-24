@@ -26,6 +26,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemStackHandler;
+import net.neoforged.neoforge.items.wrapper.RangedWrapper;
 
 import reika.rotarycraft.registry.RotaryBlockEntities;
 
@@ -92,7 +93,7 @@ public class ItemFilterBlockEntity extends PowerReceiverBlockEntity {
 
 	/** Capability: items go into the buffer only (through the test), and only the buffer gives items out. */
 	public IItemHandler getItemHandler(@Nullable Direction side) {
-		return new net.neoforged.neoforge.items.wrapper.RangedWrapper(inv, 1, 2);
+		return new RangedWrapper(inv, 1, 2);
 	}
 
 	public MatchType getSetting(Criterion c) {

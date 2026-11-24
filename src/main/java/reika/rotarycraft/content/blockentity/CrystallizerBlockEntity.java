@@ -10,6 +10,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.tags.FluidTags;
+import net.minecraft.world.Clearable;
 import net.minecraft.world.Containers;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -33,6 +34,8 @@ import reika.rotarycraft.registry.RotaryBlockEntities;
 import reika.rotarycraft.registry.RotaryFluids;
 import reika.rotarycraft.registry.RotaryItems;
 
+import java.util.function.Predicate;
+
 /**
  * Original: Reika.RotaryCraft.TileEntities.Processing.TileEntityCrystallizer - freezes the liquid in its 8000 mB tank into items
  * (RecipesCrystallizer: 1000 mB water -> ice, 200-999 mB water -> a snowball, 1000 mB lava -> stone, 1000 mB ethanol -> an ethanol
@@ -43,7 +46,7 @@ import reika.rotarycraft.registry.RotaryItems;
  * The items go to slot 0, the only one that can be emptied. Not ported: the fan sound, Thermal Foundation cryotheum, other mods' molten
  * metals and liquids (ender, redstone, glowstone, coal).
  */
-public class CrystallizerBlockEntity extends PowerReceiverBlockEntity implements TemperatureMachine, PipeConnector, net.minecraft.world.Clearable {
+public class CrystallizerBlockEntity extends PowerReceiverBlockEntity implements TemperatureMachine, PipeConnector, Clearable {
 
 	public static final int CAPACITY = 8000;
 	public static final int MAXTEMP = 1000;
@@ -178,7 +181,7 @@ public class CrystallizerBlockEntity extends PowerReceiverBlockEntity implements
 		return out.isEmpty() || ItemStack.isSameItemSameComponents(out, toMake) && out.getCount()+toMake.getCount() <= out.getMaxStackSize();
 	}
 
-	private static boolean isNextTo(Level world, BlockPos pos, java.util.function.Predicate<BlockState> test) {
+	private static boolean isNextTo(Level world, BlockPos pos, Predicate<BlockState> test) {
 		for (Direction d : Direction.values())
 			if (test.test(world.getBlockState(pos.relative(d))))
 				return true;

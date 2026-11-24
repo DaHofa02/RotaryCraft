@@ -19,6 +19,8 @@ import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
+import reika.rotarycraft.content.blockentity.CoolingFinBlockEntity;
+
 @SuppressWarnings("unused")
 public class ModelFin extends TechneModel {
 
@@ -115,9 +117,9 @@ public class ModelFin extends TechneModel {
 			Shape3b.render(pose, vc, light, overlay);
 			Shape3c.render(pose, vc, light, overlay);
 
-			reika.rotarycraft.content.blockentity.CoolingFinBlockEntity.FinSettings s = (reika.rotarycraft.content.blockentity.CoolingFinBlockEntity.FinSettings)li.get(1);
-			flag1 = s != reika.rotarycraft.content.blockentity.CoolingFinBlockEntity.FinSettings.QUARTER;
-			flag2 = s == reika.rotarycraft.content.blockentity.CoolingFinBlockEntity.FinSettings.FULL;
+			CoolingFinBlockEntity.FinSettings s = (CoolingFinBlockEntity.FinSettings)li.get(1);
+			flag1 = s != CoolingFinBlockEntity.FinSettings.QUARTER;
+			flag2 = s == CoolingFinBlockEntity.FinSettings.FULL;
 		}
 
 		if (flag1) {

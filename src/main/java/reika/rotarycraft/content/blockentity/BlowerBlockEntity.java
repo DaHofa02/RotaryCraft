@@ -3,6 +3,7 @@
  ******************************************************************************/
 package reika.rotarycraft.content.blockentity;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -20,6 +21,7 @@ import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
 
+import reika.rotarycraft.RotaryConfig;
 import reika.rotarycraft.content.block.BlowerBlock;
 import reika.rotarycraft.registry.RotaryBlockEntities;
 
@@ -40,7 +42,7 @@ public class BlowerBlockEntity extends PowerReceiverBlockEntity {
 
 	public BlowerBlockEntity(BlockPos pos, BlockState state) {
 		super(RotaryBlockEntities.BLOWER.get(), pos, state, 1, 256, 1024);
-		java.util.Arrays.fill(matchingItems, ItemStack.EMPTY);
+		Arrays.fill(matchingItems, ItemStack.EMPTY);
 	}
 
 	@Override
@@ -111,7 +113,7 @@ public class BlowerBlockEntity extends PowerReceiverBlockEntity {
 					max -= n;
 				}
 			}
-			else if (tte == null && world.getBlockState(tg).isAir() && reika.rotarycraft.RotaryConfig.BLOWERSPILL.get()) {
+			else if (tte == null && world.getBlockState(tg).isAir() && RotaryConfig.BLOWERSPILL.get()) {
 				ItemStack out = source.extractItem(slot, is.getCount(), false);
 				for (int i = 0; i < out.getCount(); i++) {
 					ItemEntity ei = new ItemEntity(world, tg.getX()+0.5, tg.getY()+0.5, tg.getZ()+0.5, out.copyWithCount(1));
@@ -196,7 +198,7 @@ public class BlowerBlockEntity extends PowerReceiverBlockEntity {
 		checkMeta = NBT.getBoolean("metac");
 		checkNBT = NBT.getBoolean("cnbt");
 		useOreDict = !NBT.contains("ore") || NBT.getBoolean("ore");
-		java.util.Arrays.fill(matchingItems, ItemStack.EMPTY);
+		Arrays.fill(matchingItems, ItemStack.EMPTY);
 		ListTag li = NBT.getList("Items", 10);
 		for (int i = 0; i < li.size(); i++) {
 			CompoundTag tag = li.getCompound(i);

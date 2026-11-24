@@ -14,6 +14,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
@@ -30,6 +31,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 import reika.rotarycraft.RotaryConfig;
 import reika.rotarycraft.content.blockentity.RotaryCraftBlockEntity;
+import reika.rotarycraft.content.piping.FlowPipeBlockEntity;
 import reika.rotarycraft.content.piping.HoseBlockEntity;
 import reika.rotarycraft.content.piping.PipingBlockEntity;
 
@@ -94,7 +96,7 @@ public class PipingBlock extends MachineBlock {
 	private static final ThreadLocal<Direction> placedAgainst = new ThreadLocal<>();
 
 	@Override
-	public BlockState getStateForPlacement(net.minecraft.world.item.context.BlockPlaceContext ctx) {
+	public BlockState getStateForPlacement(BlockPlaceContext ctx) {
 		placedAgainst.set(ctx.getClickedFace().getOpposite());
 		return super.getStateForPlacement(ctx);
 	}
@@ -105,7 +107,7 @@ public class PipingBlock extends MachineBlock {
 		Direction against = placedAgainst.get();
 		placedAgainst.remove();
 		if (!world.isClientSide && world.getBlockEntity(pos) instanceof PipingBlockEntity te) {
-			if (against != null && te instanceof reika.rotarycraft.content.piping.FlowPipeBlockEntity f)
+			if (against != null && te instanceof FlowPipeBlockEntity f)
 				f.onPlacedAgainst(against);
 			te.recomputeConnections(world, pos);
 		}

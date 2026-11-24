@@ -8,6 +8,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
+import reika.rotarycraft.compat.OptionalMods;
 import reika.rotarycraft.compat.PneumaticCompat;
 import reika.rotarycraft.registry.RotaryBlockEntities;
 
@@ -41,7 +42,7 @@ public class AirCompressorBlockEntity extends PowerReceiverBlockEntity {
 	protected void updateEntity(Level world, BlockPos pos, BlockState state) {
 		this.updateTileEntity();
 		this.getIOSidesDefault(this.getBlockMetadata());
-		if (world.isClientSide || !reika.rotarycraft.compat.OptionalMods.pneumaticCraft())
+		if (world.isClientSide || !OptionalMods.pneumaticCraft())
 			return;
 		this.readPower();
 		Direction out = this.getOutputSide();

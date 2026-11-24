@@ -25,11 +25,17 @@ import reika.rotarycraft.content.block.GearboxBlock;
 import reika.rotarycraft.content.blockentity.EngineControllerBlockEntity;
 import reika.rotarycraft.content.blockentity.ExtractorBlockEntity;
 import reika.rotarycraft.content.blockentity.GearboxBlockEntity;
+import reika.rotarycraft.content.blockentity.PipePumpBlockEntity;
+import reika.rotarycraft.content.blockentity.PumpBlockEntity;
+import reika.rotarycraft.content.blockentity.ReservoirBlockEntity;
 import reika.rotarycraft.content.blockentity.RotaryCraftBlockEntity;
+import reika.rotarycraft.content.blockentity.TemperatureMachine;
 import reika.rotarycraft.content.blockentity.engine.EngineBlockEntity;
+import reika.rotarycraft.content.piping.FlowPipeBlockEntity;
 import reika.rotarycraft.content.piping.PipingBlockEntity;
 import reika.rotarycraft.registry.GearboxTypes;
 import reika.rotarycraft.registry.RotaryBlocks;
+import reika.rotarycraft.registry.RotaryComponents;
 import reika.rotarycraft.registry.RotaryFluids;
 
 @GameTestHolder(RotaryCraft.MOD_ID)
@@ -67,7 +73,7 @@ public class PipeTests {
 		h.setBlock(new BlockPos(2, 0, 4), Blocks.NETHERRACK);
 		h.setBlock(new BlockPos(2, 1, 4), Blocks.FIRE);
 		EngineBlockEntity eng = place(h, RotaryBlocks.STEAM_ENGINE.get(), 2, 2, 4, 0, EngineBlockEntity.class);
-		((reika.rotarycraft.content.blockentity.TemperatureMachine)eng).setTemperature(95);
+		((TemperatureMachine)eng).setTemperature(95);
 		pipe(h, RotaryBlocks.PIPE.get(), 3, 2, 4);
 		pipe(h, RotaryBlocks.PIPE.get(), 4, 2, 4);
 		PipingBlockEntity src = pipe(h, RotaryBlocks.PIPE.get(), 5, 2, 4);
@@ -190,7 +196,7 @@ public class PipeTests {
 			for (int z = 2; z <= 6; z++)
 				h.setBlock(new BlockPos(x, 1, z), x == 2 || x == 6 || z == 2 || z == 6 ? Blocks.STONE : Blocks.WATER);
 		place(h, RotaryBlocks.GAS_ENGINE.get(), 4, 2, 3, 3, EngineBlockEntity.class).addFuel(50000);
-		reika.rotarycraft.content.blockentity.PumpBlockEntity pump = place(h, RotaryBlocks.PUMP.get(), 4, 2, 4, 0, reika.rotarycraft.content.blockentity.PumpBlockEntity.class);
+		PumpBlockEntity pump = place(h, RotaryBlocks.PUMP.get(), 4, 2, 4, 0, PumpBlockEntity.class);
 		PipingBlockEntity p = pipe(h, RotaryBlocks.PIPE.get(), 5, 2, 4);
 		h.succeedWhen(() -> {
 			h.assertTrue(pump.omega == 512 && pump.torque == 128, "pump input "+pump.omega+" rad/s @ "+pump.torque+" Nm");
@@ -203,8 +209,8 @@ public class PipeTests {
 	/** Two joined reservoirs with water level out (half the difference per step) and leave the wall between them out. */
 	@GameTest(template = PLATFORM, timeoutTicks = 200)
 	public static void reservoirsLevelOut(GameTestHelper h) {
-		var a = place(h, RotaryBlocks.RESERVOIR.get(), 3, 1, 4, 0, reika.rotarycraft.content.blockentity.ReservoirBlockEntity.class);
-		var b = place(h, RotaryBlocks.RESERVOIR.get(), 4, 1, 4, 0, reika.rotarycraft.content.blockentity.ReservoirBlockEntity.class);
+		var a = place(h, RotaryBlocks.RESERVOIR.get(), 3, 1, 4, 0, ReservoirBlockEntity.class);
+		var b = place(h, RotaryBlocks.RESERVOIR.get(), 4, 1, 4, 0, ReservoirBlockEntity.class);
 		a.addLiquid(8000, Fluids.WATER);
 		h.succeedWhen(() -> {
 			h.assertTrue(a.isConnectedOnSide(Direction.EAST) && b.isConnectedOnSide(Direction.WEST), "reservoirs not joined");
@@ -216,8 +222,8 @@ public class PipeTests {
 	/** Different fluids do not mix: lava next to water stays apart, and the wall stays. */
 	@GameTest(template = PLATFORM, timeoutTicks = 60)
 	public static void reservoirsKeepFluidsApart(GameTestHelper h) {
-		var a = place(h, RotaryBlocks.RESERVOIR.get(), 3, 1, 4, 0, reika.rotarycraft.content.blockentity.ReservoirBlockEntity.class);
-		var b = place(h, RotaryBlocks.RESERVOIR.get(), 4, 1, 4, 0, reika.rotarycraft.content.blockentity.ReservoirBlockEntity.class);
+		var a = place(h, RotaryBlocks.RESERVOIR.get(), 3, 1, 4, 0, ReservoirBlockEntity.class);
+		var b = place(h, RotaryBlocks.RESERVOIR.get(), 4, 1, 4, 0, ReservoirBlockEntity.class);
 		a.addLiquid(8000, Fluids.WATER);
 		b.addLiquid(1000, RotaryFluids.LUBRICANT.get());
 		h.runAtTickTime(40, () -> {
@@ -230,9 +236,9 @@ public class PipeTests {
 	/** A pipe under a reservoir drains it (the reservoir gives only downwards); the item of a filled reservoir keeps the contents. */
 	@GameTest(template = PLATFORM, timeoutTicks = 200)
 	public static void reservoirDrainsDown(GameTestHelper h) {
-		var r = place(h, RotaryBlocks.RESERVOIR.get(), 4, 2, 4, 0, reika.rotarycraft.content.blockentity.ReservoirBlockEntity.class);
+		var r = place(h, RotaryBlocks.RESERVOIR.get(), 4, 2, 4, 0, ReservoirBlockEntity.class);
 		r.addLiquid(8000, Fluids.WATER);
-		var drop = r.collectComponents().get(reika.rotarycraft.registry.RotaryComponents.RESERVOIR_DATA.get());
+		var drop = r.collectComponents().get(RotaryComponents.RESERVOIR_DATA.get());
 		h.assertTrue(drop != null && drop.fluid().getAmount() == 8000, "item data "+drop);
 		PipingBlockEntity p = pipe(h, RotaryBlocks.PIPE.get(), 4, 1, 4);
 		PipingBlockEntity side = pipe(h, RotaryBlocks.PIPE.get(), 5, 2, 4);
@@ -245,7 +251,7 @@ public class PipeTests {
 	/** A valve under a reservoir takes nothing until it gets a redstone signal. */
 	@GameTest(template = PLATFORM, timeoutTicks = 200)
 	public static void valveNeedsRedstone(GameTestHelper h) {
-		var r = place(h, RotaryBlocks.RESERVOIR.get(), 4, 2, 4, 0, reika.rotarycraft.content.blockentity.ReservoirBlockEntity.class);
+		var r = place(h, RotaryBlocks.RESERVOIR.get(), 4, 2, 4, 0, ReservoirBlockEntity.class);
 		r.addLiquid(8000, Fluids.WATER);
 		PipingBlockEntity v = pipe(h, RotaryBlocks.VALVE.get(), 4, 1, 4);
 		h.runAtTickTime(40, () -> {
@@ -278,7 +284,7 @@ public class PipeTests {
 	public static void bypassesStayApart(GameTestHelper h) {
 		pipe(h, RotaryBlocks.BYPASS.get(), 3, 1, 4);
 		pipe(h, RotaryBlocks.BYPASS.get(), 4, 1, 4);
-		var c = (reika.rotarycraft.content.piping.FlowPipeBlockEntity)pipe(h, RotaryBlocks.BYPASS.get(), 3, 1, 6);
+		var c = (FlowPipeBlockEntity)pipe(h, RotaryBlocks.BYPASS.get(), 3, 1, 6);
 		pipe(h, RotaryBlocks.BYPASS.get(), 4, 1, 6);
 		h.runAtTickTime(10, () -> {
 			h.assertFalse(connected(h, 3, 1, 4, Direction.EAST), "bypasses joined without being placed against each other");
@@ -299,7 +305,7 @@ public class PipeTests {
 	public static void suctionPipeIgnoresPipes(GameTestHelper h) {
 		PipingBlockEntity full = pipe(h, RotaryBlocks.PIPE.get(), 3, 1, 4);
 		PipingBlockEntity s = pipe(h, RotaryBlocks.SUCTION.get(), 4, 1, 4);
-		place(h, RotaryBlocks.RESERVOIR.get(), 4, 2, 4, 0, reika.rotarycraft.content.blockentity.ReservoirBlockEntity.class).addLiquid(8000, Fluids.WATER);
+		place(h, RotaryBlocks.RESERVOIR.get(), 4, 2, 4, 0, ReservoirBlockEntity.class).addLiquid(8000, Fluids.WATER);
 		h.runAfterDelay(2, () -> full.addFluid(Fluids.WATER, 4000));
 		h.runAtTickTime(60, () -> {
 			h.assertTrue(connected(h, 4, 1, 4, Direction.WEST), "suction pipe not joined to the liquid pipe");
@@ -317,8 +323,8 @@ public class PipeTests {
 	public static void pipePumpMovesWater(GameTestHelper h) {
 		PipingBlockEntity dst = pipe(h, RotaryBlocks.PIPE.get(), 3, 1, 4);
 		PipingBlockEntity src = pipe(h, RotaryBlocks.PIPE.get(), 5, 1, 4);
-		reika.rotarycraft.content.blockentity.PipePumpBlockEntity pump = place(h, RotaryBlocks.PIPE_PUMP.get(), 4, 1, 4, 0,
-				reika.rotarycraft.content.blockentity.PipePumpBlockEntity.class);
+		PipePumpBlockEntity pump = place(h, RotaryBlocks.PIPE_PUMP.get(), 4, 1, 4, 0,
+				PipePumpBlockEntity.class);
 		place(h, RotaryBlocks.MICRO_ENGINE.get(), 4, 1, 5, 2, EngineBlockEntity.class).addFuel(50000);
 		h.runAfterDelay(2, () -> src.addFluid(Fluids.WATER, 1000));
 		h.succeedWhen(() -> {
@@ -333,7 +339,7 @@ public class PipeTests {
 		PipingBlockEntity dst = pipe(h, RotaryBlocks.PIPE.get(), 3, 1, 4);
 		PipingBlockEntity src = pipe(h, RotaryBlocks.PIPE.get(), 5, 1, 4);
 		pipe(h, RotaryBlocks.PIPE.get(), 4, 1, 3);
-		place(h, RotaryBlocks.PIPE_PUMP.get(), 4, 1, 4, 0, reika.rotarycraft.content.blockentity.PipePumpBlockEntity.class);
+		place(h, RotaryBlocks.PIPE_PUMP.get(), 4, 1, 4, 0, PipePumpBlockEntity.class);
 		h.runAfterDelay(2, () -> src.addFluid(Fluids.WATER, 1000));
 		h.runAtTickTime(50, () -> {
 			h.assertTrue(dst.getFluidLevel() == 0, "moved "+dst.getFluidLevel()+" mB without power");

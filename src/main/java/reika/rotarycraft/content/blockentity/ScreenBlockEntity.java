@@ -20,8 +20,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemStackHandler;
+import net.neoforged.neoforge.items.wrapper.RangedWrapper;
 
 import reika.rotarycraft.registry.RotaryBlockEntities;
+
+import java.util.Arrays;
 
 /**
  * Original: Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityScreen (CCTV screen) - with at least 1024 W and 4 Nm from below and three
@@ -61,7 +64,7 @@ public class ScreenBlockEntity extends PowerReceiverBlockEntity {
 
 	/** Original: dyes in (isItemValidForSlot), nothing out (canExtractItem false). */
 	public IItemHandler getItemHandler(@Nullable Direction side) {
-		return new net.neoforged.neoforge.items.wrapper.RangedWrapper(inv, 0, 3) {
+		return new RangedWrapper(inv, 0, 3) {
 			@Override
 			public ItemStack extractItem(int slot, int amount, boolean simulate) {
 				return ItemStack.EMPTY;
@@ -111,7 +114,7 @@ public class ScreenBlockEntity extends PowerReceiverBlockEntity {
 					BlockPos p = te.getBlockPos();
 					if (te != this && te instanceof RemoteControlled rc && Math.abs(p.getX()-worldPosition.getX()) <= SEARCH_RANGE
 							&& Math.abs(p.getY()-worldPosition.getY()) <= SEARCH_RANGE && Math.abs(p.getZ()-worldPosition.getZ()) <= SEARCH_RANGE
-							&& java.util.Arrays.equals(rc.getColors(), colors))
+							&& Arrays.equals(rc.getColors(), colors))
 						return rc;
 				}
 			}

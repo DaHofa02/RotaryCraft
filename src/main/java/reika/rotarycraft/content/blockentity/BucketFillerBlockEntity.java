@@ -9,6 +9,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.Clearable;
 import net.minecraft.world.Containers;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -34,7 +35,7 @@ import reika.rotarycraft.registry.RotaryBlockEntities;
  * from any side; acts once every max(1, 200 - 20*log2(omega+1)) + 1 ticks: filling every empty container it can, emptying one. Liquid
  * comes in (filling) or goes out (emptying) on the four sides; containers come out at the bottom only when done.
  */
-public class BucketFillerBlockEntity extends PowerReceiverBlockEntity implements PipeConnector, Screwdriverable, net.minecraft.world.Clearable {
+public class BucketFillerBlockEntity extends PowerReceiverBlockEntity implements PipeConnector, Screwdriverable, Clearable {
 
 	public static final int CAPACITY = 24000;
 

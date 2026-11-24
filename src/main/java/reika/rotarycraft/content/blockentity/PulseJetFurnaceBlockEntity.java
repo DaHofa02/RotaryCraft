@@ -13,9 +13,12 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.Clearable;
+import net.minecraft.world.Containers;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
@@ -50,7 +53,10 @@ import reika.rotarycraft.registry.RotarySounds;
  * 1000 °C it explodes into scrap. It heats its surroundings and burns what touches it (temperature/100 damage).
  * Slots: 0 input, 2 output. Not ported: the oxygen accelerant (ReactorCraft fluid), heat-sink fins.
  */
-public class PulseJetFurnaceBlockEntity extends PowerReceiverBlockEntity implements TemperatureMachine, PipeConnector, net.minecraft.world.Clearable {
+public class PulseJetFurnaceBlockEntity extends PowerReceiverBlockEntity implements TemperatureMachine, PipeConnector, Clearable {
+
+	/** Remembers the last matching recipe, like vanilla furnaces, instead of searching all recipes every tick. */
+	private final RecipeManager.CachedCheck<SingleRecipeInput, PulseJetRecipe> recipeCheck = RecipeManager.createCheck(RotaryRecipeTypes.PULSE_JET.get());
 
 	public static final int CAPACITY = 3000;
 	public static final int MAXFUEL = 8000;
@@ -226,7 +232,7 @@ public class PulseJetFurnaceBlockEntity extends PowerReceiverBlockEntity impleme
 	private Optional<RecipeHolder<PulseJetRecipe>> findRecipe(ItemStack is) {
 		if (level == null || is.isEmpty())
 			return Optional.empty();
-		return level.getRecipeManager().getRecipeFor(RotaryRecipeTypes.PULSE_JET.get(), new SingleRecipeInput(is), level);
+		return recipeCheck.getRecipeFor(new SingleRecipeInput(is), level);
 	}
 
 	/** Original getRecipe: power, input, fuel, temperature and room in the output. */
@@ -474,7 +480,7 @@ public class PulseJetFurnaceBlockEntity extends PowerReceiverBlockEntity impleme
 	@Override
 	public void onBlockBroken(Level world, BlockPos pos) {
 		for (int i = 0; i < inv.getSlots(); i++)
-			net.minecraft.world.Containers.dropItemStack(world, pos.getX(), pos.getY(), pos.getZ(), inv.getStackInSlot(i).copy());
+			Containers.dropItemStack(world, pos.getX(), pos.getY(), pos.getZ(), inv.getStackInSlot(i).copy());
 	}
 
 	@Override

@@ -31,6 +31,7 @@ import reika.rotarycraft.content.blockentity.engine.EngineBlockEntity;
 import reika.rotarycraft.content.piping.PipingBlockEntity;
 import reika.rotarycraft.lib.world.AmbientTemperature;
 import reika.rotarycraft.lib.world.BiomeHumidity;
+import reika.rotarycraft.registry.GearboxTypes;
 import reika.rotarycraft.registry.RotaryBlocks;
 
 @GameTestHolder(RotaryCraft.MOD_ID)
@@ -57,7 +58,7 @@ public class AggregatorTests {
 		place(h, RotaryBlocks.GAS_ENGINE.get(), fast ? 6 : 5, 2, 4, 0, EngineBlockEntity.class).addFuel(50000);
 		if (fast) {
 			GearboxBlockEntity gbx = place(h, RotaryBlocks.GEARBOX.get(), 5, 2, 4, 8, GearboxBlockEntity.class);
-			gbx.applyComponentsFromItemStack(GearboxBlock.gearboxItem(reika.rotarycraft.registry.GearboxTypes.STEEL, 8));
+			gbx.applyComponentsFromItemStack(GearboxBlock.gearboxItem(GearboxTypes.STEEL, 8));
 			gbx.setBlockMetadata(8);
 			gbx.fillWithLubricant();
 			gbx.reduction = false;

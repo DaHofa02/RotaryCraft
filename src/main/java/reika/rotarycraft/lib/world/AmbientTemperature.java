@@ -134,7 +134,7 @@ public final class AmbientTemperature {
 
 	/** Original: WorldProvider.getAverageGroundLevel - 64, or the top of the layers in a flat world. */
 	public static int getAverageGroundLevel(Level world) {
-		if (world instanceof net.minecraft.server.level.ServerLevel sl)
+		if (world instanceof ServerLevel sl)
 			return sl.getChunkSource().getGenerator().getSpawnHeight(sl);
 		return world.getSeaLevel()+1;
 	}

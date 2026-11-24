@@ -4,6 +4,7 @@
 package reika.rotarycraft.compat.create;
 
 import java.util.List;
+import java.util.Locale;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -99,7 +100,7 @@ public class RotaryToCreateBlockEntity extends GeneratingKineticBlockEntity impl
 	@Override
 	public boolean addToGoggleTooltip(List<Component> tooltip, boolean sneaking) {
 		boolean added = super.addToGoggleTooltip(tooltip, sneaking);
-		tooltip.add(Component.translatable("gui.rotarycraft.create.shaft_in", omegaIn, torqueIn, String.format(java.util.Locale.ROOT, "%,d", (long)omegaIn*torqueIn)));
+		tooltip.add(Component.translatable("gui.rotarycraft.create.shaft_in", omegaIn, torqueIn, String.format(Locale.ROOT, "%,d", (long)omegaIn*torqueIn)));
 		return true;
 	}
 

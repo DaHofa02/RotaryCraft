@@ -5,11 +5,15 @@ package reika.rotarycraft.content.blockentity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+
+import reika.rotarycraft.RotaryConfig;
 
 /**
  * Base of the force field and the containment field, written for the port from the original's behaviour: power from below, a sphere of range
@@ -34,7 +38,7 @@ public abstract class DomeBlockEntity extends PowerReceiverBlockEntity {
 
 	/** Range from the power alone. */
 	public int getPowerRange() {
-		return power < MINPOWER ? 0 : (int)Math.min(reika.rotarycraft.RotaryConfig.FORCERANGE.get(), 2+(power-MINPOWER)/falloff);
+		return power < MINPOWER ? 0 : (int)Math.min(RotaryConfig.FORCERANGE.get(), 2+(power-MINPOWER)/falloff);
 	}
 
 	public int getRange() {
@@ -87,13 +91,13 @@ public abstract class DomeBlockEntity extends PowerReceiverBlockEntity {
 	}
 
 	@Override
-	protected void writeSyncTag(net.minecraft.nbt.CompoundTag NBT, net.minecraft.core.HolderLookup.Provider registries) {
+	protected void writeSyncTag(CompoundTag NBT, HolderLookup.Provider registries) {
 		super.writeSyncTag(NBT, registries);
 		NBT.putInt("range", range);
 	}
 
 	@Override
-	protected void readSyncTag(net.minecraft.nbt.CompoundTag NBT, net.minecraft.core.HolderLookup.Provider registries) {
+	protected void readSyncTag(CompoundTag NBT, HolderLookup.Provider registries) {
 		super.readSyncTag(NBT, registries);
 		range = NBT.getInt("range");
 	}

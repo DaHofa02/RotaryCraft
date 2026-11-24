@@ -12,6 +12,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.world.Clearable;
 import net.minecraft.world.Containers;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -26,6 +27,8 @@ import reika.rotarycraft.lib.world.AmbientTemperature;
 import reika.rotarycraft.registry.RotaryBlockEntities;
 import reika.rotarycraft.registry.RotaryItems;
 
+import java.util.function.Predicate;
+
 /**
  * Original: Reika.RotaryCraft.TileEntities.Farming.TileEntityComposter - the composter; needs no power. Between 40 and 70 deg C it
  * turns plant and animal matter (slot 0) with yeast (slot 1) into compost (slot 2): its timer advances by 1 + (T - 40)/4 per tick and
@@ -33,7 +36,7 @@ import reika.rotarycraft.registry.RotaryItems;
  * moves by 1 towards the ambient temperature (by 2 while it is more than twice / less than half of it), which water beside it lowers
  * by 5 and ice by 15 and fire raises by 50 and lava by 200. Only compost comes out.
  */
-public class ComposterBlockEntity extends RotaryCraftBlockEntity implements TemperatureMachine, net.minecraft.world.Clearable {
+public class ComposterBlockEntity extends RotaryCraftBlockEntity implements TemperatureMachine, Clearable {
 
 	public static final int MINTEMP = 40;
 	public static final int KILLTEMP = 70;
@@ -148,7 +151,7 @@ public class ComposterBlockEntity extends RotaryCraftBlockEntity implements Temp
 		return out.getCount()+value <= out.getMaxStackSize() ? value : 0;
 	}
 
-	private static boolean isNextTo(Level world, BlockPos pos, java.util.function.Predicate<BlockState> test) {
+	private static boolean isNextTo(Level world, BlockPos pos, Predicate<BlockState> test) {
 		for (Direction d : Direction.values())
 			if (test.test(world.getBlockState(pos.relative(d))))
 				return true;

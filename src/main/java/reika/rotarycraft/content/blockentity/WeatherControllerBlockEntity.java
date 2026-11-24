@@ -24,7 +24,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemStackHandler;
+import net.neoforged.neoforge.items.wrapper.RangedWrapper;
 
+import reika.rotarycraft.RotaryConfig;
 import reika.rotarycraft.content.item.CraftingPart;
 import reika.rotarycraft.registry.RotaryBlockEntities;
 import reika.rotarycraft.registry.RotaryItems;
@@ -83,7 +85,7 @@ public class WeatherControllerBlockEntity extends PowerReceiverBlockEntity {
 
 	/** Original: canExtractItem is always false. */
 	public IItemHandler getItemHandler(@Nullable Direction side) {
-		return new net.neoforged.neoforge.items.wrapper.RangedWrapper(inv, 0, 18) {
+		return new RangedWrapper(inv, 0, 18) {
 			@Override
 			public ItemStack extractItem(int slot, int amount, boolean simulate) {
 				return ItemStack.EMPTY;
@@ -176,7 +178,7 @@ public class WeatherControllerBlockEntity extends PowerReceiverBlockEntity {
 			mode = RainMode.SUN;
 			is = sawdust();
 		}
-		else if (silverio && !reika.rotarycraft.RotaryConfig.BANRAIN.get()) { //config banRain: silver iodide does nothing
+		else if (silverio && !RotaryConfig.BANRAIN.get()) { //config banRain: silver iodide does nothing
 			mode = RainMode.RAIN;
 			is = silverIodide();
 			if (redstone) {

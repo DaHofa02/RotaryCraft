@@ -11,6 +11,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 
+import reika.rotarycraft.RotaryConfig;
 import reika.rotarycraft.content.block.BridgeBlock;
 import reika.rotarycraft.registry.RotaryBlockEntities;
 import reika.rotarycraft.registry.RotaryBlocks;
@@ -116,12 +117,12 @@ public class LightBridgeBlockEntity extends PowerReceiverBlockEntity {
 	}
 
 	public int getRange() {
-		int limit = reika.rotarycraft.RotaryConfig.BRIDGERANGE.get();
+		int limit = RotaryConfig.BRIDGERANGE.get();
 		return (int)Math.min(limit, power*limit/MIN_POWER);
 	}
 
 	public int getMaxRange() {
-		return reika.rotarycraft.RotaryConfig.BRIDGERANGE.get();
+		return RotaryConfig.BRIDGERANGE.get();
 	}
 
 	/** Original BreakAction.breakBlock. */

@@ -11,6 +11,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.Clearable;
+import net.minecraft.world.Containers;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -30,6 +32,9 @@ import reika.rotarycraft.content.blockentity.EngineControllerBlockEntity;
 import reika.rotarycraft.content.blockentity.IOMachineBlockEntity;
 import reika.rotarycraft.content.blockentity.MachineSounds;
 import reika.rotarycraft.content.blockentity.TemperatureMachine;
+import reika.rotarycraft.content.item.IntegratedGearboxItem;
+import reika.rotarycraft.content.piping.PipeConnector;
+import reika.rotarycraft.content.piping.PipeType;
 import reika.rotarycraft.content.power.PowerSourceList;
 import reika.rotarycraft.content.power.PowerSourceTracker;
 import reika.rotarycraft.content.power.SimpleProvider;
@@ -38,13 +43,14 @@ import reika.rotarycraft.lib.math.ReikaMathLibrary;
 import reika.rotarycraft.lib.world.AmbientTemperature;
 import reika.rotarycraft.registry.EngineType;
 import reika.rotarycraft.registry.RotaryFluids;
+import reika.rotarycraft.registry.RotaryItems;
 
 /**
  * Original: Reika.RotaryCraft.Base.TileEntity.TileEntityEngine, including the Engine Control Unit below (above when flipped).
  * The integrated gearbox upgrade (IntegratedGearboxItem) multiplies torque and divides speed or the other way round. Not ported yet:
  * the oxygen boost (air fluids); without it the engine behaves like an original engine without oxygen.
  */
-public abstract class EngineBlockEntity extends IOMachineBlockEntity implements TemperatureMachine, SimpleProvider, PowerGenerator, net.minecraft.world.Clearable, reika.rotarycraft.content.piping.PipeConnector {
+public abstract class EngineBlockEntity extends IOMachineBlockEntity implements TemperatureMachine, SimpleProvider, PowerGenerator, Clearable, PipeConnector {
 
 	/** Vanilla Clearable: commands such as /setblock and /fill empty the inventory before replacing the block, so nothing drops. */
 	@Override
@@ -405,15 +411,15 @@ public abstract class EngineBlockEntity extends IOMachineBlockEntity implements 
 		if (replacing)
 			return;
 		for (int i = 0; i < inv.getSlots(); i++)
-			net.minecraft.world.Containers.dropItemStack(world, pos.getX(), pos.getY(), pos.getZ(), inv.getStackInSlot(i).copy());
+			Containers.dropItemStack(world, pos.getX(), pos.getY(), pos.getZ(), inv.getStackInSlot(i).copy());
 		if (integratedGear != 0) { //original breakBlock: an unfilled gear of that ratio
-			ItemStack is = reika.rotarycraft.content.item.IntegratedGearboxItem.getIntegratedGearItem(integratedGear, null);
-			net.minecraft.world.Containers.dropItemStack(world, pos.getX()+rand.nextDouble(), pos.getY()+rand.nextDouble(), pos.getZ()+rand.nextDouble(), is);
+			ItemStack is = IntegratedGearboxItem.getIntegratedGearItem(integratedGear, null);
+			Containers.dropItemStack(world, pos.getX()+rand.nextDouble(), pos.getY()+rand.nextDouble(), pos.getZ()+rand.nextDouble(), is);
 		}
 	}
 
 	protected final void dropItem(Level world, BlockPos pos, ItemStack is) {
-		net.minecraft.world.Containers.dropItemStack(world, pos.getX()+0.5, pos.getY()+0.5, pos.getZ()+0.5, is);
+		Containers.dropItemStack(world, pos.getX()+0.5, pos.getY()+0.5, pos.getZ()+0.5, is);
 	}
 
 	protected boolean canConsumeFuel() {
@@ -500,7 +506,7 @@ public abstract class EngineBlockEntity extends IOMachineBlockEntity implements 
 			return false;
 		return switch(type) {
 			case GAS, AC -> true;
-			case SPORT -> (i == 0 && is.is(reika.rotarycraft.registry.RotaryItems.ethanol())) || (i == 1 && type.isAdditive(is));
+			case SPORT -> (i == 0 && is.is(RotaryItems.ethanol())) || (i == 1 && type.isAdditive(is));
 			default -> false;
 		};
 	}
@@ -653,19 +659,19 @@ public abstract class EngineBlockEntity extends IOMachineBlockEntity implements 
 
 	/** Original canConnectToPipe: liquid pipes, fuel lines and hoses. */
 	@Override
-	public final boolean canConnectToPipe(reika.rotarycraft.content.piping.PipeType m) {
-		return m.isStandardPipe() || m == reika.rotarycraft.content.piping.PipeType.FUEL_LINE || m == reika.rotarycraft.content.piping.PipeType.HOSE;
+	public final boolean canConnectToPipe(PipeType m) {
+		return m.isStandardPipe() || m == PipeType.FUEL_LINE || m == PipeType.HOSE;
 	}
 
 	/** Original canConnectToPipeOnSide: fuel lines (and bedrock pipes) below the fuel engines, water pipes and lubricant hoses at the back. */
 	@Override
-	public final boolean canConnectToPipeOnSide(reika.rotarycraft.content.piping.PipeType p, Direction side) {
+	public final boolean canConnectToPipeOnSide(PipeType p, Direction side) {
 		if (type == null)
 			return false;
 		if (type.isJetFueled() || type.isEthanolFueled())
-			if ((p == reika.rotarycraft.content.piping.PipeType.FUEL_LINE || p == reika.rotarycraft.content.piping.PipeType.BEDROCK_PIPE) && side == this.getFuelInputDirection())
+			if ((p == PipeType.FUEL_LINE || p == PipeType.BEDROCK_PIPE) && side == this.getFuelInputDirection())
 				return true;
-		if ((type.isWaterPiped() && p.isStandardPipe()) || (type.requiresLubricant() && (p == reika.rotarycraft.content.piping.PipeType.HOSE || p == reika.rotarycraft.content.piping.PipeType.BEDROCK_PIPE))) {
+		if ((type.isWaterPiped() && p.isStandardPipe()) || (type.requiresLubricant() && (p == PipeType.HOSE || p == PipeType.BEDROCK_PIPE))) {
 			return switch (side) {
 				case EAST -> this.getBlockMetadata() == 0;
 				case SOUTH -> this.getBlockMetadata() == 2;
@@ -683,8 +689,8 @@ public abstract class EngineBlockEntity extends IOMachineBlockEntity implements 
 	}
 
 	@Override
-	public final reika.rotarycraft.content.piping.PipeConnector.Flow getFlowForSide(Direction side) {
-		return reika.rotarycraft.content.piping.PipeConnector.Flow.INPUT;
+	public final PipeConnector.Flow getFlowForSide(Direction side) {
+		return PipeConnector.Flow.INPUT;
 	}
 
 	public IFluidHandler getFluidHandler(@Nullable Direction from) {
@@ -779,13 +785,13 @@ public abstract class EngineBlockEntity extends IOMachineBlockEntity implements 
 
 	/** Original applyIntegratedGear (IntegratedGearboxable): only a filled upgrade, on a stopped engine without one. */
 	public final boolean applyIntegratedGear(ItemStack is) {
-		if (is.isEmpty() || !(is.getItem() instanceof reika.rotarycraft.content.item.IntegratedGearboxItem))
+		if (is.isEmpty() || !(is.getItem() instanceof IntegratedGearboxItem))
 			return false;
 		if (integratedGear != 0)
 			return false;
 		if (omega > 0 || power > 0)
 			return false;
-		integratedGear = reika.rotarycraft.content.item.IntegratedGearboxItem.getRatioFromIntegratedGearItem(is, true);
+		integratedGear = IntegratedGearboxItem.getRatioFromIntegratedGearItem(is, true);
 		this.syncAllData();
 		return integratedGear != 0;
 	}

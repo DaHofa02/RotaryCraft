@@ -21,11 +21,14 @@ import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
 import reika.rotarycraft.RotaryCraft;
+import reika.rotarycraft.content.block.FermenterBlock;
 import reika.rotarycraft.content.block.GearboxBlock;
 import reika.rotarycraft.content.blockentity.BevelGearBlockEntity;
 import reika.rotarycraft.content.blockentity.CentrifugeBlockEntity;
 import reika.rotarycraft.content.blockentity.FermenterBlockEntity;
+import reika.rotarycraft.content.blockentity.FractionatorBlockEntity;
 import reika.rotarycraft.content.blockentity.GearboxBlockEntity;
+import reika.rotarycraft.content.blockentity.PulseJetFurnaceBlockEntity;
 import reika.rotarycraft.content.blockentity.RotaryCraftBlockEntity;
 import reika.rotarycraft.content.blockentity.engine.EngineBlockEntity;
 import reika.rotarycraft.content.item.CraftingPart;
@@ -71,7 +74,7 @@ public class EthanolChainTests {
 			ItemStack out = f.getInventory().getStackInSlot(2);
 			h.assertTrue(out.is(RotaryItems.YEAST.get()), "output "+out+" at "+f.getTemperature()+" C, "+f.omega+" rad/s");
 			h.assertTrue(f.getWater() == 4000-50*out.getCount(), "water "+f.getWater()+" for "+out.getCount()+" yeast");
-			h.assertTrue(h.getBlockState(new BlockPos(4, 1, 4)).getValue(reika.rotarycraft.content.block.FermenterBlock.FACING) == Direction.WEST, "front not west");
+			h.assertTrue(h.getBlockState(new BlockPos(4, 1, 4)).getValue(FermenterBlock.FACING) == Direction.WEST, "front not west");
 		});
 	}
 
@@ -157,7 +160,7 @@ public class EthanolChainTests {
 	}
 
 	/** Fractionation Unit at (4,2,4) powered from below: gas engine -> 16:1 speed-up (8192 rad/s @ 8 Nm = 65536 W) -> bevel east->up. */
-	private static reika.rotarycraft.content.blockentity.FractionatorBlockEntity fractionatorRig(GameTestHelper h, boolean tear) {
+	private static FractionatorBlockEntity fractionatorRig(GameTestHelper h, boolean tear) {
 		place(h, RotaryBlocks.GAS_ENGINE.get(), 6, 1, 4, 0, EngineBlockEntity.class).addFuel(50000);
 		GearboxBlockEntity gbx = place(h, RotaryBlocks.GEARBOX.get(), 5, 1, 4, 12, GearboxBlockEntity.class);
 		gbx.applyComponentsFromItemStack(GearboxBlock.gearboxItem(GearboxTypes.STEEL, 16));
@@ -166,7 +169,7 @@ public class EthanolChainTests {
 		gbx.reduction = false;
 		BevelGearBlockEntity bev = place(h, RotaryBlocks.BEVEL_GEARS.get(), 4, 1, 4, 0, BevelGearBlockEntity.class);
 		bev.direction = BevelGearBlockEntity.getDirectionMap().indexOf(new BevelGearBlockEntity.IOPair(Direction.EAST, Direction.UP));
-		var f = place(h, RotaryBlocks.FRACTIONATOR.get(), 4, 2, 4, 0, reika.rotarycraft.content.blockentity.FractionatorBlockEntity.class);
+		var f = place(h, RotaryBlocks.FRACTIONATOR.get(), 4, 2, 4, 0, FractionatorBlockEntity.class);
 		var inv = f.getInventory();
 		inv.setStackInSlot(0, new ItemStack(Items.BLAZE_POWDER, 8));
 		inv.setStackInSlot(1, new ItemStack(RotaryItems.part(CraftingPart.COALDUST), 8));
@@ -212,7 +215,7 @@ public class EthanolChainTests {
 	/** The original yield curve and the pressure build-up from torque: 8 Nm settles low (yield about 0.1). */
 	@GameTest(template = PLATFORM, timeoutTicks = 20)
 	public static void fractionatorYieldCurve(GameTestHelper h) {
-		var f = place(h, RotaryBlocks.FRACTIONATOR.get(), 4, 1, 4, 0, reika.rotarycraft.content.blockentity.FractionatorBlockEntity.class);
+		var f = place(h, RotaryBlocks.FRACTIONATOR.get(), 4, 1, 4, 0, FractionatorBlockEntity.class);
 		int[][] pts = {{180, 100}, {720, 1000}, {1000, 2500}, {0, 10}};
 		for (int[] p : pts) {
 			f.setPressure(p[0]);
@@ -224,11 +227,11 @@ public class EthanolChainTests {
 	}
 
 	/** Microturbine (131072 rad/s, jet fuel) -> bevel gears east->up -> Pulse Jet Furnace (4,2,4) with jet fuel. */
-	private static reika.rotarycraft.content.blockentity.PulseJetFurnaceBlockEntity pulseRig(GameTestHelper h) {
+	private static PulseJetFurnaceBlockEntity pulseRig(GameTestHelper h) {
 		place(h, RotaryBlocks.MICRO_ENGINE.get(), 5, 1, 4, 0, EngineBlockEntity.class).addFuel(100000);
 		BevelGearBlockEntity bev = place(h, RotaryBlocks.BEVEL_GEARS.get(), 4, 1, 4, 0, BevelGearBlockEntity.class);
 		bev.direction = BevelGearBlockEntity.getDirectionMap().indexOf(new BevelGearBlockEntity.IOPair(Direction.EAST, Direction.UP));
-		var f = place(h, RotaryBlocks.PULSE_JET.get(), 4, 2, 4, 0, reika.rotarycraft.content.blockentity.PulseJetFurnaceBlockEntity.class);
+		var f = place(h, RotaryBlocks.PULSE_JET.get(), 4, 2, 4, 0, PulseJetFurnaceBlockEntity.class);
 		f.addFuel(8000);
 		return f;
 	}
@@ -255,7 +258,7 @@ public class EthanolChainTests {
 		place(h, RotaryBlocks.GAS_ENGINE.get(), 5, 1, 4, 0, EngineBlockEntity.class).addFuel(50000);
 		BevelGearBlockEntity bev = place(h, RotaryBlocks.BEVEL_GEARS.get(), 4, 1, 4, 0, BevelGearBlockEntity.class);
 		bev.direction = BevelGearBlockEntity.getDirectionMap().indexOf(new BevelGearBlockEntity.IOPair(Direction.EAST, Direction.UP));
-		var f = place(h, RotaryBlocks.PULSE_JET.get(), 4, 2, 4, 0, reika.rotarycraft.content.blockentity.PulseJetFurnaceBlockEntity.class);
+		var f = place(h, RotaryBlocks.PULSE_JET.get(), 4, 2, 4, 0, PulseJetFurnaceBlockEntity.class);
 		f.addFuel(8000);
 		f.setTemperature(900);
 		f.getInventory().setStackInSlot(0, new ItemStack(Items.IRON_INGOT));

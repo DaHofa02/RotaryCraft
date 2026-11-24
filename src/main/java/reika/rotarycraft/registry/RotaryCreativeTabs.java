@@ -3,20 +3,27 @@
  ******************************************************************************/
 package reika.rotarycraft.registry;
 
+import java.util.List;
 import java.util.function.Supplier;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
+import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 import reika.rotarycraft.RotaryCraft;
+import reika.rotarycraft.compat.OptionalMods;
 import reika.rotarycraft.content.block.FlywheelBlock;
 import reika.rotarycraft.content.block.GearboxBlock;
 import reika.rotarycraft.content.block.ShaftBlock;
+import reika.rotarycraft.content.item.BedrockTools;
+import reika.rotarycraft.content.item.CoilItem;
 import reika.rotarycraft.content.item.CraftingPart;
+import reika.rotarycraft.content.item.IntegratedGearboxItem;
 import reika.rotarycraft.registry.GearboxTypes.GearPart;
 
 /** Original: the RotaryCraft creative tabs (machines, items, parts). Sub-variants are listed like the original getSubItems. */
@@ -67,16 +74,16 @@ public final class RotaryCreativeTabs {
 				out.accept(RotaryBlocks.FLAME_TURRET.get());
 				out.accept(RotaryBlocks.COMPACTOR.get());
 				out.accept(RotaryBlocks.FILLING_STATION.get());
-				for (int i = 0; i < reika.rotarycraft.registry.RotaryItems.GEAR_UPGRADES.size(); i++) { //original getSubItems: empty, and filled with lubricant or nitrogen
-					var item = reika.rotarycraft.registry.RotaryItems.GEAR_UPGRADES.get(i).get();
+				for (int i = 0; i < RotaryItems.GEAR_UPGRADES.size(); i++) { //original getSubItems: empty, and filled with lubricant or nitrogen
+					var item = RotaryItems.GEAR_UPGRADES.get(i).get();
 					out.accept(item);
 					if (i > 0) {
-						out.accept(reika.rotarycraft.content.item.IntegratedGearboxItem.getIntegratedGearItem(1 << i, reika.rotarycraft.registry.RotaryFluids.LUBRICANT.get()));
-						out.accept(reika.rotarycraft.content.item.IntegratedGearboxItem.getIntegratedGearItem(1 << i, reika.rotarycraft.registry.RotaryFluids.LIQUID_NITROGEN.get()));
+						out.accept(IntegratedGearboxItem.getIntegratedGearItem(1 << i, RotaryFluids.LUBRICANT.get()));
+						out.accept(IntegratedGearboxItem.getIntegratedGearItem(1 << i, RotaryFluids.LIQUID_NITROGEN.get()));
 					}
 				}
 				out.accept(RotaryBlocks.SHAFT_JUNCTION.get());
-				for (var e : java.util.List.of(RotaryBlocks.DC_ENGINE, RotaryBlocks.WIND_ENGINE, RotaryBlocks.STEAM_ENGINE, RotaryBlocks.GAS_ENGINE, RotaryBlocks.AC_ENGINE, RotaryBlocks.SPORT_ENGINE, RotaryBlocks.MICRO_ENGINE, RotaryBlocks.HYDRO_ENGINE, RotaryBlocks.JET_ENGINE))
+				for (var e : List.of(RotaryBlocks.DC_ENGINE, RotaryBlocks.WIND_ENGINE, RotaryBlocks.STEAM_ENGINE, RotaryBlocks.GAS_ENGINE, RotaryBlocks.AC_ENGINE, RotaryBlocks.SPORT_ENGINE, RotaryBlocks.MICRO_ENGINE, RotaryBlocks.HYDRO_ENGINE, RotaryBlocks.JET_ENGINE))
 					out.accept(e.get());
 				out.accept(RotaryBlocks.ECU.get());
 				out.accept(RotaryBlocks.BLAST_FURNACE.get());
@@ -164,11 +171,11 @@ public final class RotaryCreativeTabs {
 				out.accept(RotaryBlocks.DISTILLERY.get());
 				out.accept(RotaryBlocks.BOILER.get());
 				out.accept(RotaryBlocks.STEAM_TURBINE.get());
-				if (reika.rotarycraft.compat.OptionalMods.pneumaticCraft()) {
+				if (OptionalMods.pneumaticCraft()) {
 					out.accept(RotaryBlocks.AIR_COMPRESSOR.get());
 					out.accept(RotaryBlocks.PNEUMATIC_ENGINE.get());
 				}
-				out.accept(reika.rotarycraft.registry.RotaryItems.CRAFT_PATTERN.get());
+				out.accept(RotaryItems.CRAFT_PATTERN.get());
 				out.accept(RotaryBlocks.FIREWORK_MACHINE.get());
 				out.accept(RotaryBlocks.GPR.get());
 				out.accept(RotaryBlocks.CENTRIFUGE.get());
@@ -178,7 +185,7 @@ public final class RotaryCreativeTabs {
 				out.accept(RotaryBlocks.PULSE_JET.get());
 				out.accept(RotaryBlocks.BLAST_GLASS.get());
 				//Original BlockDeco (tabRotary, metadata order)
-				for (var b : java.util.List.of(RotaryBlocks.STEEL_BLOCK, RotaryBlocks.ANTHRACITE_BLOCK, RotaryBlocks.LONSDALEITE_BLOCK, RotaryBlocks.SHIELD_BLOCK,
+				for (var b : List.of(RotaryBlocks.STEEL_BLOCK, RotaryBlocks.ANTHRACITE_BLOCK, RotaryBlocks.LONSDALEITE_BLOCK, RotaryBlocks.SHIELD_BLOCK,
 						RotaryBlocks.BEDROCK_INGOT_BLOCK, RotaryBlocks.COKE_BLOCK))
 					out.accept(b.get());
 				out.accept(RotaryBlocks.HOSE.get());
@@ -218,10 +225,10 @@ public final class RotaryCreativeTabs {
 			.displayItems((params, out) -> {
 				out.accept(RotaryItems.SCREWDRIVER.get());
 				//original ItemCoil.getSubItems: empty, every power of two up to 32000, and 30000 kJ
-				for (var coil : new net.neoforged.neoforge.registries.DeferredItem[] {RotaryItems.SPRING, RotaryItems.STRONGCOIL})
+				for (var coil : new DeferredItem[] {RotaryItems.SPRING, RotaryItems.STRONGCOIL})
 					for (int i = 0; i <= 32000; i++)
 						if (i == 0 || i == 30000 || Integer.bitCount(i) == 1)
-							out.accept(reika.rotarycraft.content.item.CoilItem.withCharge(new ItemStack((net.minecraft.world.item.Item)coil.get()), i));
+							out.accept(CoilItem.withCharge(new ItemStack((Item)coil.get()), i));
 				out.accept(RotaryItems.METER.get());
 				out.accept(RotaryItems.UPGRADE_PERFORMANCE.get());
 				out.accept(RotaryItems.UPGRADE_AFTERBURNER.get());
@@ -235,12 +242,12 @@ public final class RotaryCreativeTabs {
 				out.accept(RotaryItems.UPGRADE_FLUX.get());
 				out.accept(RotaryItems.UPGRADE_LODESTONE.get());
 				out.accept(RotaryItems.HANDBOOK.get());
-				for (var it : java.util.List.of(RotaryItems.BEDROCK_PICKAXE, RotaryItems.BEDROCK_AXE, RotaryItems.BEDROCK_SHOVEL, RotaryItems.BEDROCK_SWORD,
+				for (var it : List.of(RotaryItems.BEDROCK_PICKAXE, RotaryItems.BEDROCK_AXE, RotaryItems.BEDROCK_SHOVEL, RotaryItems.BEDROCK_SWORD,
 						RotaryItems.BEDROCK_HOE, RotaryItems.BEDROCK_SHEARS, RotaryItems.BEDROCK_SCYTHE, RotaryItems.BEDROCK_HELMET, RotaryItems.BEDROCK_CHESTPLATE,
 						RotaryItems.BEDROCK_LEGGINGS, RotaryItems.BEDROCK_BOOTS))
-					out.accept(reika.rotarycraft.content.item.BedrockTools.withForced(it.get(), params.holders()));
-				if (reika.rotarycraft.content.item.BedrockTools.paxelModLoaded())
-					out.accept(reika.rotarycraft.content.item.BedrockTools.withForced(RotaryItems.BEDROCK_PAXEL.get(), params.holders()));
+					out.accept(BedrockTools.withForced(it.get(), params.holders()));
+				if (BedrockTools.paxelModLoaded())
+					out.accept(BedrockTools.withForced(RotaryItems.BEDROCK_PAXEL.get(), params.holders()));
 				out.accept(RotaryItems.LUBRICANT_BUCKET.get());
 				out.accept(RotaryItems.JET_FUEL_BUCKET.get());
 				out.accept(RotaryItems.ETHANOL_BUCKET.get());

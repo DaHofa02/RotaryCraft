@@ -10,6 +10,7 @@ import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.Cow;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
@@ -51,7 +52,7 @@ public class IgniterTests {
 		return place(h, RotaryBlocks.IGNITER.get(), 4, 2, 4, 0, IgniterBlockEntity.class);
 	}
 
-	private static int count(ItemStackHandler inv, net.minecraft.world.item.Item item) {
+	private static int count(ItemStackHandler inv, Item item) {
 		int n = 0;
 		for (int i = 0; i < inv.getSlots(); i++)
 			if (inv.getStackInSlot(i).is(item))

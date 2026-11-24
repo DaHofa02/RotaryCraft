@@ -16,6 +16,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.Clearable;
 import net.minecraft.world.Containers;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
@@ -41,7 +42,7 @@ import reika.rotarycraft.registry.RotaryBlockEntities;
  * burnt while below the fuel's temperature, closing a quarter of the gap. Needs 32768 W and 1024 rad/s from any side.
  * Change: a lava bucket gives its empty bucket back (the original lost it).
  */
-public class IgniterBlockEntity extends PowerReceiverBlockEntity implements TemperatureMachine, net.minecraft.world.Clearable {
+public class IgniterBlockEntity extends PowerReceiverBlockEntity implements TemperatureMachine, Clearable {
 
 	public static final int ANIMALIGNITION = 280;
 	public static final int MAXTEMP = 2500;

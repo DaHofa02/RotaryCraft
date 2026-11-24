@@ -15,6 +15,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.common.world.chunk.RegisterTicketControllersEvent;
 import net.neoforged.neoforge.common.world.chunk.TicketController;
 
+import reika.rotarycraft.RotaryConfig;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.lib.math.ReikaMathLibrary;
 import reika.rotarycraft.registry.RotaryBlockEntities;
@@ -79,7 +80,7 @@ public class ChunkLoaderBlockEntity extends PowerReceiverBlockEntity {
 	}
 
 	public int getLoadingRadius() {
-		return Math.min(reika.rotarycraft.RotaryConfig.CHUNKLOADERSIZE.get(), BASE_RADIUS+(int)(power-MINSPEED)/FALLOFF);
+		return Math.min(RotaryConfig.CHUNKLOADERSIZE.get(), BASE_RADIUS+(int)(power-MINSPEED)/FALLOFF);
 	}
 
 	public boolean isLoading() {
@@ -119,7 +120,7 @@ public class ChunkLoaderBlockEntity extends PowerReceiverBlockEntity {
 	}
 
 	public int getMaxRange() {
-		return reika.rotarycraft.RotaryConfig.CHUNKLOADERSIZE.get()*16;
+		return RotaryConfig.CHUNKLOADERSIZE.get()*16;
 	}
 
 	@Override

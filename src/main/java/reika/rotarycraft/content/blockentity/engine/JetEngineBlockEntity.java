@@ -18,7 +18,9 @@ import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
@@ -834,7 +836,7 @@ public class JetEngineBlockEntity extends EngineBlockEntity implements Upgradeab
 			}
 			else {
 				int temp = fs.getFluidType().getTemperature(fs, world, d);
-				if (net.minecraft.core.registries.BuiltInRegistries.FLUID.getKey(fs.getType()).getPath().toLowerCase(Locale.ENGLISH).contains("fuel")) {
+				if (BuiltInRegistries.FLUID.getKey(fs.getType()).getPath().toLowerCase(Locale.ENGLISH).contains("fuel")) {
 					if (!isJetFailing && rand.nextInt(200) == 0) {
 						temperature = 900;
 						isJetFailing = true;
@@ -876,7 +878,7 @@ public class JetEngineBlockEntity extends EngineBlockEntity implements Upgradeab
 				}
 				else if (temperature >= 600) {
 					world.playSound(null, pos, SoundEvents.FIRE_EXTINGUISH, SoundSource.BLOCKS, 1, 1);
-					if (world instanceof net.minecraft.server.level.ServerLevel sl)
+					if (world instanceof ServerLevel sl)
 						sl.sendParticles(ParticleTypes.SMOKE, pos.getX()+0.5, pos.getY()+0.5, pos.getZ()+0.5, 8, 0.5, 0.5, 0.5, 0);
 				}
 			}

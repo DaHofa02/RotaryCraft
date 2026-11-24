@@ -138,7 +138,7 @@ class ResourceCompletenessTest {
 		String hb = Files.readString(ASSETS.resolve("handbook/en_us.json"));
 		String src = Files.readString(ASSETS.resolve("../../../java/reika/rotarycraft/registry/RotaryBlocks.java").normalize());
 		List<String> missing = new ArrayList<>();
-		java.util.regex.Matcher m = Pattern.compile("(?:machine|BLOCKS\\.register|block)\\(\"([a-z0-9_]+)\"").matcher(src);
+		Matcher m = Pattern.compile("(?:machine|BLOCKS\\.register|block)\\(\"([a-z0-9_]+)\"").matcher(src);
 		while (m.find())
 			if (!hb.contains("\"id\": \""+m.group(1)+"\""))
 				missing.add(m.group(1));

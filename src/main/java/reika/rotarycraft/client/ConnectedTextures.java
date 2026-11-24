@@ -13,7 +13,9 @@ import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.BlockModelShaper;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -55,7 +57,7 @@ public final class ConnectedTextures {
 	/** Whether the texture has connected-texture tiles at all (asking the atlas for missing ones logs a warning each). */
 	private static boolean hasTiles(ResourceLocation sprite) {
 		ResourceLocation v = variant(sprite, 1);
-		return net.minecraft.client.Minecraft.getInstance().getResourceManager()
+		return Minecraft.getInstance().getResourceManager()
 				.getResource(ResourceLocation.fromNamespaceAndPath(v.getNamespace(), "textures/"+v.getPath()+".png")).isPresent();
 	}
 
@@ -70,7 +72,7 @@ public final class ConnectedTextures {
 		Map<ModelResourceLocation, BakedModel> models = e.getModels();
 		Map<TextureAtlasSprite, TextureAtlasSprite[]> variants = new IdentityHashMap<>();
 		int wrapped = 0;
-		java.util.Set<ResourceLocation> blocks = new java.util.TreeSet<>();
+		Set<ResourceLocation> blocks = new TreeSet<>();
 		for (Block b : BuiltInRegistries.BLOCK) {
 			if (!MODS.contains(BuiltInRegistries.BLOCK.getKey(b).getNamespace()) || b instanceof EntityBlock)
 				continue;

@@ -14,6 +14,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.Clearable;
 import net.minecraft.world.Containers;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -42,7 +43,7 @@ import reika.rotarycraft.registry.RotaryBlockEntities;
  * The original's two conversions to jet fuel start from other mods' fuels (BuildCraft fuel, kerosene) and are therefore absent;
  * other mods (here ReactorCraft) add conversions with {@link #addRecipe}.
  */
-public class FuelEnhancerBlockEntity extends PowerReceiverBlockEntity implements PipeConnector, net.minecraft.world.Clearable {
+public class FuelEnhancerBlockEntity extends PowerReceiverBlockEntity implements PipeConnector, Clearable {
 
 	public static final int CAPACITY = 5000;
 

@@ -15,6 +15,8 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.Clearable;
+import net.minecraft.world.Containers;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
@@ -41,7 +43,7 @@ import reika.rotarycraft.registry.RotaryItems;
  * (pipes, hoses and fuel lines; as in the original the pipe connection test looks at the opposite side, so pipes join from below but
  * not from above) or by hand with a bucket; the product is taken out of its slot from any side.
  */
-public class DryingBedBlockEntity extends RotaryCraftBlockEntity implements PipeConnector, net.minecraft.world.Clearable {
+public class DryingBedBlockEntity extends RotaryCraftBlockEntity implements PipeConnector, Clearable {
 
 	public static final int CAPACITY = 2000;
 	public static final int TIMER_CAP = 400;
@@ -301,7 +303,7 @@ public class DryingBedBlockEntity extends RotaryCraftBlockEntity implements Pipe
 
 	@Override
 	public void onBlockBroken(Level world, BlockPos pos) {
-		net.minecraft.world.Containers.dropItemStack(world, pos.getX(), pos.getY(), pos.getZ(), inv.getStackInSlot(0).copy());
+		Containers.dropItemStack(world, pos.getX(), pos.getY(), pos.getZ(), inv.getStackInSlot(0).copy());
 	}
 
 	@Override

@@ -32,6 +32,8 @@ import reika.rotarycraft.RotaryConfig;
 import reika.rotarycraft.api.interfaces.ComplexIO;
 import reika.rotarycraft.api.power.ShaftPowerEmitter;
 import reika.rotarycraft.content.item.CraftingPart;
+import reika.rotarycraft.content.piping.PipeConnector;
+import reika.rotarycraft.content.piping.PipeType;
 import reika.rotarycraft.content.power.SimpleProvider;
 import reika.rotarycraft.lib.math.ReikaEngLibrary;
 import reika.rotarycraft.lib.math.ReikaMathLibrary;
@@ -49,7 +51,7 @@ import reika.rotarycraft.registry.RotaryItems;
  * Ratio is 2^(1+meta/4); meta%4 is the 4-sided direction, exactly as in the original. Not ported: the Botania mana receiver
  * (living gearboxes are not ported), the ChromatiCraft repair hook and the DAMAGEGEARS achievement (comes with the advancements).
  */
-public class GearboxBlockEntity extends OneDTransmitterBlockEntity implements TemperatureMachine, reika.rotarycraft.content.piping.PipeConnector {
+public class GearboxBlockEntity extends OneDTransmitterBlockEntity implements TemperatureMachine, PipeConnector {
 
 	public boolean reduction = true; // Reduction gear if true, accelerator if false
 
@@ -512,18 +514,18 @@ public class GearboxBlockEntity extends OneDTransmitterBlockEntity implements Te
 
 	/** Original canConnectToPipe: hoses and bedrock pipes, on every side but the top (bottom when flipped). */
 	@Override
-	public boolean canConnectToPipe(reika.rotarycraft.content.piping.PipeType m) {
-		return m == reika.rotarycraft.content.piping.PipeType.HOSE || m == reika.rotarycraft.content.piping.PipeType.BEDROCK_PIPE;
+	public boolean canConnectToPipe(PipeType m) {
+		return m == PipeType.HOSE || m == PipeType.BEDROCK_PIPE;
 	}
 
 	@Override
-	public boolean canConnectToPipeOnSide(reika.rotarycraft.content.piping.PipeType p, Direction side) {
+	public boolean canConnectToPipeOnSide(PipeType p, Direction side) {
 		return side != (isFlipped ? Direction.DOWN : Direction.UP);
 	}
 
 	@Override
-	public reika.rotarycraft.content.piping.PipeConnector.Flow getFlowForSide(Direction side) {
-		return side != (isFlipped ? Direction.DOWN : Direction.UP) ? reika.rotarycraft.content.piping.PipeConnector.Flow.INPUT : reika.rotarycraft.content.piping.PipeConnector.Flow.NONE;
+	public PipeConnector.Flow getFlowForSide(Direction side) {
+		return side != (isFlipped ? Direction.DOWN : Direction.UP) ? PipeConnector.Flow.INPUT : PipeConnector.Flow.NONE;
 	}
 
 	@Override

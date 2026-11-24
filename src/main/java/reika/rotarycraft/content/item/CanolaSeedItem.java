@@ -4,6 +4,7 @@
 package reika.rotarycraft.content.item;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -46,7 +47,7 @@ public class CanolaSeedItem extends Item {
 					BlockPos p = pos.offset(dx, 0, dz);
 					if (!world.getBlockState(p).canBeReplaced() || !CanolaBlock.isValidFarmBlock(world, p.below())
 							|| (ep != null && !ep.mayUseItemAt(p, ctx.getClickedFace(), is))) {
-						net.minecraft.world.Containers.dropItemStack(world, p.getX()+0.5, p.getY()+0.5, p.getZ()+0.5, new ItemStack(RotaryItems.CANOLA_SEEDS.get()));
+						Containers.dropItemStack(world, p.getX()+0.5, p.getY()+0.5, p.getZ()+0.5, new ItemStack(RotaryItems.CANOLA_SEEDS.get()));
 					}
 					else {
 						world.setBlockAndUpdate(p, RotaryBlocks.CANOLA.get().defaultBlockState());

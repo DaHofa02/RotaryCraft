@@ -15,6 +15,7 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.Clearable;
 import net.minecraft.world.Containers;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -29,6 +30,7 @@ import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemStackHandler;
 
+import reika.rotarycraft.RotaryConfig;
 import reika.rotarycraft.registry.RotaryBlockEntities;
 
 /**
@@ -39,7 +41,7 @@ import reika.rotarycraft.registry.RotaryBlockEntities;
  * Change: the room's lower bound is measured from its own height (the original used its x coordinate there). Not ported: the potion
  * fluid handler and other mods' potions.
  */
-public class AerosolizerBlockEntity extends PowerReceiverBlockEntity implements net.minecraft.world.Clearable {
+public class AerosolizerBlockEntity extends PowerReceiverBlockEntity implements Clearable {
 
 	public static final int MAXRANGE = 64;
 	public static final int CAPACITY = 64;
@@ -169,7 +171,7 @@ public class AerosolizerBlockEntity extends PowerReceiverBlockEntity implements 
 		int[] reach = new int[6];
 		for (int d = 0; d < 6; d++) {
 			int r = 0;
-			for (int i = 1, max = reika.rotarycraft.RotaryConfig.AERORANGE.get(); i < max; i++) {
+			for (int i = 1, max = RotaryConfig.AERORANGE.get(); i < max; i++) {
 				BlockPos c = pos.relative(dirs[d], i);
 				if (world.getBlockState(c).isSolidRender(world, c))
 					break;

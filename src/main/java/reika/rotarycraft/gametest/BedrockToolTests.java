@@ -5,6 +5,8 @@
 package reika.rotarycraft.gametest;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.core.Direction;
 import net.minecraft.gametest.framework.GameTest;
@@ -15,19 +17,27 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.level.GameType;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CropBlock;
+import net.minecraft.world.level.block.entity.SpawnerBlockEntity;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
+import net.neoforged.neoforge.registries.DeferredItem;
 
 import reika.rotarycraft.RotaryCraft;
+import reika.rotarycraft.content.PlayerEvents;
 import reika.rotarycraft.content.blockentity.MagnetizerBlockEntity;
 import reika.rotarycraft.content.blockentity.RotaryCraftBlockEntity;
 import reika.rotarycraft.content.item.BedrockTools;
+import reika.rotarycraft.content.item.SpawnerItem;
 import reika.rotarycraft.registry.RotaryBlocks;
 import reika.rotarycraft.registry.RotaryItems;
+
+import java.util.List;
 
 @GameTestHolder(RotaryCraft.MOD_ID)
 @PrefixGameTestTemplate(false)
@@ -38,14 +48,14 @@ public class BedrockToolTests {
 	/** All bedrock tools and armour are unbreakable; the pickaxe digs obsidian at 20 and gets its drop; the paxel digs stone, logs and dirt. */
 	@GameTest(template = PLATFORM, timeoutTicks = 20)
 	public static void bedrockToolsAreUnbreakable(GameTestHelper h) {
-		for (var i : new net.neoforged.neoforge.registries.DeferredItem<?>[] {RotaryItems.BEDROCK_PICKAXE, RotaryItems.BEDROCK_AXE, RotaryItems.BEDROCK_SHOVEL,
+		for (var i : new DeferredItem<?>[] {RotaryItems.BEDROCK_PICKAXE, RotaryItems.BEDROCK_AXE, RotaryItems.BEDROCK_SHOVEL,
 				RotaryItems.BEDROCK_SWORD, RotaryItems.BEDROCK_HOE, RotaryItems.BEDROCK_SHEARS, RotaryItems.BEDROCK_SCYTHE, RotaryItems.BEDROCK_PAXEL,
 				RotaryItems.BEDROCK_HELMET, RotaryItems.BEDROCK_CHESTPLATE, RotaryItems.BEDROCK_LEGGINGS, RotaryItems.BEDROCK_BOOTS})
 			h.assertTrue(!new ItemStack(i.get()).isDamageableItem(), i.getId()+" can wear out");
 		ItemStack pick = new ItemStack(RotaryItems.BEDROCK_PICKAXE.get());
 		h.assertTrue(pick.getDestroySpeed(Blocks.OBSIDIAN.defaultBlockState()) == 20 && pick.isCorrectToolForDrops(Blocks.OBSIDIAN.defaultBlockState()), "pickaxe on obsidian");
 		ItemStack paxel = new ItemStack(RotaryItems.BEDROCK_PAXEL.get());
-		for (var b : new net.minecraft.world.level.block.Block[] {Blocks.STONE, Blocks.OAK_LOG, Blocks.DIRT, Blocks.OBSIDIAN})
+		for (var b : new Block[] {Blocks.STONE, Blocks.OAK_LOG, Blocks.DIRT, Blocks.OBSIDIAN})
 			h.assertTrue(paxel.isCorrectToolForDrops(b.defaultBlockState()) && paxel.getDestroySpeed(b.defaultBlockState()) == 20, "paxel on "+b);
 		h.assertTrue(!BedrockTools.paxelModLoaded(), "a paxel mod in the test run?");
 		h.succeed();
@@ -124,13 +134,13 @@ public class BedrockToolTests {
 	/** Built-in enchantments: on when crafted, back after a grindstone-like wipe on the next inventory tick; the axe loses silk touch. */
 	@GameTest(template = PLATFORM, timeoutTicks = 20)
 	public static void bedrockToolsKeepTheirEnchantments(GameTestHelper h) {
-		var reg = h.getLevel().registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.ENCHANTMENT);
+		var reg = h.getLevel().registryAccess().lookupOrThrow(Registries.ENCHANTMENT);
 		SimPlayer p = new SimPlayer(h, GameType.SURVIVAL);
 		ItemStack pick = new ItemStack(RotaryItems.BEDROCK_PICKAXE.get());
 		pick.onCraftedBySystem(h.getLevel());
 		h.assertTrue(pick.getEnchantmentLevel(reg.getOrThrow(Enchantments.SILK_TOUCH)) == 1 && pick.getEnchantmentLevel(reg.getOrThrow(Enchantments.FORTUNE)) == 5, "crafted pickaxe");
 		ItemStack sword = BedrockTools.withForced(RotaryItems.BEDROCK_SWORD.get(), h.getLevel().registryAccess());
-		sword.set(net.minecraft.core.component.DataComponents.ENCHANTMENTS, net.minecraft.world.item.enchantment.ItemEnchantments.EMPTY);
+		sword.set(DataComponents.ENCHANTMENTS, ItemEnchantments.EMPTY);
 		sword.getItem().inventoryTick(sword, h.getLevel(), p.player, 0, false);
 		h.assertTrue(sword.getEnchantmentLevel(reg.getOrThrow(Enchantments.SHARPNESS)) == 5 && sword.getEnchantmentLevel(reg.getOrThrow(Enchantments.LOOTING)) == 5, "sword not restored");
 		ItemStack boots = BedrockTools.withForced(RotaryItems.BEDROCK_BOOTS.get(), h.getLevel().registryAccess());
@@ -151,23 +161,24 @@ public class BedrockToolTests {
 	 */
 	@GameTest(template = PLATFORM, timeoutTicks = 20)
 	public static void bedrockPickaxeTakesSpawners(GameTestHelper h) {
-		BlockPos at = new BlockPos(4, 1, 4), back = new BlockPos(4, 1, 6), other = new BlockPos(2, 1, 4);
+		BlockPos at = new BlockPos(4, 1, 4), back = new BlockPos(4, 2, 6), other = new BlockPos(2, 1, 4); //back: on top of the platform floor
 		for (BlockPos q : new BlockPos[] {at, other}) {
-			h.setBlock(q, net.minecraft.world.level.block.Blocks.SPAWNER);
-			((net.minecraft.world.level.block.entity.SpawnerBlockEntity)h.getBlockEntity(q)).setEntityId(net.minecraft.world.entity.EntityType.ZOMBIE, h.getLevel().random);
+			h.setBlock(q, Blocks.SPAWNER);
+			((SpawnerBlockEntity)h.getBlockEntity(q)).setEntityId(EntityType.ZOMBIE, h.getLevel().random);
 		}
 		SimPlayer p = new SimPlayer(h, GameType.SURVIVAL);
 		p.give(RotaryItems.BEDROCK_PICKAXE.get(), 1);
-		p.give(net.minecraft.world.item.Items.IRON_PICKAXE, 1);
-		java.util.List<ItemStack> got = p.mine(at, RotaryItems.BEDROCK_PICKAXE.get());
+		p.give(Items.IRON_PICKAXE, 1);
+		List<ItemStack> got = p.mine(at, RotaryItems.BEDROCK_PICKAXE.get());
 		ItemStack sp = got.stream().filter(i -> i.is(RotaryItems.SPAWNER.get())).findFirst().orElse(ItemStack.EMPTY);
-		h.assertTrue(!sp.isEmpty() && reika.rotarycraft.content.item.SpawnerItem.mob(sp).orElse(null) == net.minecraft.world.entity.EntityType.ZOMBIE, "dropped "+got);
-		h.assertTrue(p.mine(other, net.minecraft.world.item.Items.IRON_PICKAXE).stream().noneMatch(i -> i.is(RotaryItems.SPAWNER.get())), "iron pickaxe took a spawner");
+		h.assertTrue(!sp.isEmpty() && SpawnerItem.mob(sp).orElse(null) == EntityType.ZOMBIE, "dropped "+got);
+		h.assertTrue(p.mine(other, Items.IRON_PICKAXE).stream().noneMatch(i -> i.is(RotaryItems.SPAWNER.get())), "iron pickaxe took a spawner");
 		p.hold(sp);
-		p.useOn(back.below(), net.minecraft.core.Direction.UP);
-		h.assertBlockPresent(net.minecraft.world.level.block.Blocks.SPAWNER, back);
-		CompoundTag data = ((net.minecraft.world.level.block.entity.SpawnerBlockEntity)h.getBlockEntity(back)).getSpawner().save(new CompoundTag());
+		p.useOn(back.below(), Direction.UP);
+		h.assertBlockPresent(Blocks.SPAWNER, back);
+		CompoundTag data = ((SpawnerBlockEntity)h.getBlockEntity(back)).getSpawner().save(new CompoundTag());
 		h.assertTrue(data.getCompound("SpawnData").getCompound("entity").getString("id").equals("minecraft:zombie"), "placed spawner "+data);
+		h.setBlock(back, net.minecraft.world.level.block.Blocks.AIR); //structures stay in the world: a live zombie spawner would disturb other tests
 		p.leave();
 		h.succeed();
 	}
@@ -176,8 +187,8 @@ public class BedrockToolTests {
 	@GameTest(template = PLATFORM, timeoutTicks = 20)
 	public static void handbookGivenOnceOnJoin(GameTestHelper h) {
 		SimPlayer p = new SimPlayer(h, GameType.SURVIVAL);
-		h.assertTrue(reika.rotarycraft.content.PlayerEvents.giveHandbookOnce(p.player), "no book on the first join");
-		h.assertTrue(!reika.rotarycraft.content.PlayerEvents.giveHandbookOnce(p.player), "a second book");
+		h.assertTrue(PlayerEvents.giveHandbookOnce(p.player), "no book on the first join");
+		h.assertTrue(!PlayerEvents.giveHandbookOnce(p.player), "a second book");
 		h.assertTrue(p.count(RotaryItems.HANDBOOK.get()) == 1, "books: "+p.count(RotaryItems.HANDBOOK.get()));
 		p.leave();
 		h.succeed();

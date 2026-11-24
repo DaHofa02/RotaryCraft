@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
 
@@ -15,6 +16,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.Clearable;
+import net.minecraft.world.Containers;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -47,7 +50,7 @@ import reika.rotarycraft.registry.RotaryItems;
  * average 1.5 ingredients (weighted) are used, yield * 1000-2200 mB jet fuel made (medium). Ethanol enters from the sides,
  * jet fuel leaves at the top (fuel lines and bedrock pipes).
  */
-public class FractionatorBlockEntity extends PowerReceiverBlockEntity implements PipeConnector, net.minecraft.world.Clearable {
+public class FractionatorBlockEntity extends PowerReceiverBlockEntity implements PipeConnector, Clearable {
 
 	public static final int CAPACITY = 240000;
 	public static final int INPUT_CAPACITY = 16000;
@@ -58,7 +61,7 @@ public class FractionatorBlockEntity extends PowerReceiverBlockEntity implements
 	/** Original ingredients map with the weights used to pick what is consumed. */
 	private static final List<Ingredient> INGREDIENTS = new ArrayList<>();
 
-	private record Ingredient(java.util.function.Supplier<Item> item, float weight) {}
+	private record Ingredient(Supplier<Item> item, float weight) {}
 
 	static {
 		INGREDIENTS.add(new Ingredient(() -> Items.BLAZE_POWDER, 1.5F));
@@ -506,6 +509,6 @@ public class FractionatorBlockEntity extends PowerReceiverBlockEntity implements
 	@Override
 	public void onBlockBroken(Level world, BlockPos pos) {
 		for (int i = 0; i < inv.getSlots(); i++)
-			net.minecraft.world.Containers.dropItemStack(world, pos.getX(), pos.getY(), pos.getZ(), inv.getStackInSlot(i).copy());
+			Containers.dropItemStack(world, pos.getX(), pos.getY(), pos.getZ(), inv.getStackInSlot(i).copy());
 	}
 }

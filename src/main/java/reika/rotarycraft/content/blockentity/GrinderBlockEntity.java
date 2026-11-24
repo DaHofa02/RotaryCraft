@@ -11,9 +11,12 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.Clearable;
+import net.minecraft.world.Containers;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -41,7 +44,10 @@ import reika.rotarycraft.registry.RotaryRecipeTypes;
  * fills buckets in slot 2 and flows out to hoses on every side but the top. Slots: 0 input, 1 output, 2 bucket.
  * Not ported: machine enchantments (fortune for more lubricant, looting etc. for the contact damage), other mods' seeds (creepvine).
  */
-public class GrinderBlockEntity extends PowerReceiverBlockEntity implements PipeConnector, net.minecraft.world.Clearable {
+public class GrinderBlockEntity extends PowerReceiverBlockEntity implements PipeConnector, Clearable {
+
+	/** Remembers the last matching recipe, like vanilla furnaces, instead of searching all recipes every tick. */
+	private final RecipeManager.CachedCheck<SingleRecipeInput, GrinderRecipe> recipeCheck = RecipeManager.createCheck(RotaryRecipeTypes.GRINDER.get());
 
 	public static final int MAXLUBE = 4000;
 	/** Original DurationRegistry.GRINDER. */
@@ -89,7 +95,7 @@ public class GrinderBlockEntity extends PowerReceiverBlockEntity implements Pipe
 	private Optional<RecipeHolder<GrinderRecipe>> getRecipe(ItemStack is) {
 		if (level == null || is.isEmpty())
 			return Optional.empty();
-		return level.getRecipeManager().getRecipeFor(RotaryRecipeTypes.GRINDER.get(), new SingleRecipeInput(is), level);
+		return recipeCheck.getRecipeFor(new SingleRecipeInput(is), level);
 	}
 
 	public ItemStack getGrindingResult(ItemStack is) {
@@ -381,7 +387,7 @@ public class GrinderBlockEntity extends PowerReceiverBlockEntity implements Pipe
 	@Override
 	public void onBlockBroken(Level world, BlockPos pos) {
 		for (int i = 0; i < inv.getSlots(); i++)
-			net.minecraft.world.Containers.dropItemStack(world, pos.getX(), pos.getY(), pos.getZ(), inv.getStackInSlot(i).copy());
+			Containers.dropItemStack(world, pos.getX(), pos.getY(), pos.getZ(), inv.getStackInSlot(i).copy());
 	}
 
 	@Override

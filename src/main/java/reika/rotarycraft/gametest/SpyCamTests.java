@@ -31,6 +31,8 @@ import reika.rotarycraft.content.menu.SpyCamViewMenu;
 import reika.rotarycraft.registry.RotaryBlocks;
 import reika.rotarycraft.registry.RotaryItems;
 
+import java.util.Arrays;
+
 @GameTestHolder(RotaryCraft.MOD_ID)
 @PrefixGameTestTemplate(false)
 public class SpyCamTests {
@@ -68,7 +70,7 @@ public class SpyCamTests {
 		int r = SpyCamBlockEntity.MAXRANGE;
 		h.succeedWhen(() -> {
 			h.assertTrue(cam.isOn(), "camera off");
-			h.assertTrue(java.util.Arrays.equals(cam.getColors(), new int[] {DyeColor.RED.getId(), DyeColor.GREEN.getId(), DyeColor.BLUE.getId()}), "colours");
+			h.assertTrue(Arrays.equals(cam.getColors(), new int[] {DyeColor.RED.getId(), DyeColor.GREEN.getId(), DyeColor.BLUE.getId()}), "colours");
 			h.assertTrue(cam.getHeightAt(r-2, r-2) == h.absolutePos(new BlockPos(2, 3, 2)).getY(), "pillar top at "+cam.getHeightAt(r-2, r-2));
 			h.assertTrue(cam.getHeightAt(r+1, r+1) == h.absolutePos(new BlockPos(5, 1, 5)).getY(), "floor at "+cam.getHeightAt(r+1, r+1));
 			h.assertTrue(cam.getMobAt(r+1, r+2) == 92, "cow not on the map: "+cam.getMobAt(r+1, r+2));

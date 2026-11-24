@@ -13,6 +13,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.world.Clearable;
 import net.minecraft.world.Containers;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ExperienceOrb;
@@ -27,6 +28,7 @@ import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
 import net.neoforged.neoforge.items.ItemStackHandler;
 
+import reika.rotarycraft.RotaryConfig;
 import reika.rotarycraft.api.interfaces.Screwdriverable;
 import reika.rotarycraft.registry.RotaryBlockEntities;
 
@@ -37,7 +39,7 @@ import reika.rotarycraft.registry.RotaryBlockEntities;
  * power, else one item at a time). The stored XP is let out with the GUI button or when it is broken. The screwdriver toggles the
  * equidistant range (sneaking) and whether it keeps sucking when full. Not ported: the XP fluid, ChromatiCraft's lizard doggos.
  */
-public class VacuumBlockEntity extends PowerReceiverBlockEntity implements Screwdriverable, net.minecraft.world.Clearable {
+public class VacuumBlockEntity extends PowerReceiverBlockEntity implements Screwdriverable, Clearable {
 
 	public static final int FALLOFF = 4096;
 	public static final int MAXRANGE = 32;
@@ -77,7 +79,7 @@ public class VacuumBlockEntity extends PowerReceiverBlockEntity implements Screw
 	}
 
 	public int getRange() {
-		return (int)Math.min(8+power/reika.rotarycraft.RotaryConfig.VACPOWER.get(), reika.rotarycraft.RotaryConfig.VACUUMRANGE.get());
+		return (int)Math.min(8+power/RotaryConfig.VACPOWER.get(), RotaryConfig.VACUUMRANGE.get());
 	}
 
 	@Override

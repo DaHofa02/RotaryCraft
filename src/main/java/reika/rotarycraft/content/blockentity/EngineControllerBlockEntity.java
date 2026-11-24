@@ -20,10 +20,14 @@ import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 
 import reika.rotarycraft.content.block.EcuBlock;
 import reika.rotarycraft.content.blockentity.engine.EngineBlockEntity;
+import reika.rotarycraft.content.piping.PipeConnector;
+import reika.rotarycraft.content.piping.PipeType;
 import reika.rotarycraft.registry.EngineType;
 import reika.rotarycraft.registry.EngineType.EngineClass;
 import reika.rotarycraft.registry.RotaryBlockEntities;
 import reika.rotarycraft.registry.RotaryFluids;
+
+import java.util.Locale;
 
 /**
  * Original: Reika.RotaryCraft.TileEntities.Auxiliary.TileEntityEngineController (Engine Control Unit). Sits below an engine (above a
@@ -31,7 +35,7 @@ import reika.rotarycraft.registry.RotaryFluids;
  * it fuel from its own tank. Not ported: Project Red bundled-cable input (the dye colour is kept and shown, as in the original without
  * Project Red), the Fuel Engine and air/oxygen fluids (not ported yet), and the ComputerCraft/OpenComputers Lua call.
  */
-public class EngineControllerBlockEntity extends RotaryCraftBlockEntity implements reika.rotarycraft.content.piping.PipeConnector {
+public class EngineControllerBlockEntity extends RotaryCraftBlockEntity implements PipeConnector {
 
 	public static final int FUELCAP = 3000;
 
@@ -241,7 +245,7 @@ public class EngineControllerBlockEntity extends RotaryCraftBlockEntity implemen
 		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < EngineSettings.list.length; i++) {
 			EngineSettings set = EngineSettings.list[i];
-			String n = set.name().charAt(0)+set.name().substring(1).toLowerCase(java.util.Locale.ENGLISH);
+			String n = set.name().charAt(0)+set.name().substring(1).toLowerCase(Locale.ENGLISH);
 			sb.append(String.format("%s: %.2f%% Speed, %dx Fuel Efficiency", n, set.getSpeedDecimal(), set.getEfficiencyFactor()));
 			if (i < EngineSettings.list.length-1)
 				sb.append("\n");
@@ -261,18 +265,18 @@ public class EngineControllerBlockEntity extends RotaryCraftBlockEntity implemen
 
 	/** Original canConnectToPipe: fuel lines and bedrock pipes, on every side, in both directions. */
 	@Override
-	public boolean canConnectToPipe(reika.rotarycraft.content.piping.PipeType m) {
-		return m == reika.rotarycraft.content.piping.PipeType.FUEL_LINE || m == reika.rotarycraft.content.piping.PipeType.BEDROCK_PIPE;
+	public boolean canConnectToPipe(PipeType m) {
+		return m == PipeType.FUEL_LINE || m == PipeType.BEDROCK_PIPE;
 	}
 
 	@Override
-	public boolean canConnectToPipeOnSide(reika.rotarycraft.content.piping.PipeType p, Direction side) {
+	public boolean canConnectToPipeOnSide(PipeType p, Direction side) {
 		return true;
 	}
 
 	@Override
-	public reika.rotarycraft.content.piping.PipeConnector.Flow getFlowForSide(Direction side) {
-		return reika.rotarycraft.content.piping.PipeConnector.Flow.DUAL;
+	public PipeConnector.Flow getFlowForSide(Direction side) {
+		return PipeConnector.Flow.DUAL;
 	}
 
 	@Override

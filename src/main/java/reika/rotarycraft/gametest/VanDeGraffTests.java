@@ -10,7 +10,9 @@ import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.IronGolem;
+import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.phys.AABB;
 
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
@@ -71,9 +73,9 @@ public class VanDeGraffTests {
 		});
 		h.runAtTickTime(25, () -> {
 			h.assertTrue(h.getBlockState(new BlockPos(2, 1, 3)).isAir(), "TNT not set off (weights 100 to 1)");
-			var tnt = h.getLevel().getEntitiesOfClass(net.minecraft.world.entity.item.PrimedTnt.class, new net.minecraft.world.phys.AABB(h.absolutePos(new BlockPos(2, 1, 3))).inflate(4));
+			var tnt = h.getLevel().getEntitiesOfClass(PrimedTnt.class, new AABB(h.absolutePos(new BlockPos(2, 1, 3))).inflate(4));
 			h.assertTrue(!tnt.isEmpty(), "no primed TNT, block "+h.getBlockState(new BlockPos(2, 1, 3))+", charge "+vdg.getCharge());
-			h.killAllEntitiesOfClass(net.minecraft.world.entity.item.PrimedTnt.class); //would blow up the neighbouring tests later
+			h.killAllEntitiesOfClass(PrimedTnt.class); //would blow up the neighbouring tests later
 			h.succeed();
 		});
 	}

@@ -10,6 +10,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.Clearable;
+import net.minecraft.world.Containers;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
@@ -35,7 +37,7 @@ import reika.rotarycraft.registry.RotarySounds;
  * per tick. The liquid leaves through the four sides (pipes and fuel lines); items only go in. Above 50 deg C it melts one adjacent
  * snow block and one ice block per second. Signals 15 when the tank is full or nothing in it can be melted.
  */
-public class LavaMakerBlockEntity extends PowerReceiverBlockEntity implements PipeConnector, TemperatureMachine, net.minecraft.world.Clearable {
+public class LavaMakerBlockEntity extends PowerReceiverBlockEntity implements PipeConnector, TemperatureMachine, Clearable {
 
 	public static final int CAPACITY = 64000;
 	public static final int MAXTEMP = 1800;
@@ -329,7 +331,7 @@ public class LavaMakerBlockEntity extends PowerReceiverBlockEntity implements Pi
 	@Override
 	public void onBlockBroken(Level world, BlockPos pos) {
 		for (int i = 0; i < inv.getSlots(); i++)
-			net.minecraft.world.Containers.dropItemStack(world, pos.getX(), pos.getY(), pos.getZ(), inv.getStackInSlot(i).copy());
+			Containers.dropItemStack(world, pos.getX(), pos.getY(), pos.getZ(), inv.getStackInSlot(i).copy());
 	}
 
 	@Override

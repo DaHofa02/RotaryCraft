@@ -10,6 +10,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.Clearable;
 import net.minecraft.world.Containers;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -42,7 +43,7 @@ import reika.rotarycraft.registry.RotaryItems;
  * chance of 1/4, one fertilizer item. Redstone parts are never ticked. Not ported: machine enchantments, Forestry fertilizer, other
  * mods' crops and saplings.
  */
-public class FertilizerBlockEntity extends PowerReceiverBlockEntity implements PipeConnector, net.minecraft.world.Clearable {
+public class FertilizerBlockEntity extends PowerReceiverBlockEntity implements PipeConnector, Clearable {
 
 	public static final int CAPACITY = 6000;
 	public static final int MAXRANGE = 32;

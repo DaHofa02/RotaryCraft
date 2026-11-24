@@ -13,6 +13,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.Clearable;
 import net.minecraft.world.Containers;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -40,7 +41,7 @@ import reika.rotarycraft.registry.RotaryBlockEntities;
  * the ambient one and lava heats it by 3 (to at most 600 with water in it, else 1000; water without lava cools it by 2). At 1000 deg C it
  * melts into lava (with block damage on).
  */
-public class ObsidianMakerBlockEntity extends PowerReceiverBlockEntity implements TemperatureMachine, PipeConnector, net.minecraft.world.Clearable {
+public class ObsidianMakerBlockEntity extends PowerReceiverBlockEntity implements TemperatureMachine, PipeConnector, Clearable {
 
 	public static final int CAPACITY = 320000;
 	public static final int MAXTEMP = 1000;

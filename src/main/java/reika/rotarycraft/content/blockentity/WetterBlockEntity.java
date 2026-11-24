@@ -9,7 +9,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.Clearable;
 import net.minecraft.world.Containers;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
@@ -34,12 +36,12 @@ import reika.rotarycraft.registry.RotaryFluids;
  * Liquids come in from the four sides only, and only one that fits the item in the slot (none while it works); the item can be taken
  * out by automation only 10 ticks after the last work. Not ported: other mods' liquids (oil, ender).
  */
-public class WetterBlockEntity extends PowerReceiverBlockEntity implements PipeConnector, net.minecraft.world.Clearable {
+public class WetterBlockEntity extends PowerReceiverBlockEntity implements PipeConnector, Clearable {
 
 	public static final int CAPACITY = 1000;
 
 	/** Original WettingRecipe. */
-	public record WettingRecipe(net.minecraft.world.item.Item input, Fluid fluid, int amount, net.minecraft.world.item.Item output, int duration) {}
+	public record WettingRecipe(Item input, Fluid fluid, int amount, Item output, int duration) {}
 
 	public static final WettingRecipe[] RECIPES = {
 			new WettingRecipe(Blocks.SAND.asItem(), RotaryFluids.LUBRICANT.get(), 500, Blocks.SOUL_SAND.asItem(), 200),

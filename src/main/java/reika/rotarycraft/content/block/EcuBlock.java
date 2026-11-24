@@ -9,6 +9,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -49,7 +50,7 @@ public class EcuBlock extends MachineBlock {
 	}
 
 	/** Original ReikaDyeHelper order is the 1.7 dye damage (black first); DyeColor ids run the other way. */
-	public static int originalDyeIndex(net.minecraft.world.item.DyeColor c) {
+	public static int originalDyeIndex(DyeColor c) {
 		return 15-c.getId();
 	}
 

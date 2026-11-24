@@ -27,6 +27,7 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
+import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
@@ -80,7 +81,7 @@ public class TerraformerBlockEntity extends PowerReceiverBlockEntity implements 
 			TerraformerBlockEntity.this.setChanged();
 		}
 	};
-	private final FluidTank tank = new FluidTank(WATER_CAPACITY, fs -> fs.is(net.minecraft.world.level.material.Fluids.WATER));
+	private final FluidTank tank = new FluidTank(WATER_CAPACITY, fs -> fs.is(Fluids.WATER));
 	private Target target = Target.FOREST;
 	private int radius = 4;
 	private int tickcount;
@@ -126,7 +127,7 @@ public class TerraformerBlockEntity extends PowerReceiverBlockEntity implements 
 	}
 
 	public void addWater(int amt) {
-		tank.fill(new FluidStack(net.minecraft.world.level.material.Fluids.WATER, amt), IFluidHandler.FluidAction.EXECUTE);
+		tank.fill(new FluidStack(Fluids.WATER, amt), IFluidHandler.FluidAction.EXECUTE);
 	}
 
 	public int getOperationTime() {
@@ -257,7 +258,7 @@ public class TerraformerBlockEntity extends PowerReceiverBlockEntity implements 
 		super.readSyncTag(NBT, registries);
 		inv.deserializeNBT(registries, NBT.getCompound("inv"));
 		int w = NBT.getInt("water");
-		tank.setFluid(w > 0 ? new FluidStack(net.minecraft.world.level.material.Fluids.WATER, w) : FluidStack.EMPTY);
+		tank.setFluid(w > 0 ? new FluidStack(Fluids.WATER, w) : FluidStack.EMPTY);
 		target = Target.values()[Math.floorMod(NBT.getInt("target"), Target.values().length)];
 		radius = NBT.contains("radius") ? NBT.getInt("radius") : 4;
 	}

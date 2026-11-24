@@ -9,10 +9,13 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.Clearable;
 import net.minecraft.world.Containers;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
+import net.minecraft.world.item.crafting.SmeltingRecipe;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -36,7 +39,10 @@ import reika.rotarycraft.registry.RotaryBlockEntities;
  * far off). Above 100 deg C it melts a snow block beside it and turns ice beside it into water. Not ported: pyrotheum (Thermal
  * Expansion); the original's XP counter is never raised and is left out.
  */
-public class BigFurnaceBlockEntity extends PowerReceiverBlockEntity implements TemperatureMachine, PipeConnector, net.minecraft.world.Clearable {
+public class BigFurnaceBlockEntity extends PowerReceiverBlockEntity implements TemperatureMachine, PipeConnector, Clearable {
+
+	/** Remembers the last matching recipe, like vanilla furnaces, instead of searching all recipes every tick. */
+	private final RecipeManager.CachedCheck<SingleRecipeInput, SmeltingRecipe> recipeCheck = RecipeManager.createCheck(RecipeType.SMELTING);
 
 	public static final int INPUTS = 18;
 	public static final int CAPACITY = 16000;
@@ -99,7 +105,7 @@ public class BigFurnaceBlockEntity extends PowerReceiverBlockEntity implements T
 		if (level == null || is.isEmpty())
 			return ItemStack.EMPTY;
 		SingleRecipeInput in = new SingleRecipeInput(is);
-		return level.getRecipeManager().getRecipeFor(RecipeType.SMELTING, in, level).map(r -> r.value().assemble(in, level.registryAccess())).orElse(ItemStack.EMPTY);
+		return recipeCheck.getRecipeFor(in, level).map(r -> r.value().assemble(in, level.registryAccess())).orElse(ItemStack.EMPTY);
 	}
 
 	public boolean canSmelt() {

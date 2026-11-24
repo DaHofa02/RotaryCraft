@@ -4,19 +4,32 @@
 package reika.rotarycraft.gametest;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.OptionalInt;
+import java.util.Set;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.GameProfileRepository;
+import com.mojang.authlib.yggdrasil.ServicesKeySet;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.gametest.framework.GameTestServer;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.Services;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.players.GameProfileCache;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ClickType;
@@ -31,9 +44,22 @@ import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+
+import java.io.File;
+import java.io.IOException;
+
+import javax.annotation.Nullable;
+
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.common.util.FakePlayer;
+import net.neoforged.neoforge.event.entity.player.PlayerContainerEvent;
+
+import reika.rotarycraft.content.recipe.WorktableRecipe;
 
 /**
  * A server player in the GameTest world (survival or creative) that does what a player does, through the same code paths as a real
@@ -46,7 +72,7 @@ public final class SimPlayer {
 
 	/** The test it acts in (null outside tests, e.g. in a scene built in a world). */
 	public final GameTestHelper helper;
-	private final net.minecraft.server.level.ServerLevel level;
+	private final ServerLevel level;
 	/** World position of relative (0, 0, 0). */
 	private final BlockPos origin;
 	public final ServerPlayer player;
@@ -60,16 +86,16 @@ public final class SimPlayer {
 	 * Outside a test (a scene built in a world): positions are relative to {@code origin}; {@code as} is whose hands do it (the real
 	 * player's profile, so they own what is placed).
 	 */
-	public SimPlayer(net.minecraft.server.level.ServerLevel level, BlockPos origin, GameType mode, GameProfile as) {
+	public SimPlayer(ServerLevel level, BlockPos origin, GameType mode, GameProfile as) {
 		this(null, level, origin, mode, as);
 	}
 
-	private SimPlayer(GameTestHelper helper, net.minecraft.server.level.ServerLevel level, BlockPos origin, GameType mode, GameProfile as) {
+	private SimPlayer(GameTestHelper helper, ServerLevel level, BlockPos origin, GameType mode, GameProfile as) {
 		this.helper = helper;
 		this.level = level;
 		this.origin = origin;
 		this.mode = mode;
-		if (level.getServer() instanceof net.minecraft.gametest.framework.GameTestServer)
+		if (level.getServer() instanceof GameTestServer)
 			offlineProfileCache(level.getServer());
 		//NeoForge's fake player: a real ServerPlayer whose packets go nowhere (so GUIs open without a client)
 		player = new Fake(level, as);
@@ -82,23 +108,23 @@ public final class SimPlayer {
 	 * name when a player places their block (Mekanism's security owner) need one. This gives the test server an offline cache that
 	 * knows no names (lookups find nothing, as for an unknown player).
 	 */
-	private static synchronized void offlineProfileCache(net.minecraft.server.MinecraftServer server) {
+	private static synchronized void offlineProfileCache(MinecraftServer server) {
 		if (server.getProfileCache() != null)
 			return;
 		try {
-			com.mojang.authlib.GameProfileRepository none = (names, callback) -> {
+			GameProfileRepository none = (names, callback) -> {
 				for (String n : names)
 					callback.onProfileLookupFailed(n, new IllegalStateException("offline test server"));
 			};
-			java.io.File f = java.io.File.createTempFile("gametest_usercache", ".json");
+			File f = File.createTempFile("gametest_usercache", ".json");
 			f.deleteOnExit();
-			var cache = new net.minecraft.server.players.GameProfileCache(none, f);
-			var services = new net.minecraft.server.Services(null, com.mojang.authlib.yggdrasil.ServicesKeySet.EMPTY, none, cache);
-			java.lang.reflect.Field fd = net.minecraft.server.MinecraftServer.class.getDeclaredField("services");
+			var cache = new GameProfileCache(none, f);
+			var services = new Services(null, ServicesKeySet.EMPTY, none, cache);
+			java.lang.reflect.Field fd = MinecraftServer.class.getDeclaredField("services");
 			fd.setAccessible(true);
 			fd.set(server, services);
 		}
-		catch (ReflectiveOperationException | java.io.IOException e) {
+		catch (ReflectiveOperationException | IOException e) {
 			throw new IllegalStateException("could not give the test server a profile cache", e);
 		}
 	}
@@ -305,8 +331,8 @@ public final class SimPlayer {
 	 * Builds the blueprint (relative positions) block by block from items, always next to something already there (floor or placed
 	 * blocks), the blocks in {@code last} at the very end in that order (for structures whose last part completes them).
 	 */
-	public void build(java.util.Map<BlockPos, net.minecraft.world.level.block.Block> blueprint, List<BlockPos> last, Direction look) {
-		java.util.Set<BlockPos> todo = new java.util.LinkedHashSet<>(blueprint.keySet());
+	public void build(Map<BlockPos, Block> blueprint, List<BlockPos> last, Direction look) {
+		Set<BlockPos> todo = new LinkedHashSet<>(blueprint.keySet());
 		todo.removeAll(last);
 		List<BlockPos> props = new ArrayList<>();
 		while (!todo.isEmpty()) {
@@ -455,7 +481,7 @@ public final class SimPlayer {
 		Recipe<?> r = holder.value();
 		List<Ingredient> layout = new ArrayList<>();
 		CraftingRecipe cr = r instanceof CraftingRecipe c ? c : null;
-		if (r instanceof reika.rotarycraft.content.recipe.WorktableRecipe w)
+		if (r instanceof WorktableRecipe w)
 			layout.addAll(w.getGridLayout());
 		else if (cr instanceof ShapedRecipe s) {
 			for (int y = 0; y < 3; y++)
@@ -524,11 +550,11 @@ public final class SimPlayer {
 	public static void floor(GameTestHelper h, int x0, int z0, int x1, int z1) {
 		for (int x = x0; x <= x1; x++)
 			for (int z = z0; z <= z1; z++)
-				h.setBlock(new BlockPos(x, 1, z), net.minecraft.world.level.block.Blocks.STONE);
+				h.setBlock(new BlockPos(x, 1, z), Blocks.STONE);
 	}
 
 	/** NeoForge's fake player (packets go nowhere), but one that opens menus on the server as a real player does. */
-	private static final class Fake extends net.neoforged.neoforge.common.util.FakePlayer {
+	private static final class Fake extends FakePlayer {
 		private int counter;
 
 		Fake(ServerLevel level, GameProfile profile) {
@@ -536,19 +562,19 @@ public final class SimPlayer {
 		}
 
 		@Override
-		public java.util.OptionalInt openMenu(@javax.annotation.Nullable net.minecraft.world.MenuProvider provider,
-				@javax.annotation.Nullable java.util.function.Consumer<net.minecraft.network.RegistryFriendlyByteBuf> extra) {
+		public OptionalInt openMenu(@Nullable MenuProvider provider,
+				@Nullable Consumer<RegistryFriendlyByteBuf> extra) {
 			if (provider == null)
-				return java.util.OptionalInt.empty();
+				return OptionalInt.empty();
 			if (containerMenu != inventoryMenu)
 				this.doCloseContainer();
 			counter = counter%100+1;
 			AbstractContainerMenu m = provider.createMenu(counter, this.getInventory(), this);
 			if (m == null)
-				return java.util.OptionalInt.empty();
+				return OptionalInt.empty();
 			containerMenu = m;
-			net.neoforged.neoforge.common.NeoForge.EVENT_BUS.post(new net.neoforged.neoforge.event.entity.player.PlayerContainerEvent.Open(this, m));
-			return java.util.OptionalInt.of(counter);
+			NeoForge.EVENT_BUS.post(new PlayerContainerEvent.Open(this, m));
+			return OptionalInt.of(counter);
 		}
 	}
 

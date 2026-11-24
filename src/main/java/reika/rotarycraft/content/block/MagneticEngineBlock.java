@@ -13,6 +13,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 
@@ -20,6 +21,8 @@ import reika.rotarycraft.content.blockentity.MagneticEngineBlockEntity;
 import reika.rotarycraft.content.menu.MagneticEngineMenu;
 import reika.rotarycraft.registry.RotaryBlockEntities;
 import reika.rotarycraft.registry.RotaryItems;
+
+import java.util.function.Supplier;
 
 /** The magnetostatic engine: four-sided like the other engines; a right click opens its GUI, a liquid nitrogen bucket fills its coolant. */
 public class MagneticEngineBlock extends MachineBlock {
@@ -29,7 +32,7 @@ public class MagneticEngineBlock extends MachineBlock {
 	}
 
 	/** Also the steam turbine, which shares the engine's GUI. */
-	public MagneticEngineBlock(Properties props, java.util.function.Supplier<? extends net.minecraft.world.level.block.entity.BlockEntityType<? extends MagneticEngineBlockEntity>> type) {
+	public MagneticEngineBlock(Properties props, Supplier<? extends BlockEntityType<? extends MagneticEngineBlockEntity>> type) {
 		super(props, type, Placement.FOUR_SIDED, false);
 	}
 

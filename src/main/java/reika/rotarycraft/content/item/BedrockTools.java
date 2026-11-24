@@ -51,7 +51,10 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
+import reika.rotarycraft.RotaryConfig;
 import reika.rotarycraft.registry.RotaryItems;
+
+import net.neoforged.fml.ModList;
 
 /**
  * The bedrock tools and armour, written for the port from the original's behaviour. All are unbreakable and made from bedrock alloy.
@@ -303,7 +306,7 @@ public final class BedrockTools {
 	}
 
 	public static class Armour extends ArmorItem {
-		public Armour(net.minecraft.core.Holder<ArmorMaterial> material, Type type) {
+		public Armour(Holder<ArmorMaterial> material, Type type) {
 			super(material, type, props().durability(type.getDurability(64)));
 		}
 
@@ -340,7 +343,7 @@ public final class BedrockTools {
 
 	/** Raises the stack's built-in enchantments to their levels (and takes silk touch off the axe); returns whether it changed anything. */
 	public static boolean force(ItemStack is, HolderLookup.Provider reg) {
-		if (!reika.rotarycraft.RotaryConfig.PREENCHANT.get()) //config "Lock enchants on bedrock tools" off
+		if (!RotaryConfig.PREENCHANT.get()) //config "Lock enchants on bedrock tools" off
 			return false;
 		HolderLookup.RegistryLookup<Enchantment> lookup = reg.lookupOrThrow(Registries.ENCHANTMENT);
 		ItemEnchantments now = is.getTagEnchantments();
@@ -376,7 +379,7 @@ public final class BedrockTools {
 
 	/** Whether a paxel mod is installed (Mekanism Tools or another known one): only then is the bedrock paxel offered. */
 	public static boolean paxelModLoaded() {
-		var ml = net.neoforged.fml.ModList.get();
+		var ml = ModList.get();
 		return ml != null && (ml.isLoaded("mekanismtools") || ml.isLoaded("paxels") || ml.isLoaded("paxi"));
 	}
 

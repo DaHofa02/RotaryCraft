@@ -10,6 +10,7 @@ import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.RepeaterBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
@@ -89,7 +90,7 @@ public class DistributionClutchTests {
 		h.succeedWhen(() -> {
 			if (!on[0]) {
 				h.assertTrue(te.getTorqueToSide(Direction.EAST) == 128 && te.getTorqueToSide(Direction.NORTH) == 0, "without a signal: east "+te.getTorqueToSide(Direction.EAST));
-				h.setBlock(new BlockPos(2, 2, 5), Blocks.REPEATER.defaultBlockState().setValue(net.minecraft.world.level.block.RepeaterBlock.FACING, Direction.SOUTH)); //input south, strong output north into it
+				h.setBlock(new BlockPos(2, 2, 5), Blocks.REPEATER.defaultBlockState().setValue(RepeaterBlock.FACING, Direction.SOUTH)); //input south, strong output north into it
 				h.setBlock(new BlockPos(2, 2, 6), Blocks.REDSTONE_BLOCK); //after the repeater, so that it notices
 				on[0] = true;
 				h.fail("no signal; now a repeater");

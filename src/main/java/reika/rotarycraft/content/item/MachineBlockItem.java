@@ -23,6 +23,9 @@ import reika.rotarycraft.registry.MaterialRegistry;
 import reika.rotarycraft.registry.RotaryBlocks;
 import reika.rotarycraft.registry.RotaryComponents;
 
+import net.neoforged.fml.loading.FMLEnvironment;
+import net.neoforged.neoforge.fluids.SimpleFluidContent;
+
 /**
  * Item form of a machine. Names and Shift tooltips follow the original placer items (ItemShaftPlacer, ItemGearPlacer,
  * ItemFlywheelPlacer): "material + Shaft", "material ratio:1 Gearbox", "type Flywheel".
@@ -58,7 +61,7 @@ public class MachineBlockItem extends BlockItem {
 	@Override
 	public void appendHoverText(ItemStack is, TooltipContext ctx, List<Component> li, TooltipFlag flag) {
 		Block b = this.getBlock();
-		boolean shift = net.neoforged.fml.loading.FMLEnvironment.dist.isClient() && ClientKeys.isShiftDown();
+		boolean shift = FMLEnvironment.dist.isClient() && ClientKeys.isShiftDown();
 		if (b == RotaryBlocks.RESERVOIR.get()) {
 			//Original: TileEntityReservoir.getDisplayTags
 			RotaryComponents.ReservoirData d = is.get(RotaryComponents.RESERVOIR_DATA.get());
@@ -71,7 +74,7 @@ public class MachineBlockItem extends BlockItem {
 		}
 		if (b == RotaryBlocks.FLUID_COMPRESSOR.get()) {
 			//Original: TileEntityFluidCompressor.getDisplayTags
-			net.neoforged.neoforge.fluids.SimpleFluidContent c = is.get(RotaryComponents.TANK_FLUID.get());
+			SimpleFluidContent c = is.get(RotaryComponents.TANK_FLUID.get());
 			if (c != null && c.getAmount() >= 1000)
 				li.add(Component.literal("Contents: "+c.getAmount()/1000+"B of "+c.copy().getHoverName().getString()));
 		}

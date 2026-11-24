@@ -14,6 +14,8 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
+import net.minecraft.world.level.LightLayer;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -65,8 +67,8 @@ public class SolarTests {
 			h.assertTrue(t[0].getPlant().getTowerMultiplier() == 3, "tower multiplier "+t[0].getPlant().getTowerMultiplier());
 			for (MirrorBlockEntity mm : m)
 				h.assertTrue(mm.isFunctional(), "mirror not working at "+mm.getBlockPos()+": broken "+mm.broken+", plant "+(mm.getPlant() != null)
-						+", sky light "+h.getLevel().getBrightness(net.minecraft.world.level.LightLayer.SKY, mm.getBlockPos().above())
-						+", surface "+h.getLevel().getHeight(net.minecraft.world.level.levelgen.Heightmap.Types.WORLD_SURFACE, mm.getBlockPos().getX(), mm.getBlockPos().getZ())
+						+", sky light "+h.getLevel().getBrightness(LightLayer.SKY, mm.getBlockPos().above())
+						+", surface "+h.getLevel().getHeight(Heightmap.Types.WORLD_SURFACE, mm.getBlockPos().getX(), mm.getBlockPos().getZ())
 						+", above "+h.getLevel().getBlockState(mm.getBlockPos().above())+", canSeeSky "+h.getLevel().canSeeSky(mm.getBlockPos().above())
 						+", plant.canSeeTheSky "+mm.getPlant().canSeeTheSky(mm)+", same plant "+(mm.getPlant() == t[0].getPlant())+", above BE "+h.getLevel().getBlockEntity(mm.getBlockPos().above()));
 			h.assertTrue(t[0].getOmega() == 512 && t[0].getTorque() == 15, "tower: "+t[0].getOmega()+" rad/s, "+t[0].getTorque()+" Nm");

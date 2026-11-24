@@ -13,7 +13,15 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
+import net.neoforged.neoforge.fluids.capability.wrappers.FluidBucketWrapper;
 
+import reika.rotarycraft.compat.OptionalMods;
+import reika.rotarycraft.compat.PneumaticCompat;
+import reika.rotarycraft.compat.chisel.ChiselCompat;
+import reika.rotarycraft.compat.create.CreateCompat;
+import reika.rotarycraft.content.blockentity.AdvancedGearBlockEntity;
+import reika.rotarycraft.content.blockentity.ChunkLoaderBlockEntity;
+import reika.rotarycraft.content.loot.CanolaGrassSeedModifier;
 import reika.rotarycraft.registry.RotaryBlockEntities;
 import reika.rotarycraft.registry.RotaryBlocks;
 import reika.rotarycraft.registry.RotaryEntities;
@@ -37,7 +45,7 @@ public final class RotaryCraft {
 	public RotaryCraft(IEventBus modBus, ModContainer container) {
 		container.registerConfig(ModConfig.Type.COMMON, RotaryConfig.SPEC);
 
-		reika.rotarycraft.registry.RotaryItems.ARMOR_MATERIALS.register(modBus);
+		RotaryItems.ARMOR_MATERIALS.register(modBus);
 		RotaryComponents.COMPONENTS.register(modBus);
 		RotaryFluids.TYPES.register(modBus);
 		RotaryFluids.FLUIDS.register(modBus);
@@ -48,19 +56,19 @@ public final class RotaryCraft {
 		RotarySounds.SOUNDS.register(modBus);
 		RotaryCreativeTabs.TABS.register(modBus);
 		RotaryConditions.CONDITIONS.register(modBus);
-		reika.rotarycraft.content.loot.CanolaGrassSeedModifier.SERIALIZERS.register(modBus);
+		CanolaGrassSeedModifier.SERIALIZERS.register(modBus);
 
 		RotaryMenus.MENUS.register(modBus);
 		RotaryRecipeTypes.TYPES.register(modBus);
 		RotaryRecipeTypes.SERIALIZERS.register(modBus);
-		if (reika.rotarycraft.compat.OptionalMods.create()) //the Create converters only exist with Create; no Create class is loaded otherwise
-			reika.rotarycraft.compat.create.CreateCompat.register(modBus);
-		if (reika.rotarycraft.compat.OptionalMods.chiselsAndBits())
-			reika.rotarycraft.compat.chisel.ChiselCompat.register(modBus);
+		if (OptionalMods.create()) //the Create converters only exist with Create; no Create class is loaded otherwise
+			CreateCompat.register(modBus);
+		if (OptionalMods.chiselsAndBits())
+			ChiselCompat.register(modBus);
 
 		modBus.addListener(this::registerCapabilities);
 		modBus.addListener(RotaryNetwork::register);
-		modBus.addListener(reika.rotarycraft.content.blockentity.ChunkLoaderBlockEntity::registerTickets);
+		modBus.addListener(ChunkLoaderBlockEntity::registerTickets);
 	}
 
 	private void registerCapabilities(RegisterCapabilitiesEvent event) {
@@ -95,7 +103,7 @@ public final class RotaryCraft {
 		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, RotaryBlockEntities.WEATHER_CONTROLLER.get(), (te, side) -> te.getItemHandler(side));
 		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, RotaryBlockEntities.ITEM_CANNON.get(), (te, side) -> te.getItemHandler(side));
 		event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, RotaryBlockEntities.ADVANCED_GEAR.get(), (te, side) -> te.getFluidHandler(side));
-		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, RotaryBlockEntities.ADVANCED_GEAR.get(), (te, side) -> te.kind == reika.rotarycraft.content.blockentity.AdvancedGearBlockEntity.Kind.CVT ? te.belts : null);
+		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, RotaryBlockEntities.ADVANCED_GEAR.get(), (te, side) -> te.kind == AdvancedGearBlockEntity.Kind.CVT ? te.belts : null);
 		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, RotaryBlockEntities.ITEM_FILTER.get(), (te, side) -> te.getItemHandler(side));
 		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, RotaryBlockEntities.AUTO_CRAFTER.get(), (te, side) -> te.getItemHandler(side));
 		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, RotaryBlockEntities.DROP_PROCESSOR.get(), (te, side) -> te.getItemHandler(side));
@@ -110,8 +118,8 @@ public final class RotaryCraft {
 		event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, RotaryBlockEntities.DISTILLERY.get(), (te, side) -> te.getFluidHandler(side));
 		event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, RotaryBlockEntities.BOILER.get(), (te, side) -> te.getFluidHandler(side));
 		event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, RotaryBlockEntities.STEAM_TURBINE.get(), (te, side) -> te.getFluidHandler(side));
-		if (reika.rotarycraft.compat.OptionalMods.pneumaticCraft()) //optional: air compressor and pneumatic engine
-			reika.rotarycraft.compat.PneumaticCompat.registerCapabilities(event);
+		if (OptionalMods.pneumaticCraft()) //optional: air compressor and pneumatic engine
+			PneumaticCompat.registerCapabilities(event);
 		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, RotaryBlockEntities.LANDMINE.get(), (te, side) -> te.getItemHandler(side));
 		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, RotaryBlockEntities.MACHINE_GUN.get(), (te, side) -> te.getItemHandler(side));
 		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, RotaryBlockEntities.TNT_CANNON.get(), (te, side) -> te.getItemHandler(side));
@@ -169,7 +177,7 @@ public final class RotaryCraft {
 		event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, RotaryBlockEntities.CENTRIFUGE.get(), (te, side) -> te.getFluidHandler(side));
 		event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, RotaryBlockEntities.GRINDER.get(), (te, side) -> te.getFluidHandler(side));
 		//Original: FluidContainerRegistry.registerFluidContainer for the RotaryCraft buckets
-		event.registerItem(Capabilities.FluidHandler.ITEM, (stack, ctx) -> new net.neoforged.neoforge.fluids.capability.wrappers.FluidBucketWrapper(stack),
+		event.registerItem(Capabilities.FluidHandler.ITEM, (stack, ctx) -> new FluidBucketWrapper(stack),
 				RotaryItems.LUBRICANT_BUCKET.get(), RotaryItems.JET_FUEL_BUCKET.get(), RotaryItems.ETHANOL_BUCKET.get());
 		//Original: TileEntityPiping is no IFluidHandler - pipes push and pull themselves, other mods cannot access them
 		//Original: InertIInv, no insertion or extraction (canExtractItem false); the breaker pushes dust into neighbours itself

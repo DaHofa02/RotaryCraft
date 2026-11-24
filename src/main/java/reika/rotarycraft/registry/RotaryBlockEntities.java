@@ -3,22 +3,132 @@
  ******************************************************************************/
 package reika.rotarycraft.registry;
 
+import java.util.List;
 import java.util.function.Supplier;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 import reika.rotarycraft.RotaryCraft;
+import reika.rotarycraft.content.blockentity.AdvancedGearBlockEntity;
+import reika.rotarycraft.content.blockentity.AerosolizerBlockEntity;
+import reika.rotarycraft.content.blockentity.AggregatorBlockEntity;
+import reika.rotarycraft.content.blockentity.AirCompressorBlockEntity;
+import reika.rotarycraft.content.blockentity.AirGunBlockEntity;
+import reika.rotarycraft.content.blockentity.AutoBreederBlockEntity;
+import reika.rotarycraft.content.blockentity.AutoCrafterBlockEntity;
+import reika.rotarycraft.content.blockentity.BaitBoxBlockEntity;
+import reika.rotarycraft.content.blockentity.BeamMirrorBlockEntity;
+import reika.rotarycraft.content.blockentity.BeltHubBlockEntity;
 import reika.rotarycraft.content.blockentity.BevelGearBlockEntity;
+import reika.rotarycraft.content.blockentity.BigFurnaceBlockEntity;
+import reika.rotarycraft.content.blockentity.BlockCannonBlockEntity;
+import reika.rotarycraft.content.blockentity.BlockFillerBlockEntity;
+import reika.rotarycraft.content.blockentity.BlowerBlockEntity;
+import reika.rotarycraft.content.blockentity.BoilerBlockEntity;
+import reika.rotarycraft.content.blockentity.BorerBlockEntity;
+import reika.rotarycraft.content.blockentity.BucketFillerBlockEntity;
+import reika.rotarycraft.content.blockentity.BusControllerBlockEntity;
+import reika.rotarycraft.content.blockentity.CaveScannerBlockEntity;
+import reika.rotarycraft.content.blockentity.CctvBlockEntity;
+import reika.rotarycraft.content.blockentity.CentrifugeBlockEntity;
+import reika.rotarycraft.content.blockentity.ChainDriveBlockEntity;
+import reika.rotarycraft.content.blockentity.ChunkLoaderBlockEntity;
 import reika.rotarycraft.content.blockentity.ClutchBlockEntity;
+import reika.rotarycraft.content.blockentity.CompactorBlockEntity;
+import reika.rotarycraft.content.blockentity.ComposterBlockEntity;
+import reika.rotarycraft.content.blockentity.ContainmentBlockEntity;
+import reika.rotarycraft.content.blockentity.CoolingFinBlockEntity;
+import reika.rotarycraft.content.blockentity.CrystallizerBlockEntity;
+import reika.rotarycraft.content.blockentity.DefoliatorBlockEntity;
+import reika.rotarycraft.content.blockentity.DisplayBlockEntity;
+import reika.rotarycraft.content.blockentity.DistilleryBlockEntity;
+import reika.rotarycraft.content.blockentity.DistributionClutchBlockEntity;
+import reika.rotarycraft.content.blockentity.DropProcessorBlockEntity;
+import reika.rotarycraft.content.blockentity.DryingBedBlockEntity;
+import reika.rotarycraft.content.blockentity.DynamoBlockEntity;
 import reika.rotarycraft.content.blockentity.DynamometerBlockEntity;
+import reika.rotarycraft.content.blockentity.EmpBlockEntity;
+import reika.rotarycraft.content.blockentity.FanBlockEntity;
+import reika.rotarycraft.content.blockentity.FermenterBlockEntity;
+import reika.rotarycraft.content.blockentity.FertilizerBlockEntity;
+import reika.rotarycraft.content.blockentity.FillingStationBlockEntity;
+import reika.rotarycraft.content.blockentity.FireworkMachineBlockEntity;
+import reika.rotarycraft.content.blockentity.FlooderBlockEntity;
+import reika.rotarycraft.content.blockentity.FloodlightBlockEntity;
+import reika.rotarycraft.content.blockentity.FluidCompressorBlockEntity;
 import reika.rotarycraft.content.blockentity.FlywheelBlockEntity;
+import reika.rotarycraft.content.blockentity.ForceFieldBlockEntity;
+import reika.rotarycraft.content.blockentity.FractionatorBlockEntity;
+import reika.rotarycraft.content.blockentity.FuelEngineBlockEntity;
+import reika.rotarycraft.content.blockentity.FuelEnhancerBlockEntity;
 import reika.rotarycraft.content.blockentity.GearboxBlockEntity;
+import reika.rotarycraft.content.blockentity.GprBlockEntity;
+import reika.rotarycraft.content.blockentity.GrinderBlockEntity;
+import reika.rotarycraft.content.blockentity.GrindstoneBlockEntity;
+import reika.rotarycraft.content.blockentity.GroundHydratorBlockEntity;
+import reika.rotarycraft.content.blockentity.HeatRayBlockEntity;
+import reika.rotarycraft.content.blockentity.HeaterBlockEntity;
+import reika.rotarycraft.content.blockentity.IgniterBlockEntity;
+import reika.rotarycraft.content.blockentity.ItemCannonBlockEntity;
+import reika.rotarycraft.content.blockentity.ItemFilterBlockEntity;
+import reika.rotarycraft.content.blockentity.ItemRefresherBlockEntity;
+import reika.rotarycraft.content.blockentity.LampBlockEntity;
+import reika.rotarycraft.content.blockentity.LandmineBlockEntity;
+import reika.rotarycraft.content.blockentity.LavaMakerBlockEntity;
+import reika.rotarycraft.content.blockentity.LawnSprinklerBlockEntity;
+import reika.rotarycraft.content.blockentity.LightBridgeBlockEntity;
+import reika.rotarycraft.content.blockentity.LineBuilderBlockEntity;
+import reika.rotarycraft.content.blockentity.MachineGunBlockEntity;
+import reika.rotarycraft.content.blockentity.MagneticEngineBlockEntity;
+import reika.rotarycraft.content.blockentity.MagnetizerBlockEntity;
+import reika.rotarycraft.content.blockentity.MirrorBlockEntity;
+import reika.rotarycraft.content.blockentity.MobHarvesterBlockEntity;
+import reika.rotarycraft.content.blockentity.MobRadarBlockEntity;
+import reika.rotarycraft.content.blockentity.MultiClutchBlockEntity;
+import reika.rotarycraft.content.blockentity.MusicBoxBlockEntity;
+import reika.rotarycraft.content.blockentity.ObsidianMakerBlockEntity;
+import reika.rotarycraft.content.blockentity.ParticleEmitterBlockEntity;
+import reika.rotarycraft.content.blockentity.PileDriverBlockEntity;
+import reika.rotarycraft.content.blockentity.PipePumpBlockEntity;
+import reika.rotarycraft.content.blockentity.PlayerDetectorBlockEntity;
+import reika.rotarycraft.content.blockentity.PneumaticEngineBlockEntity;
+import reika.rotarycraft.content.blockentity.PortalShaftBlockEntity;
+import reika.rotarycraft.content.blockentity.PowerBusBlockEntity;
+import reika.rotarycraft.content.blockentity.ProjectorBlockEntity;
+import reika.rotarycraft.content.blockentity.PulseJetFurnaceBlockEntity;
+import reika.rotarycraft.content.blockentity.PumpBlockEntity;
+import reika.rotarycraft.content.blockentity.PurifierBlockEntity;
+import reika.rotarycraft.content.blockentity.RefrigeratorBlockEntity;
+import reika.rotarycraft.content.blockentity.ReservoirBlockEntity;
+import reika.rotarycraft.content.blockentity.ScaleableChestBlockEntity;
+import reika.rotarycraft.content.blockentity.ScreenBlockEntity;
+import reika.rotarycraft.content.blockentity.SelfDestructBlockEntity;
 import reika.rotarycraft.content.blockentity.ShaftBlockEntity;
+import reika.rotarycraft.content.blockentity.SmokeDetectorBlockEntity;
+import reika.rotarycraft.content.blockentity.SolarTowerBlockEntity;
+import reika.rotarycraft.content.blockentity.SonicBorerBlockEntity;
+import reika.rotarycraft.content.blockentity.SonicWeaponBlockEntity;
+import reika.rotarycraft.content.blockentity.SortingBlockEntity;
+import reika.rotarycraft.content.blockentity.SpawnerControllerBlockEntity;
+import reika.rotarycraft.content.blockentity.SpillwayBlockEntity;
+import reika.rotarycraft.content.blockentity.SplitBeltBlockEntity;
 import reika.rotarycraft.content.blockentity.SplitterBlockEntity;
+import reika.rotarycraft.content.blockentity.SprinklerBlockEntity;
+import reika.rotarycraft.content.blockentity.SpyCamBlockEntity;
+import reika.rotarycraft.content.blockentity.SteamTurbineBlockEntity;
+import reika.rotarycraft.content.blockentity.TerraformerBlockEntity;
+import reika.rotarycraft.content.blockentity.TntCannonBlockEntity;
+import reika.rotarycraft.content.blockentity.VacuumBlockEntity;
+import reika.rotarycraft.content.blockentity.VanDeGraffBlockEntity;
+import reika.rotarycraft.content.blockentity.WeatherControllerBlockEntity;
+import reika.rotarycraft.content.blockentity.WetterBlockEntity;
+import reika.rotarycraft.content.blockentity.WinderBlockEntity;
+import reika.rotarycraft.content.blockentity.WoodcutterBlockEntity;
 import reika.rotarycraft.content.blockentity.engine.ACEngineBlockEntity;
 import reika.rotarycraft.content.blockentity.engine.DCEngineBlockEntity;
 import reika.rotarycraft.content.blockentity.engine.EngineBlockEntity;
@@ -35,6 +145,17 @@ import reika.rotarycraft.content.blockentity.engine.MicroturbineBlockEntity;
 import reika.rotarycraft.content.blockentity.engine.PerformanceEngineBlockEntity;
 import reika.rotarycraft.content.blockentity.engine.SteamEngineBlockEntity;
 import reika.rotarycraft.content.blockentity.engine.WindEngineBlockEntity;
+import reika.rotarycraft.content.blockentity.turret.AntiAirGunBlockEntity;
+import reika.rotarycraft.content.blockentity.turret.FlameTurretBlockEntity;
+import reika.rotarycraft.content.blockentity.turret.FreezeGunBlockEntity;
+import reika.rotarycraft.content.blockentity.turret.LaserGunBlockEntity;
+import reika.rotarycraft.content.blockentity.turret.MultiCannonBlockEntity;
+import reika.rotarycraft.content.blockentity.turret.RailgunBlockEntity;
+import reika.rotarycraft.content.piping.BedrockPipeBlockEntity;
+import reika.rotarycraft.content.piping.FlowPipeBlockEntity;
+import reika.rotarycraft.content.piping.FuelLineBlockEntity;
+import reika.rotarycraft.content.piping.HoseBlockEntity;
+import reika.rotarycraft.content.piping.PipeBlockEntity;
 
 public final class RotaryBlockEntities {
 
@@ -45,30 +166,30 @@ public final class RotaryBlockEntities {
 	public static final Supplier<BlockEntityType<FlywheelBlockEntity>> FLYWHEEL = type("flywheel", FlywheelBlockEntity::new, () -> RotaryBlocks.FLYWHEEL.get());
 	public static final Supplier<BlockEntityType<BevelGearBlockEntity>> BEVEL_GEARS = type("bevel_gears", BevelGearBlockEntity::new, () -> RotaryBlocks.BEVEL_GEARS.get());
 	public static final Supplier<BlockEntityType<ClutchBlockEntity>> CLUTCH = type("clutch", ClutchBlockEntity::new, () -> RotaryBlocks.CLUTCH.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.MirrorBlockEntity>> MIRROR = type("solar_mirror",
-			reika.rotarycraft.content.blockentity.MirrorBlockEntity::new, () -> RotaryBlocks.MIRROR.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.SolarTowerBlockEntity>> SOLAR_TOWER = type("solar_tower",
-			reika.rotarycraft.content.blockentity.SolarTowerBlockEntity::new, () -> RotaryBlocks.SOLAR_TOWER.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.VanDeGraffBlockEntity>> VAN_DE_GRAFF = type("van_de_graff",
-			reika.rotarycraft.content.blockentity.VanDeGraffBlockEntity::new, () -> RotaryBlocks.VAN_DE_GRAFF.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.DryingBedBlockEntity>> DRYING_BED = type("drying_bed",
-			reika.rotarycraft.content.blockentity.DryingBedBlockEntity::new, () -> RotaryBlocks.DRYING_BED.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.WinderBlockEntity>> WINDER = type("winder",
-			reika.rotarycraft.content.blockentity.WinderBlockEntity::new, () -> RotaryBlocks.WINDER.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.FillingStationBlockEntity>> FILLING_STATION = type("filling_station",
-			reika.rotarycraft.content.blockentity.FillingStationBlockEntity::new, () -> RotaryBlocks.FILLING_STATION.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.CompactorBlockEntity>> COMPACTOR = type("compactor",
-			reika.rotarycraft.content.blockentity.CompactorBlockEntity::new, () -> RotaryBlocks.COMPACTOR.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.HeatRayBlockEntity>> HEAT_RAY = type("heat_ray",
-			reika.rotarycraft.content.blockentity.HeatRayBlockEntity::new, () -> RotaryBlocks.HEAT_RAY.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.RefrigeratorBlockEntity>> REFRIGERATOR = type("refrigerator",
-			reika.rotarycraft.content.blockentity.RefrigeratorBlockEntity::new, () -> RotaryBlocks.REFRIGERATOR.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.PipePumpBlockEntity>> PIPE_PUMP = type("pipe_pump",
-			reika.rotarycraft.content.blockentity.PipePumpBlockEntity::new, () -> RotaryBlocks.PIPE_PUMP.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.FuelEnhancerBlockEntity>> FUEL_ENHANCER = type("fuel_enhancer",
-			reika.rotarycraft.content.blockentity.FuelEnhancerBlockEntity::new, () -> RotaryBlocks.FUEL_ENHANCER.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.CoolingFinBlockEntity>> COOLING_FIN = type("cooling_fin",
-			reika.rotarycraft.content.blockentity.CoolingFinBlockEntity::new, () -> RotaryBlocks.COOLING_FIN.get());
+	public static final Supplier<BlockEntityType<MirrorBlockEntity>> MIRROR = type("solar_mirror",
+			MirrorBlockEntity::new, () -> RotaryBlocks.MIRROR.get());
+	public static final Supplier<BlockEntityType<SolarTowerBlockEntity>> SOLAR_TOWER = type("solar_tower",
+			SolarTowerBlockEntity::new, () -> RotaryBlocks.SOLAR_TOWER.get());
+	public static final Supplier<BlockEntityType<VanDeGraffBlockEntity>> VAN_DE_GRAFF = type("van_de_graff",
+			VanDeGraffBlockEntity::new, () -> RotaryBlocks.VAN_DE_GRAFF.get());
+	public static final Supplier<BlockEntityType<DryingBedBlockEntity>> DRYING_BED = type("drying_bed",
+			DryingBedBlockEntity::new, () -> RotaryBlocks.DRYING_BED.get());
+	public static final Supplier<BlockEntityType<WinderBlockEntity>> WINDER = type("winder",
+			WinderBlockEntity::new, () -> RotaryBlocks.WINDER.get());
+	public static final Supplier<BlockEntityType<FillingStationBlockEntity>> FILLING_STATION = type("filling_station",
+			FillingStationBlockEntity::new, () -> RotaryBlocks.FILLING_STATION.get());
+	public static final Supplier<BlockEntityType<CompactorBlockEntity>> COMPACTOR = type("compactor",
+			CompactorBlockEntity::new, () -> RotaryBlocks.COMPACTOR.get());
+	public static final Supplier<BlockEntityType<HeatRayBlockEntity>> HEAT_RAY = type("heat_ray",
+			HeatRayBlockEntity::new, () -> RotaryBlocks.HEAT_RAY.get());
+	public static final Supplier<BlockEntityType<RefrigeratorBlockEntity>> REFRIGERATOR = type("refrigerator",
+			RefrigeratorBlockEntity::new, () -> RotaryBlocks.REFRIGERATOR.get());
+	public static final Supplier<BlockEntityType<PipePumpBlockEntity>> PIPE_PUMP = type("pipe_pump",
+			PipePumpBlockEntity::new, () -> RotaryBlocks.PIPE_PUMP.get());
+	public static final Supplier<BlockEntityType<FuelEnhancerBlockEntity>> FUEL_ENHANCER = type("fuel_enhancer",
+			FuelEnhancerBlockEntity::new, () -> RotaryBlocks.FUEL_ENHANCER.get());
+	public static final Supplier<BlockEntityType<CoolingFinBlockEntity>> COOLING_FIN = type("cooling_fin",
+			CoolingFinBlockEntity::new, () -> RotaryBlocks.COOLING_FIN.get());
 	public static final Supplier<BlockEntityType<DynamometerBlockEntity>> DYNAMOMETER = type("dynamometer", DynamometerBlockEntity::new, () -> RotaryBlocks.DYNAMOMETER.get());
 	public static final Supplier<BlockEntityType<SplitterBlockEntity>> SHAFT_JUNCTION = type("shaft_junction", SplitterBlockEntity::new, () -> RotaryBlocks.SHAFT_JUNCTION.get());
 
@@ -90,129 +211,129 @@ public final class RotaryBlockEntities {
 
 	public static final Supplier<BlockEntityType<ExtractorBlockEntity>> EXTRACTOR = type("extractor", ExtractorBlockEntity::new, () -> RotaryBlocks.EXTRACTOR.get());
 	public static final Supplier<BlockEntityType<BedrockBreakerBlockEntity>> BEDROCK_BREAKER = type("bedrock_breaker", BedrockBreakerBlockEntity::new, () -> RotaryBlocks.BEDROCK_BREAKER.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.BorerBlockEntity>> BORER = type("borer", reika.rotarycraft.content.blockentity.BorerBlockEntity::new, () -> RotaryBlocks.BORER.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.GrinderBlockEntity>> GRINDER = type("grinder", reika.rotarycraft.content.blockentity.GrinderBlockEntity::new, () -> RotaryBlocks.GRINDER.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.FermenterBlockEntity>> FERMENTER = type("fermenter", reika.rotarycraft.content.blockentity.FermenterBlockEntity::new, () -> RotaryBlocks.FERMENTER.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.FanBlockEntity>> FAN = type("fan", reika.rotarycraft.content.blockentity.FanBlockEntity::new, () -> RotaryBlocks.FAN.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.MobHarvesterBlockEntity>> MOB_HARVESTER = type("mob_harvester", reika.rotarycraft.content.blockentity.MobHarvesterBlockEntity::new, () -> RotaryBlocks.MOB_HARVESTER.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.AggregatorBlockEntity>> AGGREGATOR = type("aggregator", reika.rotarycraft.content.blockentity.AggregatorBlockEntity::new, () -> RotaryBlocks.AGGREGATOR.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.FlooderBlockEntity>> SPILLER = type("spiller", reika.rotarycraft.content.blockentity.FlooderBlockEntity::new, () -> RotaryBlocks.SPILLER.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.BlockFillerBlockEntity>> FILLER = type("filler", reika.rotarycraft.content.blockentity.BlockFillerBlockEntity::new, () -> RotaryBlocks.FILLER.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.SmokeDetectorBlockEntity>> SMOKE_DETECTOR = type("smoke_detector", reika.rotarycraft.content.blockentity.SmokeDetectorBlockEntity::new, () -> RotaryBlocks.SMOKE_DETECTOR.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.PlayerDetectorBlockEntity>> PLAYER_DETECTOR = type("player_detector", reika.rotarycraft.content.blockentity.PlayerDetectorBlockEntity::new, () -> RotaryBlocks.PLAYER_DETECTOR.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.MobRadarBlockEntity>> MOB_RADAR = type("mob_radar", reika.rotarycraft.content.blockentity.MobRadarBlockEntity::new, () -> RotaryBlocks.MOB_RADAR.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.LavaMakerBlockEntity>> LAVA_MAKER = type("lava_maker", reika.rotarycraft.content.blockentity.LavaMakerBlockEntity::new, () -> RotaryBlocks.LAVA_MAKER.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.HeaterBlockEntity>> HEATER = type("heater", reika.rotarycraft.content.blockentity.HeaterBlockEntity::new, () -> RotaryBlocks.HEATER.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.ComposterBlockEntity>> COMPOSTER = type("composter", reika.rotarycraft.content.blockentity.ComposterBlockEntity::new, () -> RotaryBlocks.COMPOSTER.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.CrystallizerBlockEntity>> CRYSTALLIZER = type("crystallizer", reika.rotarycraft.content.blockentity.CrystallizerBlockEntity::new, () -> RotaryBlocks.CRYSTALLIZER.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.LampBlockEntity>> LAMP = type("lamp", reika.rotarycraft.content.blockentity.LampBlockEntity::new, () -> RotaryBlocks.LAMP.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.GroundHydratorBlockEntity>> HYDRATOR = type("hydrator", reika.rotarycraft.content.blockentity.GroundHydratorBlockEntity::new, () -> RotaryBlocks.HYDRATOR.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.WetterBlockEntity>> WETTER = type("wetter", reika.rotarycraft.content.blockentity.WetterBlockEntity::new, () -> RotaryBlocks.WETTER.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.ParticleEmitterBlockEntity>> PARTICLE_EMITTER = type("particle_emitter", reika.rotarycraft.content.blockentity.ParticleEmitterBlockEntity::new, () -> RotaryBlocks.PARTICLE_EMITTER.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.MultiClutchBlockEntity>> MULTI_CLUTCH = type("multi_clutch", reika.rotarycraft.content.blockentity.MultiClutchBlockEntity::new, () -> RotaryBlocks.MULTI_CLUTCH.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.BigFurnaceBlockEntity>> BIG_FURNACE = type("big_furnace", reika.rotarycraft.content.blockentity.BigFurnaceBlockEntity::new, () -> RotaryBlocks.BIG_FURNACE.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.SpillwayBlockEntity>> SPILLWAY = type("spillway", reika.rotarycraft.content.blockentity.SpillwayBlockEntity::new, () -> RotaryBlocks.SPILLWAY.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.FluidCompressorBlockEntity>> FLUID_COMPRESSOR = type("fluid_compressor", reika.rotarycraft.content.blockentity.FluidCompressorBlockEntity::new, () -> RotaryBlocks.FLUID_COMPRESSOR.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.LineBuilderBlockEntity>> LINE_BUILDER = type("line_builder", reika.rotarycraft.content.blockentity.LineBuilderBlockEntity::new, () -> RotaryBlocks.LINE_BUILDER.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.MagnetizerBlockEntity>> MAGNETIZER = type("magnetizer", reika.rotarycraft.content.blockentity.MagnetizerBlockEntity::new, () -> RotaryBlocks.MAGNETIZER.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.BeamMirrorBlockEntity>> BEAM_MIRROR = type("beam_mirror", reika.rotarycraft.content.blockentity.BeamMirrorBlockEntity::new, () -> RotaryBlocks.BEAM_MIRROR.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.ItemRefresherBlockEntity>> ITEM_REFRESHER = type("item_refresher", reika.rotarycraft.content.blockentity.ItemRefresherBlockEntity::new, () -> RotaryBlocks.ITEM_REFRESHER.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.GrindstoneBlockEntity>> GRINDSTONE = type("grindstone", reika.rotarycraft.content.blockentity.GrindstoneBlockEntity::new, () -> RotaryBlocks.GRINDSTONE.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.BucketFillerBlockEntity>> BUCKET_FILLER = type("bucket_filler", reika.rotarycraft.content.blockentity.BucketFillerBlockEntity::new, () -> RotaryBlocks.BUCKET_FILLER.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.SortingBlockEntity>> SORTING = type("sorting", reika.rotarycraft.content.blockentity.SortingBlockEntity::new, () -> RotaryBlocks.SORTING.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.FertilizerBlockEntity>> FERTILIZER = type("fertilizer", reika.rotarycraft.content.blockentity.FertilizerBlockEntity::new, () -> RotaryBlocks.FERTILIZER.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.LawnSprinklerBlockEntity>> LAWN_SPRINKLER = type("lawn_sprinkler", reika.rotarycraft.content.blockentity.LawnSprinklerBlockEntity::new, () -> RotaryBlocks.LAWN_SPRINKLER.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.SprinklerBlockEntity>> SPRINKLER = type("sprinkler", reika.rotarycraft.content.blockentity.SprinklerBlockEntity::new, () -> RotaryBlocks.SPRINKLER.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.IgniterBlockEntity>> IGNITER = type("firestarter", reika.rotarycraft.content.blockentity.IgniterBlockEntity::new, () -> RotaryBlocks.IGNITER.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.ObsidianMakerBlockEntity>> OBSIDIAN_MAKER = type("obsidian_maker", reika.rotarycraft.content.blockentity.ObsidianMakerBlockEntity::new, () -> RotaryBlocks.OBSIDIAN_MAKER.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.AutoBreederBlockEntity>> AUTO_BREEDER = type("auto_breeder", reika.rotarycraft.content.blockentity.AutoBreederBlockEntity::new, () -> RotaryBlocks.AUTO_BREEDER.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.BaitBoxBlockEntity>> BAIT_BOX = type("bait_box", reika.rotarycraft.content.blockentity.BaitBoxBlockEntity::new, () -> RotaryBlocks.BAIT_BOX.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.ScaleableChestBlockEntity>> SCALEABLE_CHEST = type("scaleable_chest", reika.rotarycraft.content.blockentity.ScaleableChestBlockEntity::new, () -> RotaryBlocks.SCALEABLE_CHEST.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.VacuumBlockEntity>> VACUUM = type("vacuum", reika.rotarycraft.content.blockentity.VacuumBlockEntity::new, () -> RotaryBlocks.VACUUM.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.BlowerBlockEntity>> BLOWER = type("blower", reika.rotarycraft.content.blockentity.BlowerBlockEntity::new, () -> RotaryBlocks.BLOWER.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.AerosolizerBlockEntity>> AEROSOLIZER = type("aerosolizer", reika.rotarycraft.content.blockentity.AerosolizerBlockEntity::new, () -> RotaryBlocks.AEROSOLIZER.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.FloodlightBlockEntity>> FLOODLIGHT = type("floodlight", reika.rotarycraft.content.blockentity.FloodlightBlockEntity::new, () -> RotaryBlocks.FLOODLIGHT.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.WoodcutterBlockEntity>> WOODCUTTER = type("woodcutter", reika.rotarycraft.content.blockentity.WoodcutterBlockEntity::new, () -> RotaryBlocks.WOODCUTTER.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.LightBridgeBlockEntity>> LIGHT_BRIDGE = type("light_bridge", reika.rotarycraft.content.blockentity.LightBridgeBlockEntity::new, () -> RotaryBlocks.LIGHT_BRIDGE.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.BeltHubBlockEntity>> BELT_HUB = type("belt_hub", reika.rotarycraft.content.blockentity.BeltHubBlockEntity::new, () -> RotaryBlocks.BELT_HUB.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.ChainDriveBlockEntity>> CHAIN_DRIVE = type("chain_drive", reika.rotarycraft.content.blockentity.ChainDriveBlockEntity::new, () -> RotaryBlocks.CHAIN_DRIVE.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.SplitBeltBlockEntity>> SPLIT_BELT = type("split_belt", reika.rotarycraft.content.blockentity.SplitBeltBlockEntity::new, () -> RotaryBlocks.SPLIT_BELT.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.DistributionClutchBlockEntity>> DISTRIBUTION_CLUTCH = type("distribution_clutch", reika.rotarycraft.content.blockentity.DistributionClutchBlockEntity::new, () -> RotaryBlocks.DISTRIBUTION_CLUTCH.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.BusControllerBlockEntity>> BUS_CONTROLLER = type("bus_controller", reika.rotarycraft.content.blockentity.BusControllerBlockEntity::new, () -> RotaryBlocks.BUS_CONTROLLER.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.PowerBusBlockEntity>> POWER_BUS = type("power_bus", reika.rotarycraft.content.blockentity.PowerBusBlockEntity::new, () -> RotaryBlocks.POWER_BUS.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.CaveScannerBlockEntity>> CAVE_SCANNER = type("cave_scanner", reika.rotarycraft.content.blockentity.CaveScannerBlockEntity::new, () -> RotaryBlocks.CAVE_SCANNER.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.DisplayBlockEntity>> DISPLAY = type("display", reika.rotarycraft.content.blockentity.DisplayBlockEntity::new, () -> RotaryBlocks.DISPLAY.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.ScreenBlockEntity>> SCREEN = type("cctv_screen", reika.rotarycraft.content.blockentity.ScreenBlockEntity::new, () -> RotaryBlocks.SCREEN.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.SpyCamBlockEntity>> SPY_CAM = type("spy_cam", reika.rotarycraft.content.blockentity.SpyCamBlockEntity::new, () -> RotaryBlocks.SPY_CAM.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.SonicBorerBlockEntity>> SONIC_BORER = type("sonic_borer", reika.rotarycraft.content.blockentity.SonicBorerBlockEntity::new, () -> RotaryBlocks.SONIC_BORER.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.PileDriverBlockEntity>> PILE_DRIVER = type("pile_driver", reika.rotarycraft.content.blockentity.PileDriverBlockEntity::new, () -> RotaryBlocks.PILE_DRIVER.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.DefoliatorBlockEntity>> DEFOLIATOR = type("defoliator", reika.rotarycraft.content.blockentity.DefoliatorBlockEntity::new, () -> RotaryBlocks.DEFOLIATOR.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.WeatherControllerBlockEntity>> WEATHER_CONTROLLER = type("weather_controller", reika.rotarycraft.content.blockentity.WeatherControllerBlockEntity::new, () -> RotaryBlocks.WEATHER_CONTROLLER.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.ChunkLoaderBlockEntity>> CHUNK_LOADER = type("chunk_loader", reika.rotarycraft.content.blockentity.ChunkLoaderBlockEntity::new, () -> RotaryBlocks.CHUNK_LOADER.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.ItemCannonBlockEntity>> ITEM_CANNON = type("item_cannon", reika.rotarycraft.content.blockentity.ItemCannonBlockEntity::new, () -> RotaryBlocks.ITEM_CANNON.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.SpawnerControllerBlockEntity>> SPAWNER_CONTROLLER = type("spawner_controller", reika.rotarycraft.content.blockentity.SpawnerControllerBlockEntity::new, () -> RotaryBlocks.SPAWNER_CONTROLLER.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.AdvancedGearBlockEntity>> ADVANCED_GEAR = TYPES.register("advanced_gear", () -> BlockEntityType.Builder.of(reika.rotarycraft.content.blockentity.AdvancedGearBlockEntity::new, RotaryBlocks.WORM_GEAR.get(), RotaryBlocks.HIGH_GEAR.get(), RotaryBlocks.INDUSTRIAL_COIL.get(), RotaryBlocks.BEDROCK_COIL.get(), RotaryBlocks.CVT.get()).build(null));
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.ItemFilterBlockEntity>> ITEM_FILTER = type("item_filter", reika.rotarycraft.content.blockentity.ItemFilterBlockEntity::new, () -> RotaryBlocks.ITEM_FILTER.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.AutoCrafterBlockEntity>> AUTO_CRAFTER = type("auto_crafter", reika.rotarycraft.content.blockentity.AutoCrafterBlockEntity::new, () -> RotaryBlocks.AUTO_CRAFTER.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.DropProcessorBlockEntity>> DROP_PROCESSOR = type("drop_processor", reika.rotarycraft.content.blockentity.DropProcessorBlockEntity::new, () -> RotaryBlocks.DROP_PROCESSOR.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.MusicBoxBlockEntity>> MUSIC_BOX = type("music_box", reika.rotarycraft.content.blockentity.MusicBoxBlockEntity::new, () -> RotaryBlocks.MUSIC_BOX.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.CctvBlockEntity>> CCTV = type("cctv", reika.rotarycraft.content.blockentity.CctvBlockEntity::new, () -> RotaryBlocks.CCTV.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.PortalShaftBlockEntity>> PORTAL_SHAFT = type("portal_shaft", reika.rotarycraft.content.blockentity.PortalShaftBlockEntity::new, () -> RotaryBlocks.PORTAL_SHAFT.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.TerraformerBlockEntity>> TERRAFORMER = type("terraformer", reika.rotarycraft.content.blockentity.TerraformerBlockEntity::new, () -> RotaryBlocks.TERRAFORMER.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.ProjectorBlockEntity>> PROJECTOR = type("projector", reika.rotarycraft.content.blockentity.ProjectorBlockEntity::new, () -> RotaryBlocks.PROJECTOR.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.MagneticEngineBlockEntity>> MAGNETIC_ENGINE = type("magnetic_engine", reika.rotarycraft.content.blockentity.MagneticEngineBlockEntity::new, () -> RotaryBlocks.MAGNETIC_ENGINE.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.DynamoBlockEntity>> DYNAMO = type("dynamo", reika.rotarycraft.content.blockentity.DynamoBlockEntity::new, () -> RotaryBlocks.DYNAMO.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.PurifierBlockEntity>> PURIFIER = type("purifier", reika.rotarycraft.content.blockentity.PurifierBlockEntity::new, () -> RotaryBlocks.PURIFIER.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.FuelEngineBlockEntity>> FUEL_ENGINE = type("fuel_engine", reika.rotarycraft.content.blockentity.FuelEngineBlockEntity::new, () -> RotaryBlocks.FUEL_ENGINE.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.DistilleryBlockEntity>> DISTILLERY = type("distillery", reika.rotarycraft.content.blockentity.DistilleryBlockEntity::new, () -> RotaryBlocks.DISTILLERY.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.BoilerBlockEntity>> BOILER = type("boiler", reika.rotarycraft.content.blockentity.BoilerBlockEntity::new, () -> RotaryBlocks.BOILER.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.SteamTurbineBlockEntity>> STEAM_TURBINE = type("steam_turbine", reika.rotarycraft.content.blockentity.SteamTurbineBlockEntity::new, () -> RotaryBlocks.STEAM_TURBINE.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.AirCompressorBlockEntity>> AIR_COMPRESSOR = type("air_compressor", reika.rotarycraft.content.blockentity.AirCompressorBlockEntity::new, () -> RotaryBlocks.AIR_COMPRESSOR.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.PneumaticEngineBlockEntity>> PNEUMATIC_ENGINE = type("pneumatic_engine", reika.rotarycraft.content.blockentity.PneumaticEngineBlockEntity::new, () -> RotaryBlocks.PNEUMATIC_ENGINE.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.ForceFieldBlockEntity>> FORCE_FIELD = type("force_field", reika.rotarycraft.content.blockentity.ForceFieldBlockEntity::new, () -> RotaryBlocks.FORCE_FIELD.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.ContainmentBlockEntity>> CONTAINMENT = type("containment", reika.rotarycraft.content.blockentity.ContainmentBlockEntity::new, () -> RotaryBlocks.CONTAINMENT.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.AirGunBlockEntity>> AIR_GUN = type("air_gun", reika.rotarycraft.content.blockentity.AirGunBlockEntity::new, () -> RotaryBlocks.AIR_GUN.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.LandmineBlockEntity>> LANDMINE = type("landmine", reika.rotarycraft.content.blockentity.LandmineBlockEntity::new, () -> RotaryBlocks.LANDMINE.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.SelfDestructBlockEntity>> SELF_DESTRUCT = type("self_destruct", reika.rotarycraft.content.blockentity.SelfDestructBlockEntity::new, () -> RotaryBlocks.SELF_DESTRUCT.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.SonicWeaponBlockEntity>> SONIC_WEAPON = type("sonic_weapon", reika.rotarycraft.content.blockentity.SonicWeaponBlockEntity::new, () -> RotaryBlocks.SONIC_WEAPON.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.EmpBlockEntity>> EMP = type("emp", reika.rotarycraft.content.blockentity.EmpBlockEntity::new, () -> RotaryBlocks.EMP.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.MachineGunBlockEntity>> MACHINE_GUN = type("machine_gun", reika.rotarycraft.content.blockentity.MachineGunBlockEntity::new, () -> RotaryBlocks.MACHINE_GUN.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.TntCannonBlockEntity>> TNT_CANNON = type("tnt_cannon", reika.rotarycraft.content.blockentity.TntCannonBlockEntity::new, () -> RotaryBlocks.TNT_CANNON.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.BlockCannonBlockEntity>> BLOCK_CANNON = type("block_cannon", reika.rotarycraft.content.blockentity.BlockCannonBlockEntity::new, () -> RotaryBlocks.BLOCK_CANNON.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.turret.RailgunBlockEntity>> RAILGUN = type("railgun", reika.rotarycraft.content.blockentity.turret.RailgunBlockEntity::new, () -> RotaryBlocks.RAILGUN.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.turret.FreezeGunBlockEntity>> FREEZE_GUN = type("freeze_gun", reika.rotarycraft.content.blockentity.turret.FreezeGunBlockEntity::new, () -> RotaryBlocks.FREEZE_GUN.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.turret.LaserGunBlockEntity>> LASER_GUN = type("laser_gun", reika.rotarycraft.content.blockentity.turret.LaserGunBlockEntity::new, () -> RotaryBlocks.LASER_GUN.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.turret.MultiCannonBlockEntity>> MULTI_CANNON = type("multi_cannon", reika.rotarycraft.content.blockentity.turret.MultiCannonBlockEntity::new, () -> RotaryBlocks.MULTI_CANNON.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.turret.AntiAirGunBlockEntity>> ANTI_AIR_GUN = type("anti_air_gun", reika.rotarycraft.content.blockentity.turret.AntiAirGunBlockEntity::new, () -> RotaryBlocks.ANTI_AIR_GUN.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.turret.FlameTurretBlockEntity>> FLAME_TURRET = type("flame_turret", reika.rotarycraft.content.blockentity.turret.FlameTurretBlockEntity::new, () -> RotaryBlocks.FLAME_TURRET.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.FireworkMachineBlockEntity>> FIREWORK_MACHINE = type("firework_machine", reika.rotarycraft.content.blockentity.FireworkMachineBlockEntity::new, () -> RotaryBlocks.FIREWORK_MACHINE.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.GprBlockEntity>> GPR = type("gpr", reika.rotarycraft.content.blockentity.GprBlockEntity::new, () -> RotaryBlocks.GPR.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.CentrifugeBlockEntity>> CENTRIFUGE = type("centrifuge", reika.rotarycraft.content.blockentity.CentrifugeBlockEntity::new, () -> RotaryBlocks.CENTRIFUGE.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.FractionatorBlockEntity>> FRACTIONATOR = type("fractionator", reika.rotarycraft.content.blockentity.FractionatorBlockEntity::new, () -> RotaryBlocks.FRACTIONATOR.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.PumpBlockEntity>> PUMP = type("pump", reika.rotarycraft.content.blockentity.PumpBlockEntity::new, () -> RotaryBlocks.PUMP.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.ReservoirBlockEntity>> RESERVOIR = type("reservoir", reika.rotarycraft.content.blockentity.ReservoirBlockEntity::new, () -> RotaryBlocks.RESERVOIR.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.blockentity.PulseJetFurnaceBlockEntity>> PULSE_JET = type("pulse_jet_furnace", reika.rotarycraft.content.blockentity.PulseJetFurnaceBlockEntity::new, () -> RotaryBlocks.PULSE_JET.get());
+	public static final Supplier<BlockEntityType<BorerBlockEntity>> BORER = type("borer", BorerBlockEntity::new, () -> RotaryBlocks.BORER.get());
+	public static final Supplier<BlockEntityType<GrinderBlockEntity>> GRINDER = type("grinder", GrinderBlockEntity::new, () -> RotaryBlocks.GRINDER.get());
+	public static final Supplier<BlockEntityType<FermenterBlockEntity>> FERMENTER = type("fermenter", FermenterBlockEntity::new, () -> RotaryBlocks.FERMENTER.get());
+	public static final Supplier<BlockEntityType<FanBlockEntity>> FAN = type("fan", FanBlockEntity::new, () -> RotaryBlocks.FAN.get());
+	public static final Supplier<BlockEntityType<MobHarvesterBlockEntity>> MOB_HARVESTER = type("mob_harvester", MobHarvesterBlockEntity::new, () -> RotaryBlocks.MOB_HARVESTER.get());
+	public static final Supplier<BlockEntityType<AggregatorBlockEntity>> AGGREGATOR = type("aggregator", AggregatorBlockEntity::new, () -> RotaryBlocks.AGGREGATOR.get());
+	public static final Supplier<BlockEntityType<FlooderBlockEntity>> SPILLER = type("spiller", FlooderBlockEntity::new, () -> RotaryBlocks.SPILLER.get());
+	public static final Supplier<BlockEntityType<BlockFillerBlockEntity>> FILLER = type("filler", BlockFillerBlockEntity::new, () -> RotaryBlocks.FILLER.get());
+	public static final Supplier<BlockEntityType<SmokeDetectorBlockEntity>> SMOKE_DETECTOR = type("smoke_detector", SmokeDetectorBlockEntity::new, () -> RotaryBlocks.SMOKE_DETECTOR.get());
+	public static final Supplier<BlockEntityType<PlayerDetectorBlockEntity>> PLAYER_DETECTOR = type("player_detector", PlayerDetectorBlockEntity::new, () -> RotaryBlocks.PLAYER_DETECTOR.get());
+	public static final Supplier<BlockEntityType<MobRadarBlockEntity>> MOB_RADAR = type("mob_radar", MobRadarBlockEntity::new, () -> RotaryBlocks.MOB_RADAR.get());
+	public static final Supplier<BlockEntityType<LavaMakerBlockEntity>> LAVA_MAKER = type("lava_maker", LavaMakerBlockEntity::new, () -> RotaryBlocks.LAVA_MAKER.get());
+	public static final Supplier<BlockEntityType<HeaterBlockEntity>> HEATER = type("heater", HeaterBlockEntity::new, () -> RotaryBlocks.HEATER.get());
+	public static final Supplier<BlockEntityType<ComposterBlockEntity>> COMPOSTER = type("composter", ComposterBlockEntity::new, () -> RotaryBlocks.COMPOSTER.get());
+	public static final Supplier<BlockEntityType<CrystallizerBlockEntity>> CRYSTALLIZER = type("crystallizer", CrystallizerBlockEntity::new, () -> RotaryBlocks.CRYSTALLIZER.get());
+	public static final Supplier<BlockEntityType<LampBlockEntity>> LAMP = type("lamp", LampBlockEntity::new, () -> RotaryBlocks.LAMP.get());
+	public static final Supplier<BlockEntityType<GroundHydratorBlockEntity>> HYDRATOR = type("hydrator", GroundHydratorBlockEntity::new, () -> RotaryBlocks.HYDRATOR.get());
+	public static final Supplier<BlockEntityType<WetterBlockEntity>> WETTER = type("wetter", WetterBlockEntity::new, () -> RotaryBlocks.WETTER.get());
+	public static final Supplier<BlockEntityType<ParticleEmitterBlockEntity>> PARTICLE_EMITTER = type("particle_emitter", ParticleEmitterBlockEntity::new, () -> RotaryBlocks.PARTICLE_EMITTER.get());
+	public static final Supplier<BlockEntityType<MultiClutchBlockEntity>> MULTI_CLUTCH = type("multi_clutch", MultiClutchBlockEntity::new, () -> RotaryBlocks.MULTI_CLUTCH.get());
+	public static final Supplier<BlockEntityType<BigFurnaceBlockEntity>> BIG_FURNACE = type("big_furnace", BigFurnaceBlockEntity::new, () -> RotaryBlocks.BIG_FURNACE.get());
+	public static final Supplier<BlockEntityType<SpillwayBlockEntity>> SPILLWAY = type("spillway", SpillwayBlockEntity::new, () -> RotaryBlocks.SPILLWAY.get());
+	public static final Supplier<BlockEntityType<FluidCompressorBlockEntity>> FLUID_COMPRESSOR = type("fluid_compressor", FluidCompressorBlockEntity::new, () -> RotaryBlocks.FLUID_COMPRESSOR.get());
+	public static final Supplier<BlockEntityType<LineBuilderBlockEntity>> LINE_BUILDER = type("line_builder", LineBuilderBlockEntity::new, () -> RotaryBlocks.LINE_BUILDER.get());
+	public static final Supplier<BlockEntityType<MagnetizerBlockEntity>> MAGNETIZER = type("magnetizer", MagnetizerBlockEntity::new, () -> RotaryBlocks.MAGNETIZER.get());
+	public static final Supplier<BlockEntityType<BeamMirrorBlockEntity>> BEAM_MIRROR = type("beam_mirror", BeamMirrorBlockEntity::new, () -> RotaryBlocks.BEAM_MIRROR.get());
+	public static final Supplier<BlockEntityType<ItemRefresherBlockEntity>> ITEM_REFRESHER = type("item_refresher", ItemRefresherBlockEntity::new, () -> RotaryBlocks.ITEM_REFRESHER.get());
+	public static final Supplier<BlockEntityType<GrindstoneBlockEntity>> GRINDSTONE = type("grindstone", GrindstoneBlockEntity::new, () -> RotaryBlocks.GRINDSTONE.get());
+	public static final Supplier<BlockEntityType<BucketFillerBlockEntity>> BUCKET_FILLER = type("bucket_filler", BucketFillerBlockEntity::new, () -> RotaryBlocks.BUCKET_FILLER.get());
+	public static final Supplier<BlockEntityType<SortingBlockEntity>> SORTING = type("sorting", SortingBlockEntity::new, () -> RotaryBlocks.SORTING.get());
+	public static final Supplier<BlockEntityType<FertilizerBlockEntity>> FERTILIZER = type("fertilizer", FertilizerBlockEntity::new, () -> RotaryBlocks.FERTILIZER.get());
+	public static final Supplier<BlockEntityType<LawnSprinklerBlockEntity>> LAWN_SPRINKLER = type("lawn_sprinkler", LawnSprinklerBlockEntity::new, () -> RotaryBlocks.LAWN_SPRINKLER.get());
+	public static final Supplier<BlockEntityType<SprinklerBlockEntity>> SPRINKLER = type("sprinkler", SprinklerBlockEntity::new, () -> RotaryBlocks.SPRINKLER.get());
+	public static final Supplier<BlockEntityType<IgniterBlockEntity>> IGNITER = type("firestarter", IgniterBlockEntity::new, () -> RotaryBlocks.IGNITER.get());
+	public static final Supplier<BlockEntityType<ObsidianMakerBlockEntity>> OBSIDIAN_MAKER = type("obsidian_maker", ObsidianMakerBlockEntity::new, () -> RotaryBlocks.OBSIDIAN_MAKER.get());
+	public static final Supplier<BlockEntityType<AutoBreederBlockEntity>> AUTO_BREEDER = type("auto_breeder", AutoBreederBlockEntity::new, () -> RotaryBlocks.AUTO_BREEDER.get());
+	public static final Supplier<BlockEntityType<BaitBoxBlockEntity>> BAIT_BOX = type("bait_box", BaitBoxBlockEntity::new, () -> RotaryBlocks.BAIT_BOX.get());
+	public static final Supplier<BlockEntityType<ScaleableChestBlockEntity>> SCALEABLE_CHEST = type("scaleable_chest", ScaleableChestBlockEntity::new, () -> RotaryBlocks.SCALEABLE_CHEST.get());
+	public static final Supplier<BlockEntityType<VacuumBlockEntity>> VACUUM = type("vacuum", VacuumBlockEntity::new, () -> RotaryBlocks.VACUUM.get());
+	public static final Supplier<BlockEntityType<BlowerBlockEntity>> BLOWER = type("blower", BlowerBlockEntity::new, () -> RotaryBlocks.BLOWER.get());
+	public static final Supplier<BlockEntityType<AerosolizerBlockEntity>> AEROSOLIZER = type("aerosolizer", AerosolizerBlockEntity::new, () -> RotaryBlocks.AEROSOLIZER.get());
+	public static final Supplier<BlockEntityType<FloodlightBlockEntity>> FLOODLIGHT = type("floodlight", FloodlightBlockEntity::new, () -> RotaryBlocks.FLOODLIGHT.get());
+	public static final Supplier<BlockEntityType<WoodcutterBlockEntity>> WOODCUTTER = type("woodcutter", WoodcutterBlockEntity::new, () -> RotaryBlocks.WOODCUTTER.get());
+	public static final Supplier<BlockEntityType<LightBridgeBlockEntity>> LIGHT_BRIDGE = type("light_bridge", LightBridgeBlockEntity::new, () -> RotaryBlocks.LIGHT_BRIDGE.get());
+	public static final Supplier<BlockEntityType<BeltHubBlockEntity>> BELT_HUB = type("belt_hub", BeltHubBlockEntity::new, () -> RotaryBlocks.BELT_HUB.get());
+	public static final Supplier<BlockEntityType<ChainDriveBlockEntity>> CHAIN_DRIVE = type("chain_drive", ChainDriveBlockEntity::new, () -> RotaryBlocks.CHAIN_DRIVE.get());
+	public static final Supplier<BlockEntityType<SplitBeltBlockEntity>> SPLIT_BELT = type("split_belt", SplitBeltBlockEntity::new, () -> RotaryBlocks.SPLIT_BELT.get());
+	public static final Supplier<BlockEntityType<DistributionClutchBlockEntity>> DISTRIBUTION_CLUTCH = type("distribution_clutch", DistributionClutchBlockEntity::new, () -> RotaryBlocks.DISTRIBUTION_CLUTCH.get());
+	public static final Supplier<BlockEntityType<BusControllerBlockEntity>> BUS_CONTROLLER = type("bus_controller", BusControllerBlockEntity::new, () -> RotaryBlocks.BUS_CONTROLLER.get());
+	public static final Supplier<BlockEntityType<PowerBusBlockEntity>> POWER_BUS = type("power_bus", PowerBusBlockEntity::new, () -> RotaryBlocks.POWER_BUS.get());
+	public static final Supplier<BlockEntityType<CaveScannerBlockEntity>> CAVE_SCANNER = type("cave_scanner", CaveScannerBlockEntity::new, () -> RotaryBlocks.CAVE_SCANNER.get());
+	public static final Supplier<BlockEntityType<DisplayBlockEntity>> DISPLAY = type("display", DisplayBlockEntity::new, () -> RotaryBlocks.DISPLAY.get());
+	public static final Supplier<BlockEntityType<ScreenBlockEntity>> SCREEN = type("cctv_screen", ScreenBlockEntity::new, () -> RotaryBlocks.SCREEN.get());
+	public static final Supplier<BlockEntityType<SpyCamBlockEntity>> SPY_CAM = type("spy_cam", SpyCamBlockEntity::new, () -> RotaryBlocks.SPY_CAM.get());
+	public static final Supplier<BlockEntityType<SonicBorerBlockEntity>> SONIC_BORER = type("sonic_borer", SonicBorerBlockEntity::new, () -> RotaryBlocks.SONIC_BORER.get());
+	public static final Supplier<BlockEntityType<PileDriverBlockEntity>> PILE_DRIVER = type("pile_driver", PileDriverBlockEntity::new, () -> RotaryBlocks.PILE_DRIVER.get());
+	public static final Supplier<BlockEntityType<DefoliatorBlockEntity>> DEFOLIATOR = type("defoliator", DefoliatorBlockEntity::new, () -> RotaryBlocks.DEFOLIATOR.get());
+	public static final Supplier<BlockEntityType<WeatherControllerBlockEntity>> WEATHER_CONTROLLER = type("weather_controller", WeatherControllerBlockEntity::new, () -> RotaryBlocks.WEATHER_CONTROLLER.get());
+	public static final Supplier<BlockEntityType<ChunkLoaderBlockEntity>> CHUNK_LOADER = type("chunk_loader", ChunkLoaderBlockEntity::new, () -> RotaryBlocks.CHUNK_LOADER.get());
+	public static final Supplier<BlockEntityType<ItemCannonBlockEntity>> ITEM_CANNON = type("item_cannon", ItemCannonBlockEntity::new, () -> RotaryBlocks.ITEM_CANNON.get());
+	public static final Supplier<BlockEntityType<SpawnerControllerBlockEntity>> SPAWNER_CONTROLLER = type("spawner_controller", SpawnerControllerBlockEntity::new, () -> RotaryBlocks.SPAWNER_CONTROLLER.get());
+	public static final Supplier<BlockEntityType<AdvancedGearBlockEntity>> ADVANCED_GEAR = TYPES.register("advanced_gear", () -> BlockEntityType.Builder.of(AdvancedGearBlockEntity::new, RotaryBlocks.WORM_GEAR.get(), RotaryBlocks.HIGH_GEAR.get(), RotaryBlocks.INDUSTRIAL_COIL.get(), RotaryBlocks.BEDROCK_COIL.get(), RotaryBlocks.CVT.get()).build(null));
+	public static final Supplier<BlockEntityType<ItemFilterBlockEntity>> ITEM_FILTER = type("item_filter", ItemFilterBlockEntity::new, () -> RotaryBlocks.ITEM_FILTER.get());
+	public static final Supplier<BlockEntityType<AutoCrafterBlockEntity>> AUTO_CRAFTER = type("auto_crafter", AutoCrafterBlockEntity::new, () -> RotaryBlocks.AUTO_CRAFTER.get());
+	public static final Supplier<BlockEntityType<DropProcessorBlockEntity>> DROP_PROCESSOR = type("drop_processor", DropProcessorBlockEntity::new, () -> RotaryBlocks.DROP_PROCESSOR.get());
+	public static final Supplier<BlockEntityType<MusicBoxBlockEntity>> MUSIC_BOX = type("music_box", MusicBoxBlockEntity::new, () -> RotaryBlocks.MUSIC_BOX.get());
+	public static final Supplier<BlockEntityType<CctvBlockEntity>> CCTV = type("cctv", CctvBlockEntity::new, () -> RotaryBlocks.CCTV.get());
+	public static final Supplier<BlockEntityType<PortalShaftBlockEntity>> PORTAL_SHAFT = type("portal_shaft", PortalShaftBlockEntity::new, () -> RotaryBlocks.PORTAL_SHAFT.get());
+	public static final Supplier<BlockEntityType<TerraformerBlockEntity>> TERRAFORMER = type("terraformer", TerraformerBlockEntity::new, () -> RotaryBlocks.TERRAFORMER.get());
+	public static final Supplier<BlockEntityType<ProjectorBlockEntity>> PROJECTOR = type("projector", ProjectorBlockEntity::new, () -> RotaryBlocks.PROJECTOR.get());
+	public static final Supplier<BlockEntityType<MagneticEngineBlockEntity>> MAGNETIC_ENGINE = type("magnetic_engine", MagneticEngineBlockEntity::new, () -> RotaryBlocks.MAGNETIC_ENGINE.get());
+	public static final Supplier<BlockEntityType<DynamoBlockEntity>> DYNAMO = type("dynamo", DynamoBlockEntity::new, () -> RotaryBlocks.DYNAMO.get());
+	public static final Supplier<BlockEntityType<PurifierBlockEntity>> PURIFIER = type("purifier", PurifierBlockEntity::new, () -> RotaryBlocks.PURIFIER.get());
+	public static final Supplier<BlockEntityType<FuelEngineBlockEntity>> FUEL_ENGINE = type("fuel_engine", FuelEngineBlockEntity::new, () -> RotaryBlocks.FUEL_ENGINE.get());
+	public static final Supplier<BlockEntityType<DistilleryBlockEntity>> DISTILLERY = type("distillery", DistilleryBlockEntity::new, () -> RotaryBlocks.DISTILLERY.get());
+	public static final Supplier<BlockEntityType<BoilerBlockEntity>> BOILER = type("boiler", BoilerBlockEntity::new, () -> RotaryBlocks.BOILER.get());
+	public static final Supplier<BlockEntityType<SteamTurbineBlockEntity>> STEAM_TURBINE = type("steam_turbine", SteamTurbineBlockEntity::new, () -> RotaryBlocks.STEAM_TURBINE.get());
+	public static final Supplier<BlockEntityType<AirCompressorBlockEntity>> AIR_COMPRESSOR = type("air_compressor", AirCompressorBlockEntity::new, () -> RotaryBlocks.AIR_COMPRESSOR.get());
+	public static final Supplier<BlockEntityType<PneumaticEngineBlockEntity>> PNEUMATIC_ENGINE = type("pneumatic_engine", PneumaticEngineBlockEntity::new, () -> RotaryBlocks.PNEUMATIC_ENGINE.get());
+	public static final Supplier<BlockEntityType<ForceFieldBlockEntity>> FORCE_FIELD = type("force_field", ForceFieldBlockEntity::new, () -> RotaryBlocks.FORCE_FIELD.get());
+	public static final Supplier<BlockEntityType<ContainmentBlockEntity>> CONTAINMENT = type("containment", ContainmentBlockEntity::new, () -> RotaryBlocks.CONTAINMENT.get());
+	public static final Supplier<BlockEntityType<AirGunBlockEntity>> AIR_GUN = type("air_gun", AirGunBlockEntity::new, () -> RotaryBlocks.AIR_GUN.get());
+	public static final Supplier<BlockEntityType<LandmineBlockEntity>> LANDMINE = type("landmine", LandmineBlockEntity::new, () -> RotaryBlocks.LANDMINE.get());
+	public static final Supplier<BlockEntityType<SelfDestructBlockEntity>> SELF_DESTRUCT = type("self_destruct", SelfDestructBlockEntity::new, () -> RotaryBlocks.SELF_DESTRUCT.get());
+	public static final Supplier<BlockEntityType<SonicWeaponBlockEntity>> SONIC_WEAPON = type("sonic_weapon", SonicWeaponBlockEntity::new, () -> RotaryBlocks.SONIC_WEAPON.get());
+	public static final Supplier<BlockEntityType<EmpBlockEntity>> EMP = type("emp", EmpBlockEntity::new, () -> RotaryBlocks.EMP.get());
+	public static final Supplier<BlockEntityType<MachineGunBlockEntity>> MACHINE_GUN = type("machine_gun", MachineGunBlockEntity::new, () -> RotaryBlocks.MACHINE_GUN.get());
+	public static final Supplier<BlockEntityType<TntCannonBlockEntity>> TNT_CANNON = type("tnt_cannon", TntCannonBlockEntity::new, () -> RotaryBlocks.TNT_CANNON.get());
+	public static final Supplier<BlockEntityType<BlockCannonBlockEntity>> BLOCK_CANNON = type("block_cannon", BlockCannonBlockEntity::new, () -> RotaryBlocks.BLOCK_CANNON.get());
+	public static final Supplier<BlockEntityType<RailgunBlockEntity>> RAILGUN = type("railgun", RailgunBlockEntity::new, () -> RotaryBlocks.RAILGUN.get());
+	public static final Supplier<BlockEntityType<FreezeGunBlockEntity>> FREEZE_GUN = type("freeze_gun", FreezeGunBlockEntity::new, () -> RotaryBlocks.FREEZE_GUN.get());
+	public static final Supplier<BlockEntityType<LaserGunBlockEntity>> LASER_GUN = type("laser_gun", LaserGunBlockEntity::new, () -> RotaryBlocks.LASER_GUN.get());
+	public static final Supplier<BlockEntityType<MultiCannonBlockEntity>> MULTI_CANNON = type("multi_cannon", MultiCannonBlockEntity::new, () -> RotaryBlocks.MULTI_CANNON.get());
+	public static final Supplier<BlockEntityType<AntiAirGunBlockEntity>> ANTI_AIR_GUN = type("anti_air_gun", AntiAirGunBlockEntity::new, () -> RotaryBlocks.ANTI_AIR_GUN.get());
+	public static final Supplier<BlockEntityType<FlameTurretBlockEntity>> FLAME_TURRET = type("flame_turret", FlameTurretBlockEntity::new, () -> RotaryBlocks.FLAME_TURRET.get());
+	public static final Supplier<BlockEntityType<FireworkMachineBlockEntity>> FIREWORK_MACHINE = type("firework_machine", FireworkMachineBlockEntity::new, () -> RotaryBlocks.FIREWORK_MACHINE.get());
+	public static final Supplier<BlockEntityType<GprBlockEntity>> GPR = type("gpr", GprBlockEntity::new, () -> RotaryBlocks.GPR.get());
+	public static final Supplier<BlockEntityType<CentrifugeBlockEntity>> CENTRIFUGE = type("centrifuge", CentrifugeBlockEntity::new, () -> RotaryBlocks.CENTRIFUGE.get());
+	public static final Supplier<BlockEntityType<FractionatorBlockEntity>> FRACTIONATOR = type("fractionator", FractionatorBlockEntity::new, () -> RotaryBlocks.FRACTIONATOR.get());
+	public static final Supplier<BlockEntityType<PumpBlockEntity>> PUMP = type("pump", PumpBlockEntity::new, () -> RotaryBlocks.PUMP.get());
+	public static final Supplier<BlockEntityType<ReservoirBlockEntity>> RESERVOIR = type("reservoir", ReservoirBlockEntity::new, () -> RotaryBlocks.RESERVOIR.get());
+	public static final Supplier<BlockEntityType<PulseJetFurnaceBlockEntity>> PULSE_JET = type("pulse_jet_furnace", PulseJetFurnaceBlockEntity::new, () -> RotaryBlocks.PULSE_JET.get());
 	public static final Supplier<BlockEntityType<FrictionHeaterBlockEntity>> FRICTION_HEATER = type("friction_heater", FrictionHeaterBlockEntity::new, () -> RotaryBlocks.FRICTION_HEATER.get());
 
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.piping.HoseBlockEntity>> HOSE = type("hose", reika.rotarycraft.content.piping.HoseBlockEntity::new, () -> RotaryBlocks.HOSE.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.piping.PipeBlockEntity>> PIPE = type("pipe", reika.rotarycraft.content.piping.PipeBlockEntity::new, () -> RotaryBlocks.PIPE.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.piping.FuelLineBlockEntity>> FUEL_LINE = type("fuel_line", reika.rotarycraft.content.piping.FuelLineBlockEntity::new, () -> RotaryBlocks.FUEL_LINE.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.piping.BedrockPipeBlockEntity>> BEDROCK_PIPE = type("bedrock_pipe", reika.rotarycraft.content.piping.BedrockPipeBlockEntity::new, () -> RotaryBlocks.BEDROCK_PIPE.get());
+	public static final Supplier<BlockEntityType<HoseBlockEntity>> HOSE = type("hose", HoseBlockEntity::new, () -> RotaryBlocks.HOSE.get());
+	public static final Supplier<BlockEntityType<PipeBlockEntity>> PIPE = type("pipe", PipeBlockEntity::new, () -> RotaryBlocks.PIPE.get());
+	public static final Supplier<BlockEntityType<FuelLineBlockEntity>> FUEL_LINE = type("fuel_line", FuelLineBlockEntity::new, () -> RotaryBlocks.FUEL_LINE.get());
+	public static final Supplier<BlockEntityType<BedrockPipeBlockEntity>> BEDROCK_PIPE = type("bedrock_pipe", BedrockPipeBlockEntity::new, () -> RotaryBlocks.BEDROCK_PIPE.get());
 
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.piping.FlowPipeBlockEntity>> VALVE = type("valve", reika.rotarycraft.content.piping.FlowPipeBlockEntity::valve, () -> RotaryBlocks.VALVE.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.piping.FlowPipeBlockEntity>> BYPASS = type("bypass", reika.rotarycraft.content.piping.FlowPipeBlockEntity::bypass, () -> RotaryBlocks.BYPASS.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.piping.FlowPipeBlockEntity>> SEPARATION = type("separation", reika.rotarycraft.content.piping.FlowPipeBlockEntity::separation, () -> RotaryBlocks.SEPARATION.get());
-	public static final Supplier<BlockEntityType<reika.rotarycraft.content.piping.FlowPipeBlockEntity>> SUCTION = type("suction", reika.rotarycraft.content.piping.FlowPipeBlockEntity::suction, () -> RotaryBlocks.SUCTION.get());
+	public static final Supplier<BlockEntityType<FlowPipeBlockEntity>> VALVE = type("valve", FlowPipeBlockEntity::valve, () -> RotaryBlocks.VALVE.get());
+	public static final Supplier<BlockEntityType<FlowPipeBlockEntity>> BYPASS = type("bypass", FlowPipeBlockEntity::bypass, () -> RotaryBlocks.BYPASS.get());
+	public static final Supplier<BlockEntityType<FlowPipeBlockEntity>> SEPARATION = type("separation", FlowPipeBlockEntity::separation, () -> RotaryBlocks.SEPARATION.get());
+	public static final Supplier<BlockEntityType<FlowPipeBlockEntity>> SUCTION = type("suction", FlowPipeBlockEntity::suction, () -> RotaryBlocks.SUCTION.get());
 
 	@SuppressWarnings("unchecked")
-	public static java.util.List<Supplier<? extends BlockEntityType<? extends EngineBlockEntity>>> engines() {
-		return java.util.List.of(DC_ENGINE, WIND_ENGINE, STEAM_ENGINE, GAS_ENGINE, AC_ENGINE, SPORT_ENGINE, MICRO_ENGINE, HYDRO_ENGINE, JET_ENGINE);
+	public static List<Supplier<? extends BlockEntityType<? extends EngineBlockEntity>>> engines() {
+		return List.of(DC_ENGINE, WIND_ENGINE, STEAM_ENGINE, GAS_ENGINE, AC_ENGINE, SPORT_ENGINE, MICRO_ENGINE, HYDRO_ENGINE, JET_ENGINE);
 	}
 
 	private RotaryBlockEntities() {}
 
 	@SuppressWarnings("DataFlowIssue")
-	private static <T extends net.minecraft.world.level.block.entity.BlockEntity> Supplier<BlockEntityType<T>> type(String name, BlockEntityType.BlockEntitySupplier<T> factory, Supplier<Block> block) {
+	private static <T extends BlockEntity> Supplier<BlockEntityType<T>> type(String name, BlockEntityType.BlockEntitySupplier<T> factory, Supplier<Block> block) {
 		return TYPES.register(name, () -> BlockEntityType.Builder.of(factory, block.get()).build(null));
 	}
 }

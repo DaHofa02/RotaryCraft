@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Predicate;
 
 import javax.annotation.Nullable;
 
@@ -18,6 +19,8 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
+import net.minecraft.world.Clearable;
+import net.minecraft.world.Containers;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
@@ -47,7 +50,7 @@ import reika.rotarycraft.registry.RotaryRecipeTypes;
  * Not ported yet: the crafting pattern slot (slot 15; the pattern item is not ported), achievements, and collecting the stored XP
  * (originally only the Vacuum takes it).
  */
-public class BlastFurnaceBlockEntity extends RotaryCraftBlockEntity implements FrictionHeatable, net.minecraft.world.Clearable {
+public class BlastFurnaceBlockEntity extends RotaryCraftBlockEntity implements FrictionHeatable, Clearable {
 
 	/** Vanilla Clearable: commands such as /setblock and /fill empty the inventory before replacing the block, so nothing drops. */
 	@Override
@@ -328,7 +331,7 @@ public class BlastFurnaceBlockEntity extends RotaryCraftBlockEntity implements F
 	}
 
 	@Nullable
-	private static Direction checkForAdjBlock(Level world, BlockPos pos, java.util.function.Predicate<BlockState> test) {
+	private static Direction checkForAdjBlock(Level world, BlockPos pos, Predicate<BlockState> test) {
 		for (Direction d : Direction.values()) {
 			if (test.test(world.getBlockState(pos.relative(d))))
 				return d;
@@ -436,7 +439,7 @@ public class BlastFurnaceBlockEntity extends RotaryCraftBlockEntity implements F
 	@Override
 	public void onBlockBroken(Level world, BlockPos pos) {
 		for (int i = 0; i < inv.getSlots(); i++)
-			net.minecraft.world.Containers.dropItemStack(world, pos.getX(), pos.getY(), pos.getZ(), inv.getStackInSlot(i).copy());
+			Containers.dropItemStack(world, pos.getX(), pos.getY(), pos.getZ(), inv.getStackInSlot(i).copy());
 	}
 
 	/** Original getInputTypesForItem: 0 main item, 1-3 primary/secondary/tertiary additive of some mainline recipe. */

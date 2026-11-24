@@ -19,6 +19,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.Clearable;
 import net.minecraft.world.Containers;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
@@ -49,7 +50,7 @@ import reika.rotarycraft.registry.RotaryItems;
  * leaves (the original: wood and leaves material). Leftovers that do not fit into the inventory below when the store is emptied are
  * dropped (the original lost them).
  */
-public class WoodcutterBlockEntity extends PowerReceiverBlockEntity implements net.minecraft.world.Clearable {
+public class WoodcutterBlockEntity extends PowerReceiverBlockEntity implements Clearable {
 
 	/** Original ReikaTreeHelper (the six vanilla trees of 1.7.10) with TreeReader.getMaxDepthFromTreeType. */
 	public enum TreeType {

@@ -8,6 +8,7 @@ import java.util.function.Supplier;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -26,7 +27,10 @@ import reika.rotarycraft.content.item.CraftingPart;
 import reika.rotarycraft.registry.EngineType;
 import reika.rotarycraft.registry.GearboxTypes;
 import reika.rotarycraft.registry.GearboxTypes.GearPart;
+import reika.rotarycraft.registry.RotaryComponents;
 import reika.rotarycraft.registry.RotaryItems;
+
+import javax.annotation.Nullable;
 
 /** Original: Reika.RotaryCraft.Blocks.BlockEngine and Items.Placers.ItemEnginePlacer (4-sided, can be flipped). One block per engine type. */
 public class EngineBlock extends MachineBlock {
@@ -90,7 +94,7 @@ public class EngineBlock extends MachineBlock {
 	@Override
 	protected List<ItemStack> getHarvestDrops(BlockState state, RotaryCraftBlockEntity te) {
 		if (te instanceof JetEngineBlockEntity jet && jet.FOD >= 8) {
-			net.minecraft.util.RandomSource r = te.getLevel().random;
+			RandomSource r = te.getLevel().random;
 			return List.of(new ItemStack(RotaryItems.gearPart(GearboxTypes.STEEL, GearPart.GEAR), 1+r.nextInt(5)), new ItemStack(RotaryItems.part(CraftingPart.SCRAP), 16+r.nextInt(17)));
 		}
 		ItemStack is = new ItemStack(this);
@@ -100,10 +104,10 @@ public class EngineBlock extends MachineBlock {
 
 	/** Original BlockEngine.getDrops: a gas turbine keeps its damage on the item. */
 	@Override
-	protected List<ItemStack> getPlainDrops(BlockState state, @javax.annotation.Nullable RotaryCraftBlockEntity te) {
+	protected List<ItemStack> getPlainDrops(BlockState state, @Nullable RotaryCraftBlockEntity te) {
 		ItemStack is = new ItemStack(this);
 		if (te instanceof JetEngineBlockEntity jet && jet.FOD > 0)
-			is.set(reika.rotarycraft.registry.RotaryComponents.JET_DAMAGE.get(), jet.FOD);
+			is.set(RotaryComponents.JET_DAMAGE.get(), jet.FOD);
 		return List.of(is);
 	}
 }

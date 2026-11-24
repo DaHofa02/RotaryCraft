@@ -14,6 +14,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.Clearable;
 import net.minecraft.world.Containers;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.TamableAnimal;
@@ -27,6 +28,7 @@ import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemStackHandler;
 
+import reika.rotarycraft.RotaryConfig;
 import reika.rotarycraft.registry.RotaryBlockEntities;
 import reika.rotarycraft.registry.RotaryItems;
 
@@ -37,7 +39,7 @@ import reika.rotarycraft.registry.RotaryItems;
  * table: wheat or canola husks for sheep and cows, seeds or husks for chickens, carrots or husks for pigs, meat and fish for wolves, fish
  * for ocelots. Not ported: villagers (1.21 villagers cannot be set to mate), Twilight Forest animals.
  */
-public class AutoBreederBlockEntity extends PowerReceiverBlockEntity implements net.minecraft.world.Clearable {
+public class AutoBreederBlockEntity extends PowerReceiverBlockEntity implements Clearable {
 
 	public static final int MAXRANGE = 24;
 
@@ -91,7 +93,7 @@ public class AutoBreederBlockEntity extends PowerReceiverBlockEntity implements 
 	}
 
 	public int getRange() {
-		return (int)Math.min(reika.rotarycraft.RotaryConfig.BREEDERRANGE.get(), 8+(power-MINPOWER)/2048);
+		return (int)Math.min(RotaryConfig.BREEDERRANGE.get(), 8+(power-MINPOWER)/2048);
 	}
 
 	private int getFeedSlot(Animal ent) {

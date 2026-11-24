@@ -9,6 +9,7 @@ import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
@@ -65,7 +66,7 @@ public class ParticleEmitterTests {
 	@GameTest(template = PLATFORM)
 	public static void emitterKindIsPickedInTheGui(GameTestHelper h) {
 		ParticleEmitterBlockEntity te = emitter(h, 5);
-		ParticleEmitterMenu menu = new ParticleEmitterMenu(1, h.makeMockPlayer(net.minecraft.world.level.GameType.SURVIVAL).getInventory(), te);
+		ParticleEmitterMenu menu = new ParticleEmitterMenu(1, h.makeMockPlayer(GameType.SURVIVAL).getInventory(), te);
 		int heart = ParticleEmitterMenu.KINDS.indexOf(Kind.HEART);
 		h.assertTrue(heart == 13, "heart is button "+heart);
 		h.assertTrue(menu.clickMenuButton(null, heart) && te.particleType == Kind.HEART, "heart not picked: "+te.particleType);

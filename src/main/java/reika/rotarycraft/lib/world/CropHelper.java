@@ -3,6 +3,8 @@
  ******************************************************************************/
 package reika.rotarycraft.lib.world;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -77,9 +79,9 @@ public final class CropHelper {
 	public static List<ItemStack> harvest(ServerLevel world, BlockPos pos, BlockState s) {
 		if (!isCrop(s) || !isRipe(s))
 			return List.of();
-		List<ItemStack> li = new java.util.ArrayList<>(Block.getDrops(s, world, pos, world.getBlockEntity(pos)));
+		List<ItemStack> li = new ArrayList<>(Block.getDrops(s, world, pos, world.getBlockEntity(pos)));
 		Item seed = getSeed(s);
-		for (java.util.Iterator<ItemStack> it = li.iterator(); it.hasNext();) {
+		for (Iterator<ItemStack> it = li.iterator(); it.hasNext();) {
 			ItemStack is = it.next();
 			if (is.is(seed)) {
 				if (is.getCount() > 1)

@@ -9,8 +9,10 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.world.entity.projectile.FireworkRocketEntity;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.FireworkExplosion;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.AABB;
@@ -58,7 +60,7 @@ public class FireworkMachineTests {
 			boolean red = false;
 			for (FireworkRocketEntity r : h.getLevel().getEntitiesOfClass(FireworkRocketEntity.class, new AABB(h.absolutePos(BlockPos.ZERO)).inflate(40)))
 				red |= r.getItem().has(DataComponents.FIREWORKS)
-						&& r.getItem().get(DataComponents.FIREWORKS).explosions().stream().anyMatch(e -> e.colors().contains(net.minecraft.world.item.DyeColor.RED.getFireworkColor()));
+						&& r.getItem().get(DataComponents.FIREWORKS).explosions().stream().anyMatch(e -> e.colors().contains(DyeColor.RED.getFireworkColor()));
 			h.assertTrue(red, "no red rocket in flight");
 		});
 	}
@@ -69,7 +71,7 @@ public class FireworkMachineTests {
 		place(h, RotaryBlocks.MICRO_ENGINE.get(), 1, 2, 4, 1, EngineBlockEntity.class).addFuel(100000);
 		FireworkMachineBlockEntity te = place(h, RotaryBlocks.FIREWORK_MACHINE.get(), 2, 2, 4, 0, FireworkMachineBlockEntity.class);
 		ItemStack star = new ItemStack(Items.FIREWORK_STAR, 8);
-		star.set(DataComponents.FIREWORK_EXPLOSION, new net.minecraft.world.item.component.FireworkExplosion(net.minecraft.world.item.component.FireworkExplosion.Shape.STAR,
+		star.set(DataComponents.FIREWORK_EXPLOSION, new FireworkExplosion(FireworkExplosion.Shape.STAR,
 				it.unimi.dsi.fastutil.ints.IntList.of(0x123456), it.unimi.dsi.fastutil.ints.IntList.of(), true, false));
 		te.getInventory().setStackInSlot(0, star);
 		te.getInventory().setStackInSlot(1, new ItemStack(Items.GUNPOWDER, 16));

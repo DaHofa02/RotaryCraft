@@ -4,7 +4,9 @@
 package reika.rotarycraft.content.blockentity;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -13,6 +15,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -44,7 +47,7 @@ public class SprinklerBlockEntity extends SprinklerBaseBlockEntity {
 			randomChance = c;
 		}
 
-		private boolean doChance(net.minecraft.util.RandomSource rand, float factor) {
+		private boolean doChance(RandomSource rand, float factor) {
 			return randomChance <= 0 || rand.nextInt(Math.max(1, (int)(randomChance*factor))) == 0;
 		}
 	}
@@ -52,7 +55,7 @@ public class SprinklerBlockEntity extends SprinklerBaseBlockEntity {
 	private record Action(BlockPos pos, Block block, Effect effect) {}
 
 	/** Per column (x, z offset), the actions found in its last scan. */
-	private final java.util.Map<Long, List<Action>> columns = new java.util.HashMap<>();
+	private final Map<Long, List<Action>> columns = new HashMap<>();
 	private int age = 20;
 
 	public SprinklerBlockEntity(BlockPos pos, BlockState state) {

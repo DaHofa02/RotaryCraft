@@ -10,6 +10,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.tags.FluidTags;
+import net.minecraft.world.Clearable;
+import net.minecraft.world.Containers;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -28,6 +30,8 @@ import reika.rotarycraft.lib.world.TemperatureEnvironment;
 import reika.rotarycraft.registry.RotaryBlockEntities;
 import reika.rotarycraft.registry.RotaryItems;
 
+import java.util.function.Predicate;
+
 /**
  * Original: Reika.RotaryCraft.TileEntities.Processing.TileEntityCompactor - presses four equal items (slots 0-3) into the result (slot
  * 4) once its pressure and temperature reach the recipe's (see {@link CompactorRecipes}). Powered from the side its metadata names (at
@@ -37,7 +41,7 @@ import reika.rotarycraft.registry.RotaryItems;
  * by water (above 600 C, may boil it away), ice and snow (which may melt); above 1000 C it bursts. One operation takes
  * max(1, s*300 - s*15*log2(omega+1)) ticks for stage s (coal 1, anthracite 2, prismane 3, lonsdaleite 4).
  */
-public class CompactorBlockEntity extends PowerReceiverBlockEntity implements FrictionHeatable, net.minecraft.world.Clearable {
+public class CompactorBlockEntity extends PowerReceiverBlockEntity implements FrictionHeatable, Clearable {
 
 	public static final int MAXTEMP = 1000;
 	public static final int MAXPRESSURE = 600000; //All pressures in kPa, steel yield strength = 250Mpa
@@ -135,7 +139,7 @@ public class CompactorBlockEntity extends PowerReceiverBlockEntity implements Fr
 			this.overpressure(world, pos);
 	}
 
-	private boolean isNextTo(Level world, BlockPos pos, java.util.function.Predicate<BlockPos> test) {
+	private boolean isNextTo(Level world, BlockPos pos, Predicate<BlockPos> test) {
 		for (Direction d : Direction.values())
 			if (test.test(pos.relative(d)))
 				return true;
@@ -143,7 +147,7 @@ public class CompactorBlockEntity extends PowerReceiverBlockEntity implements Fr
 	}
 
 	@Nullable
-	private Direction adjacent(Level world, BlockPos pos, java.util.function.Predicate<BlockPos> test) {
+	private Direction adjacent(Level world, BlockPos pos, Predicate<BlockPos> test) {
 		for (Direction d : Direction.values())
 			if (test.test(pos.relative(d)))
 				return d;
@@ -436,7 +440,7 @@ public class CompactorBlockEntity extends PowerReceiverBlockEntity implements Fr
 	@Override
 	public void onBlockBroken(Level world, BlockPos pos) {
 		for (int i = 0; i < inv.getSlots(); i++)
-			net.minecraft.world.Containers.dropItemStack(world, pos.getX(), pos.getY(), pos.getZ(), inv.getStackInSlot(i).copy());
+			Containers.dropItemStack(world, pos.getX(), pos.getY(), pos.getZ(), inv.getStackInSlot(i).copy());
 	}
 
 	@Override

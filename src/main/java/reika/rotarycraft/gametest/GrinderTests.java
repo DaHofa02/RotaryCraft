@@ -29,6 +29,7 @@ import reika.rotarycraft.content.blockentity.GrinderBlockEntity;
 import reika.rotarycraft.content.blockentity.RotaryCraftBlockEntity;
 import reika.rotarycraft.content.blockentity.engine.EngineBlockEntity;
 import reika.rotarycraft.content.item.CraftingPart;
+import reika.rotarycraft.content.piping.PipingBlockEntity;
 import reika.rotarycraft.registry.GearboxTypes;
 import reika.rotarycraft.registry.RotaryBlocks;
 import reika.rotarycraft.registry.RotaryItems;
@@ -73,7 +74,7 @@ public class GrinderTests {
 			ItemStack out = gr.getInventory().getStackInSlot(1);
 			h.assertTrue(out.is(RotaryItems.CANOLA_HUSKS.get()) && out.getCount() == 2, "output "+out);
 			//the hose between them holds some lubricant too (pipes keep a remainder); without it two low rolls (64 + 64) fell short of 128
-			int total = gr.getLubricant()+gbx.getLubricant()+((reika.rotarycraft.content.piping.PipingBlockEntity)h.getBlockEntity(new BlockPos(4, 1, 3))).getFluidLevel();
+			int total = gr.getLubricant()+gbx.getLubricant()+((PipingBlockEntity)h.getBlockEntity(new BlockPos(4, 1, 3))).getFluidLevel();
 			h.assertTrue(gbx.getLubricant() > 0, "no lubricant reached the gearbox (grinder "+gr.getLubricant()+")");
 			h.assertTrue(total >= 2*64 && total <= 2*160, "lubricant "+total+" mB (2 seeds, 64-160 each)");
 		});

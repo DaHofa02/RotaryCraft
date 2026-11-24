@@ -20,8 +20,18 @@ import net.neoforged.neoforge.client.event.ClientTickEvent;
 
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.content.block.GearboxBlock;
+import reika.rotarycraft.content.blockentity.BlastFurnaceBlockEntity;
 import reika.rotarycraft.content.blockentity.DynamometerBlockEntity;
+import reika.rotarycraft.content.blockentity.FermenterBlockEntity;
+import reika.rotarycraft.content.blockentity.FrictionHeaterBlockEntity;
+import reika.rotarycraft.content.blockentity.IOMachineBlockEntity;
+import reika.rotarycraft.content.blockentity.engine.EngineBlockEntity;
+import reika.rotarycraft.content.blockentity.engine.JetEngineBlockEntity;
+import reika.rotarycraft.content.piping.PipingBlockEntity;
+import reika.rotarycraft.lib.world.AmbientTemperature;
 import reika.rotarycraft.registry.GearboxTypes;
+
+import java.util.Arrays;
 
 /** Takes screenshots of the showcase world from fixed viewpoints, then closes the client. */
 @EventBusSubscriber(modid = RotaryCraft.MOD_ID, value = Dist.CLIENT)
@@ -54,7 +64,7 @@ public final class DevShowcase {
 		String[] parts = prop.split(";");
 		double[][] ret = new double[parts.length][];
 		for (int i = 0; i < parts.length; i++)
-			ret[i] = java.util.Arrays.stream(parts[i].split(",")).mapToDouble(Double::parseDouble).toArray();
+			ret[i] = Arrays.stream(parts[i].split(",")).mapToDouble(Double::parseDouble).toArray();
 		return ret;
 	}
 
@@ -129,46 +139,46 @@ public final class DevShowcase {
 		if (phase == 0 && view == 4) {
 			//Show the I/O overlay as after a screwdriver click (client-side only)
 			for (BlockPos p : BlockPos.betweenClosed(new BlockPos(0, -60, 16), new BlockPos(10, -59, 16)))
-				if (mc.level.getBlockEntity(p) instanceof reika.rotarycraft.content.blockentity.IOMachineBlockEntity io)
+				if (mc.level.getBlockEntity(p) instanceof IOMachineBlockEntity io)
 					io.iotick = 512;
 		}
 		if (phase == 40 && view == 4) {
-			if (mc.level.getBlockEntity(new BlockPos(2, -60, 16)) instanceof reika.rotarycraft.content.blockentity.engine.JetEngineBlockEntity jet)
+			if (mc.level.getBlockEntity(new BlockPos(2, -60, 16)) instanceof JetEngineBlockEntity jet)
 				RotaryCraft.LOGGER.info("showcase: client gas turbine: {} rad/s, {} Nm, T {}, afterburning {}", jet.omega, jet.torque, jet.temperature, jet.isAfterburning());
-			if (mc.level.getBlockEntity(new BlockPos(8, -59, 16)) instanceof reika.rotarycraft.content.blockentity.engine.EngineBlockEntity eng)
+			if (mc.level.getBlockEntity(new BlockPos(8, -59, 16)) instanceof EngineBlockEntity eng)
 				RotaryCraft.LOGGER.info("showcase: client gas engine on ECU: {} rad/s, {} Nm", eng.omega, eng.torque);
 		}
 		if (phase == 40 && view == 5) {
 			for (BlockPos p : new BlockPos[] {new BlockPos(4, -60, 20), new BlockPos(10, -60, 20)})
-				if (mc.level.getBlockEntity(p) instanceof reika.rotarycraft.content.blockentity.FrictionHeaterBlockEntity fh)
+				if (mc.level.getBlockEntity(p) instanceof FrictionHeaterBlockEntity fh)
 					RotaryCraft.LOGGER.info("showcase: client friction heater at {}: {} rad/s, {} Nm, {} C", p, fh.omega, fh.torque, fh.getTemperature());
-			if (mc.level.getBlockEntity(new BlockPos(4, -60, 19)) instanceof reika.rotarycraft.content.blockentity.BlastFurnaceBlockEntity bf)
+			if (mc.level.getBlockEntity(new BlockPos(4, -60, 19)) instanceof BlastFurnaceBlockEntity bf)
 				RotaryCraft.LOGGER.info("showcase: client blast furnace: {} C", bf.getTemperature());
 		}
 		if (phase == 40 && view == 1) {
 			for (BlockPos p : new BlockPos[] {new BlockPos(5, -60, 0), new BlockPos(7, -60, 4)})
 				if (mc.level.getBlockEntity(p) instanceof DynamometerBlockEntity d)
 					RotaryCraft.LOGGER.info("showcase: client dynamometer at {}: {} rad/s, {} Nm, {} W, phi {}", p, d.omega, d.torque, d.power, d.phi);
-			if (mc.level.getBlockEntity(new BlockPos(9, -60, 3)) instanceof reika.rotarycraft.content.blockentity.engine.EngineBlockEntity eng)
+			if (mc.level.getBlockEntity(new BlockPos(9, -60, 3)) instanceof EngineBlockEntity eng)
 				RotaryCraft.LOGGER.info("showcase: client gas engine: {} rad/s, {} Nm, fuel {}", eng.omega, eng.torque, eng.getFuelLevel());
 		}
 		if (phase == 40 && view == 6) {
 			for (BlockPos p : new BlockPos[] {new BlockPos(2, -60, 27), new BlockPos(2, -60, 29), new BlockPos(6, -60, 27), new BlockPos(10, -58, 31)})
-				if (mc.level.getBlockEntity(p) instanceof reika.rotarycraft.content.piping.PipingBlockEntity pipe)
+				if (mc.level.getBlockEntity(p) instanceof PipingBlockEntity pipe)
 					RotaryCraft.LOGGER.info("showcase: client pipe at {}: {} {} mB, state {}", p, pipe.getFluidType(), pipe.getFluidLevel(), pipe.getBlockState());
 				else
 					RotaryCraft.LOGGER.info("showcase: no pipe at {}: {}", p, mc.level.getBlockState(p));
-			if (mc.level.getBlockEntity(new BlockPos(10, -58, 30)) instanceof reika.rotarycraft.content.blockentity.engine.EngineBlockEntity eng)
+			if (mc.level.getBlockEntity(new BlockPos(10, -58, 30)) instanceof EngineBlockEntity eng)
 				RotaryCraft.LOGGER.info("showcase: client steam engine: {} rad/s, {} Nm, {} C, water {}", eng.omega, eng.torque, eng.getTemperature(), eng.getWater());
 		}
 		if (phase == 40 && view == 8) {
 			if (mc.getSingleplayerServer() != null) mc.getSingleplayerServer().execute(() -> {
-			if (mc.getSingleplayerServer().overworld().getBlockEntity(new BlockPos(6, -60, 38)) instanceof reika.rotarycraft.content.blockentity.FermenterBlockEntity f)
+			if (mc.getSingleplayerServer().overworld().getBlockEntity(new BlockPos(6, -60, 38)) instanceof FermenterBlockEntity f)
 				RotaryCraft.LOGGER.info("showcase: server fermenter: {} {} {} | {} C, water {}, {} rad/s", f.getInventory().getStackInSlot(0), f.getInventory().getStackInSlot(1), f.getInventory().getStackInSlot(2), f.getTemperature(), f.getWater(), f.omega);
 			var lvl = mc.getSingleplayerServer().overworld();
 			BlockPos fp = new BlockPos(6, -60, 38);
-			RotaryCraft.LOGGER.info("showcase: ambient at fermenter {} C, biome {}, sea level {}, sky {}", reika.rotarycraft.lib.world.AmbientTemperature.getAmbientTemperatureAt(lvl, fp),
-					reika.rotarycraft.lib.world.AmbientTemperature.getBiomeTemp(lvl, fp), lvl.getSeaLevel(), lvl.canSeeSky(fp.above()));
+			RotaryCraft.LOGGER.info("showcase: ambient at fermenter {} C, biome {}, sea level {}, sky {}", AmbientTemperature.getAmbientTemperatureAt(lvl, fp),
+					AmbientTemperature.getBiomeTemp(lvl, fp), lvl.getSeaLevel(), lvl.canSeeSky(fp.above()));
 			});
 		}
 		if (phase == 50)

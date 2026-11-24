@@ -10,6 +10,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvents;
@@ -23,6 +24,7 @@ import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ArmorMaterials;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -31,6 +33,7 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 
 import reika.rotarycraft.api.interfaces.Shockable;
 import reika.rotarycraft.content.entity.DischargeEntity;
@@ -160,7 +163,7 @@ public class VanDeGraffBlockEntity extends PowerReceiverBlockEntity {
 		for (LivingEntity e : world.getEntitiesOfClass(LivingEntity.class, box)) {
 			if (!(e instanceof Player) || !((Player)e).getAbilities().instabuild) {
 				if (e.isAlive() && e.getHealth() > 0) {
-					double dd = e.position().distanceTo(new net.minecraft.world.phys.Vec3(x, y, z));
+					double dd = e.position().distanceTo(new Vec3(x, y, z));
 					if (dd < d) {
 						index = e;
 						d = dd;
@@ -215,7 +218,7 @@ public class VanDeGraffBlockEntity extends PowerReceiverBlockEntity {
 		charge = 0;
 	}
 
-	private static boolean fullSuitOf(LivingEntity e, net.minecraft.core.Holder<net.minecraft.world.item.ArmorMaterial> mat) {
+	private static boolean fullSuitOf(LivingEntity e, Holder<ArmorMaterial> mat) {
 		for (EquipmentSlot slot : new EquipmentSlot[] {EquipmentSlot.FEET, EquipmentSlot.LEGS, EquipmentSlot.CHEST, EquipmentSlot.HEAD}) {
 			ItemStack is = e.getItemBySlot(slot);
 			if (!(is.getItem() instanceof ArmorItem a) || !a.getMaterial().equals(mat))

@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 
 import reika.rotarycraft.RotaryCraft;
+import reika.rotarycraft.client.OriginalModels;
 import reika.rotarycraft.client.RotaryModelLayers;
 import reika.rotarycraft.client.model.ModelAdvancedGear;
 import reika.rotarycraft.client.model.TechneModel;
@@ -39,7 +40,7 @@ public class AdvancedGearRenderer extends MachineRenderer<AdvancedGearBlockEntit
 		pose.scale(1.0F, -1.0F, -1.0F);
 		pose.translate(0.5F, 0.5F, 0.5F);
 		String original = switch (tile.kind) { case WORM -> "worm_gear"; case HIGH -> "high_gear"; case COIL -> "industrial_coil"; case BEDROCK_COIL -> "bedrock_coil"; case CVT -> "cvt"; };
-		if (reika.rotarycraft.client.OriginalModels.renderFacing(original, tile.getBlockMetadata(), tile.hasLevel(), pose, buf, light, overlay)) { //private original-models pack
+		if (OriginalModels.renderFacing(original, tile.getBlockMetadata(), tile.hasLevel(), pose, buf, light, overlay)) { //private original-models pack
 			pose.popPose();
 			return;
 		}

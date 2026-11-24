@@ -15,6 +15,7 @@ import net.neoforged.neoforge.items.SlotItemHandler;
 import reika.rotarycraft.content.blockentity.AimedCannonBlockEntity;
 import reika.rotarycraft.content.blockentity.MachineGunBlockEntity;
 import reika.rotarycraft.content.blockentity.RotaryCraftBlockEntity;
+import reika.rotarycraft.content.blockentity.turret.TurretBlockEntity;
 import reika.rotarycraft.registry.RotaryMenus;
 
 /** Ammo slots of a weapon (rows of nine; the machine gun's 27, a cannon's 9) and the player inventory. */
@@ -39,7 +40,7 @@ public class AmmoMenu extends AbstractContainerMenu {
 	}
 
 	public static ItemStackHandler inventory(RotaryCraftBlockEntity te) {
-		if (te instanceof reika.rotarycraft.content.blockentity.turret.TurretBlockEntity t)
+		if (te instanceof TurretBlockEntity t)
 			return t.getInventory();
 		return te instanceof AimedCannonBlockEntity c ? c.getInventory() : ((MachineGunBlockEntity)te).getInventory();
 	}

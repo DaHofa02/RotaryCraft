@@ -5,6 +5,7 @@
 package reika.rotarycraft.gametest;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -13,6 +14,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.Cow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.block.Block;
@@ -42,7 +44,7 @@ public class AerosolizerTests {
 		return cls.cast(be);
 	}
 
-	private static ItemStack potion(net.minecraft.core.Holder<net.minecraft.world.item.alchemy.Potion> p, int n) {
+	private static ItemStack potion(Holder<Potion> p, int n) {
 		ItemStack is = PotionContents.createItemStack(Items.POTION, p);
 		is.setCount(n);
 		return is;

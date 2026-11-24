@@ -18,6 +18,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
@@ -99,7 +100,7 @@ public class HydroEngineBlockEntity extends EngineBlockEntity {
 		if (fluidType != null) {
 			if (fluidType.getTemperature() >= 900) {
 				if (rand.nextDouble() < 0.02) { //Original: ReikaRandomHelper.doWithChance(2), i.e. 2 %
-					world.setBlockAndUpdate(pos, net.minecraft.world.level.block.Blocks.AIR.defaultBlockState());
+					world.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
 					boolean lube = !lubricant.isEmpty();
 					world.explode(null, null, null, pos.getX()+0.5, pos.getY()+0.5, pos.getZ()+0.5, lube ? 3 : 2, lube, Level.ExplosionInteraction.BLOCK);
 				}

@@ -14,6 +14,7 @@ import net.minecraft.world.entity.animal.Pig;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.gametest.GameTestHolder;
@@ -74,11 +75,11 @@ public class AutoBreederTests {
 		te.getInventory().setStackInSlot(0, new ItemStack(Items.WHEAT, 8));
 		//glass over the bevel gears' free faces (spinning gears hurt mobs) and a pen around the corners next to the breeder
 		for (BlockPos g : new BlockPos[] {new BlockPos(4, 2, 3), new BlockPos(5, 2, 4), new BlockPos(4, 2, 5)})
-			h.setBlock(g, net.minecraft.world.level.block.Blocks.GLASS);
+			h.setBlock(g, Blocks.GLASS);
 		for (int i = 2; i <= 6; i++)
 			for (int y = 2; y <= 3; y++)
 				for (BlockPos g : new BlockPos[] {new BlockPos(2, y, i), new BlockPos(6, y, i), new BlockPos(i, y, 2), new BlockPos(i, y, 6)})
-					h.setBlock(g, net.minecraft.world.level.block.Blocks.GLASS);
+					h.setBlock(g, Blocks.GLASS);
 		Cow a = h.spawn(EntityType.COW, new BlockPos(5, 2, 5));
 		Cow b = h.spawn(EntityType.COW, new BlockPos(5, 2, 3));
 		Pig pig = h.spawn(EntityType.PIG, new BlockPos(5, 2, 5));

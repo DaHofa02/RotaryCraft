@@ -14,6 +14,7 @@ import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -104,7 +105,7 @@ public class GearboxBlock extends MachineBlock {
 				if (tile.canTakeLubricant(amt)) {
 					tile.addLubricant(amt);
 					if (!ep.isCreative())
-						ep.setItemInHand(hand, new ItemStack(net.minecraft.world.item.Items.BUCKET, held.getCount()));
+						ep.setItemInHand(hand, new ItemStack(Items.BUCKET, held.getCount()));
 					tile.syncAllData();
 				}
 			}

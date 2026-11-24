@@ -12,6 +12,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 
+import reika.rotarycraft.RotaryConfig;
 import reika.rotarycraft.registry.RotaryBlockEntities;
 
 /**
@@ -107,7 +108,7 @@ public class PlayerDetectorBlockEntity extends PowerReceiverBlockEntity {
 	}
 
 	public int getMaxRange() {
-		return (int)Math.min(power/FALLOFF, reika.rotarycraft.RotaryConfig.DETECTORRANGE.get());
+		return (int)Math.min(power/FALLOFF, RotaryConfig.DETECTORRANGE.get());
 	}
 
 	/** Original PacketRegistry.DETECTOR: the range typed into the GUI (up to three digits). */

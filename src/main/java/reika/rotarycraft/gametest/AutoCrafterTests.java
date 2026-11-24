@@ -3,6 +3,7 @@
  ******************************************************************************/
 package reika.rotarycraft.gametest;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -43,7 +44,7 @@ public class AutoCrafterTests {
 
 	static ItemStack pattern(GameTestHelper h, ItemStack... grid) {
 		ItemStack p = new ItemStack(RotaryItems.CRAFT_PATTERN.get());
-		List<ItemStack> li = new java.util.ArrayList<>(List.of(grid));
+		List<ItemStack> li = new ArrayList<>(List.of(grid));
 		li.addAll(Collections.nCopies(9-li.size(), ItemStack.EMPTY));
 		CraftPatternItem.setGrid(p, li, h.getLevel());
 		return p;

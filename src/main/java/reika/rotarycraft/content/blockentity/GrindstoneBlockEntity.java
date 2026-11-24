@@ -10,6 +10,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
+import net.minecraft.world.Clearable;
 import net.minecraft.world.Containers;
 import net.minecraft.world.item.DiggerItem;
 import net.minecraft.world.item.ItemStack;
@@ -37,7 +38,7 @@ import reika.rotarycraft.registry.RotarySounds;
  * ticks one point of damage is mended for 100 mB of water. A tool can be mended 2 * max damage times in all, and each mending wears it
  * for good by half a point: it cannot be brought below max damage - ceil(repairs left / 2). Only finished tools come out by automation.
  */
-public class GrindstoneBlockEntity extends PowerReceiverBlockEntity implements PipeConnector, net.minecraft.world.Clearable {
+public class GrindstoneBlockEntity extends PowerReceiverBlockEntity implements PipeConnector, Clearable {
 
 	public static final int CAPACITY = 1000;
 	/** Original DurationRegistry.GRINDSTONE. */

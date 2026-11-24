@@ -15,6 +15,7 @@ import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
 import reika.rotarycraft.RotaryCraft;
+import reika.rotarycraft.compat.OptionalMods;
 import reika.rotarycraft.compat.PneumaticCompat;
 import reika.rotarycraft.content.blockentity.AirCompressorBlockEntity;
 import reika.rotarycraft.content.blockentity.PneumaticEngineBlockEntity;
@@ -40,7 +41,7 @@ public class PneumaticTests {
 	/** Gas engine -> air compressor (from the west) -> PneumaticCraft pressure tube: power/520 mL a tick go in and the tube's pressure rises. */
 	@GameTest(template = PLATFORM, timeoutTicks = 200)
 	public static void compressorPressurizesATube(GameTestHelper h) {
-		h.assertTrue(reika.rotarycraft.compat.OptionalMods.pneumaticCraft(), "PneumaticCraft not loaded");
+		h.assertTrue(OptionalMods.pneumaticCraft(), "PneumaticCraft not loaded");
 		place(h, RotaryBlocks.GAS_ENGINE.get(), 1, 2, 4, 1, EngineBlockEntity.class).addFuel(50000);
 		AirCompressorBlockEntity c = place(h, RotaryBlocks.AIR_COMPRESSOR.get(), 2, 2, 4, 1, AirCompressorBlockEntity.class);
 		h.setBlock(new BlockPos(3, 2, 4), BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath("pneumaticcraft", "pressure_tube")));
@@ -53,7 +54,7 @@ public class PneumaticTests {
 	/** Gas engine -> air compressor -> pneumatic engine (air from the west, set to 256 rad/s): it runs on the air at 8 Nm. */
 	@GameTest(template = PLATFORM, timeoutTicks = 300)
 	public static void compressedAirDrivesThePneumaticEngine(GameTestHelper h) {
-		h.assertTrue(reika.rotarycraft.compat.OptionalMods.pneumaticCraft(), "PneumaticCraft not loaded");
+		h.assertTrue(OptionalMods.pneumaticCraft(), "PneumaticCraft not loaded");
 		place(h, RotaryBlocks.GAS_ENGINE.get(), 1, 2, 4, 1, EngineBlockEntity.class).addFuel(50000);
 		place(h, RotaryBlocks.AIR_COMPRESSOR.get(), 2, 2, 4, 1, AirCompressorBlockEntity.class);
 		PneumaticEngineBlockEntity e = place(h, RotaryBlocks.PNEUMATIC_ENGINE.get(), 3, 2, 4, 1, PneumaticEngineBlockEntity.class);

@@ -30,10 +30,12 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 
 import reika.rotarycraft.RotaryCraft;
+import reika.rotarycraft.client.screen.HandbookScreen;
 
 /**
  * Opens the screen of every block of the ports in a real client: places each block (with a block entity) of RotaryCraft, ReactorCraft,
@@ -157,7 +159,7 @@ public final class ScreenCheck {
 	private static void books(Minecraft mc) {
 		if (book >= 0 && timer == WAIT) {
 			Screen s = mc.screen;
-			String r = s instanceof reika.rotarycraft.client.screen.HandbookScreen ? "handbook "+HandbookClient.load(mc, BOOKS[book]).size()+" entries" : "no handbook screen";
+			String r = s instanceof HandbookScreen ? "handbook "+HandbookClient.load(mc, BOOKS[book]).size()+" entries" : "no handbook screen";
 			results.add(BOOKS[book]+":handbook -> "+r);
 			RotaryCraft.LOGGER.info("SCREENCHECK {}:handbook -> {}", BOOKS[book], r);
 			mc.setScreen(null);
@@ -166,7 +168,7 @@ public final class ScreenCheck {
 			return;
 		do
 			book++;
-		while (book < BOOKS.length && !net.neoforged.fml.ModList.get().isLoaded(BOOKS[book]));
+		while (book < BOOKS.length && !ModList.get().isLoaded(BOOKS[book]));
 		timer = 0;
 		if (book >= BOOKS.length) {
 			finish(mc);

@@ -32,6 +32,7 @@ import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 
 import reika.rotarycraft.RotaryCraft;
+import reika.rotarycraft.client.model.TechneModel;
 
 /**
  * Optional original models from a private resource pack built by tools/build_originals_pack.py (the pack is not part of the mod; the
@@ -95,7 +96,7 @@ public final class OriginalModels implements ResourceManagerReloadListener {
 	}
 
 	private static void yaw(PoseStack pose, float deg) {
-		pose.mulPose(reika.rotarycraft.client.model.TechneModel.rotation(deg, 0, 1, 0));
+		pose.mulPose(TechneModel.rotation(deg, 0, 1, 0));
 	}
 
 	/**
@@ -115,8 +116,8 @@ public final class OriginalModels implements ResourceManagerReloadListener {
 			case "dynamo", "air_compressor" -> { //RenderDynamo / RenderCompressor: models stand upright, laid down for the side they read from
 				int orig = id.equals("dynamo") ? new int[] {3, 5, 2, 4}[m] : new int[] {5, 3, 4, 2}[m];
 				int z = id.equals("dynamo") ? new int[] {0, 0, 0, 90, 180, 270}[orig] : new int[] {0, 180, 0, 90, 180, 270}[orig];
-				pose.mulPose(reika.rotarycraft.client.model.TechneModel.rotation(90, 1, 0, 0));
-				pose.mulPose(reika.rotarycraft.client.model.TechneModel.rotation(z, 0, 0, 1));
+				pose.mulPose(TechneModel.rotation(90, 1, 0, 0));
+				pose.mulPose(TechneModel.rotation(z, 0, 0, 1));
 				pose.translate(0, -1, -1);
 			}
 			case "portal_shaft" -> { //RenderPortalShaft
@@ -124,7 +125,7 @@ public final class OriginalModels implements ResourceManagerReloadListener {
 					yaw(pose, new int[] {0, 180, 90, 270}[m]);
 				else {
 					pose.translate(0, 1, 0);
-					pose.mulPose(reika.rotarycraft.client.model.TechneModel.rotation(90, 1, 0, 0));
+					pose.mulPose(TechneModel.rotation(90, 1, 0, 0));
 					pose.translate(0, -1, 0);
 				}
 			}

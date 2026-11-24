@@ -16,6 +16,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Fluids;
 
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 
@@ -60,7 +61,7 @@ public class SpillwayRenderer extends MachineRenderer<SpillwayBlockEntity> {
 	private void renderLiquid(SpillwayBlockEntity tr, PoseStack pose, MultiBufferSource buf, int light) {
 		if (tr.getWaterLevel() <= 0)
 			return;
-		Fluid f = net.minecraft.world.level.material.Fluids.WATER;
+		Fluid f = Fluids.WATER;
 		IClientFluidTypeExtensions ext = IClientFluidTypeExtensions.of(f);
 		TextureAtlasSprite ico = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(ext.getStillTexture());
 		int clr = isInWorld(tr) ? ext.getTintColor(f.defaultFluidState(), tr.getLevel(), tr.getBlockPos()) : ext.getTintColor();

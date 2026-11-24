@@ -18,6 +18,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Fluids;
 
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 
@@ -61,7 +62,7 @@ public class ObsidianMakerRenderer extends MachineRenderer<ObsidianMakerBlockEnt
 			h = 0.6875F;
 		}
 		else {
-			Fluid f = w ? net.minecraft.world.level.material.Fluids.WATER : net.minecraft.world.level.material.Fluids.LAVA;
+			Fluid f = w ? Fluids.WATER : Fluids.LAVA;
 			IClientFluidTypeExtensions ext = IClientFluidTypeExtensions.of(f);
 			ico = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(ext.getStillTexture());
 			clr = ext.getTintColor(f.defaultFluidState(), tr.getLevel(), tr.getBlockPos());

@@ -21,9 +21,14 @@ import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.content.block.GearboxBlock;
+import reika.rotarycraft.content.block.ShaftBlock;
 import reika.rotarycraft.content.blockentity.DynamometerBlockEntity;
+import reika.rotarycraft.content.blockentity.FermenterBlockEntity;
 import reika.rotarycraft.content.blockentity.GearboxBlockEntity;
+import reika.rotarycraft.content.blockentity.GrinderBlockEntity;
+import reika.rotarycraft.registry.DifficultyEffects;
 import reika.rotarycraft.registry.GearboxTypes;
+import reika.rotarycraft.registry.MaterialRegistry;
 import reika.rotarycraft.registry.RotaryBlocks;
 import reika.rotarycraft.registry.RotaryComponents;
 import reika.rotarycraft.registry.RotaryItems;
@@ -73,7 +78,7 @@ public class LiveBaseTests {
 		}
 		else {
 			engine = new ItemStack(RotaryBlocks.DC_ENGINE.get());
-			shaft = reika.rotarycraft.content.block.ShaftBlock.shaftItem(reika.rotarycraft.registry.MaterialRegistry.STEEL, false);
+			shaft = ShaftBlock.shaftItem(MaterialRegistry.STEEL, false);
 			gearbox = GearboxBlock.gearboxItem(GearboxTypes.STEEL, 2);
 			dyna = new ItemStack(RotaryBlocks.DYNAMOMETER.get());
 		}
@@ -157,7 +162,7 @@ public class LiveBaseTests {
 			dc = craftIn(p, "dc_engine_worktable");
 			fermenter = craftIn(p, "fermenter_worktable");
 			reservoir = craftIn(p, "reservoir_worktable");
-			pipe = craftIn(p, "pipe_difficulty_"+(reika.rotarycraft.registry.DifficultyEffects.getDifficulty().ordinal()+1)+"_worktable");
+			pipe = craftIn(p, "pipe_difficulty_"+(DifficultyEffects.getDifficulty().ordinal()+1)+"_worktable");
 			p.closeMenu();
 			p.give(RotaryItems.ETHANOL.get(), 4);
 			p.give(RotaryItems.CANOLA_SEEDS.get(), 2);
@@ -205,8 +210,8 @@ public class LiveBaseTests {
 		p.putInto(0, Items.SUGAR, 2);
 		p.putInto(1, Items.DIRT, 2);
 		p.closeMenu();
-		reika.rotarycraft.content.blockentity.GrinderBlockEntity grt = (reika.rotarycraft.content.blockentity.GrinderBlockEntity)h.getBlockEntity(gr);
-		reika.rotarycraft.content.blockentity.FermenterBlockEntity fet = (reika.rotarycraft.content.blockentity.FermenterBlockEntity)h.getBlockEntity(fe);
+		GrinderBlockEntity grt = (GrinderBlockEntity)h.getBlockEntity(gr);
+		FermenterBlockEntity fet = (FermenterBlockEntity)h.getBlockEntity(fe);
 		boolean[] done = {false, false};
 		h.onEachTick(() -> {
 			if (!done[0] && grt.getInventory().getStackInSlot(1).getCount() >= 2) {

@@ -28,6 +28,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemStackHandler;
+import net.neoforged.neoforge.items.wrapper.RangedWrapper;
 
 import reika.rotarycraft.lib.math.ReikaMathLibrary;
 import reika.rotarycraft.registry.RotaryBlockEntities;
@@ -74,7 +75,7 @@ public class FireworkMachineBlockEntity extends PowerReceiverBlockEntity {
 
 	/** Original: ingredients in from any side (ReikaItemHelper.isFireworkIngredient), nothing out. */
 	public IItemHandler getItemHandler(@Nullable Direction side) {
-		return new net.neoforged.neoforge.items.wrapper.RangedWrapper(inv, 0, 27) {
+		return new RangedWrapper(inv, 0, 27) {
 			@Override
 			public ItemStack extractItem(int slot, int amount, boolean simulate) {
 				return ItemStack.EMPTY;

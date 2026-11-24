@@ -20,6 +20,7 @@ import reika.rotarycraft.content.blockentity.GearboxBlockEntity;
 import reika.rotarycraft.content.blockentity.PileDriverBlockEntity;
 import reika.rotarycraft.content.blockentity.RotaryCraftBlockEntity;
 import reika.rotarycraft.content.blockentity.ShaftBlockEntity;
+import reika.rotarycraft.content.blockentity.engine.EngineBlockEntity;
 import reika.rotarycraft.content.blockentity.engine.JetEngineBlockEntity;
 import reika.rotarycraft.registry.GearboxTypes;
 import reika.rotarycraft.registry.MaterialRegistry;
@@ -80,7 +81,7 @@ public class PileDriverTests {
 	@GameTest(template = PLATFORM, timeoutTicks = 100)
 	public static void pileDriverNeedsTorque(GameTestHelper h) {
 		PileDriverBlockEntity te = place(h, RotaryBlocks.PILE_DRIVER.get(), 4, 4, 0, PileDriverBlockEntity.class);
-		place(h, RotaryBlocks.GAS_ENGINE.get(), 4, 5, 2, reika.rotarycraft.content.blockentity.engine.EngineBlockEntity.class).addFuel(50000);
+		place(h, RotaryBlocks.GAS_ENGINE.get(), 4, 5, 2, EngineBlockEntity.class).addFuel(50000);
 		h.runAtTickTime(60, () -> {
 			h.assertTrue(te.getPower() == 65536 && te.step == 0, "driver "+te.getPower()+" W, step "+te.step);
 			h.assertBlockPresent(Blocks.AIR, new BlockPos(4, Y-1, 4));

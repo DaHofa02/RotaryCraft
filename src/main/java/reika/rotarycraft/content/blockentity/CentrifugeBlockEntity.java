@@ -11,8 +11,11 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.Clearable;
+import net.minecraft.world.Containers;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -38,7 +41,10 @@ import reika.rotarycraft.registry.RotaryRecipeTypes;
  * which flows out to liquid pipes and hoses on the four sides. Slots: 0 input, 1-9 outputs.
  * Not ported: machine enchantments (fortune raises the chances, efficiency the fluid amount).
  */
-public class CentrifugeBlockEntity extends PowerReceiverBlockEntity implements PipeConnector, net.minecraft.world.Clearable {
+public class CentrifugeBlockEntity extends PowerReceiverBlockEntity implements PipeConnector, Clearable {
+
+	/** Remembers the last matching recipe, like vanilla furnaces, instead of searching all recipes every tick. */
+	private final RecipeManager.CachedCheck<SingleRecipeInput, CentrifugeRecipe> recipeCheck = RecipeManager.createCheck(RotaryRecipeTypes.CENTRIFUGE.get());
 
 	public static final int CAPACITY = 10000;
 	/** Original DurationRegistry.CENTRIFUGE. */
@@ -76,7 +82,7 @@ public class CentrifugeBlockEntity extends PowerReceiverBlockEntity implements P
 	private Optional<RecipeHolder<CentrifugeRecipe>> getRecipe(ItemStack is) {
 		if (level == null || is.isEmpty())
 			return Optional.empty();
-		return level.getRecipeManager().getRecipeFor(RotaryRecipeTypes.CENTRIFUGE.get(), new SingleRecipeInput(is), level);
+		return recipeCheck.getRecipeFor(new SingleRecipeInput(is), level);
 	}
 
 	public boolean isCentrifugable(ItemStack is) {
@@ -318,6 +324,6 @@ public class CentrifugeBlockEntity extends PowerReceiverBlockEntity implements P
 	@Override
 	public void onBlockBroken(Level world, BlockPos pos) {
 		for (int i = 0; i < inv.getSlots(); i++)
-			net.minecraft.world.Containers.dropItemStack(world, pos.getX(), pos.getY(), pos.getZ(), inv.getStackInSlot(i).copy());
+			Containers.dropItemStack(world, pos.getX(), pos.getY(), pos.getZ(), inv.getStackInSlot(i).copy());
 	}
 }

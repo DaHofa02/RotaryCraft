@@ -15,6 +15,8 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.Clearable;
+import net.minecraft.world.Containers;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -46,7 +48,7 @@ import reika.rotarycraft.registry.RotarySounds;
  * only the dry ice comes out of the item slots. Breaking it with more than 10 % in the tank hurts everything within 5 blocks
  * (4 hearts at full) with a fizz and a cold cloud.
  */
-public class RefrigeratorBlockEntity extends PowerReceiverBlockEntity implements PipeConnector, net.minecraft.world.Clearable {
+public class RefrigeratorBlockEntity extends PowerReceiverBlockEntity implements PipeConnector, Clearable {
 
 	public static final int CAPACITY = 12000;
 	/** Original DurationRegistry.REFRIGERATOR. */
@@ -318,7 +320,7 @@ public class RefrigeratorBlockEntity extends PowerReceiverBlockEntity implements
 	@Override
 	public void onBlockBroken(Level world, BlockPos pos) {
 		for (int i = 0; i < inv.getSlots(); i++)
-			net.minecraft.world.Containers.dropItemStack(world, pos.getX(), pos.getY(), pos.getZ(), inv.getStackInSlot(i).copy());
+			Containers.dropItemStack(world, pos.getX(), pos.getY(), pos.getZ(), inv.getStackInSlot(i).copy());
 		float f = tank.getFluidAmount()/(float)CAPACITY;
 		if (f > 0.1) {
 			world.playSound(null, pos, SoundEvents.FIRE_EXTINGUISH, SoundSource.BLOCKS, 1.2F, 0.8F);

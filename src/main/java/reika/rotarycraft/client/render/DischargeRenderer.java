@@ -10,6 +10,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.TextureAtlas;
@@ -59,7 +60,7 @@ public class DischargeRenderer extends EntityRenderer<DischargeEntity> {
 	}
 
 	@Override
-	public boolean shouldRender(DischargeEntity e, net.minecraft.client.renderer.culling.Frustum f, double x, double y, double z) {
+	public boolean shouldRender(DischargeEntity e, Frustum f, double x, double y, double z) {
 		return true;
 	}
 

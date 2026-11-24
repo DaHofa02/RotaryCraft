@@ -23,6 +23,7 @@ import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
 import net.neoforged.neoforge.items.ItemStackHandler;
+import net.neoforged.neoforge.items.wrapper.RangedWrapper;
 
 import reika.rotarycraft.content.item.CraftPatternItem;
 import reika.rotarycraft.registry.RotaryBlockEntities;
@@ -87,7 +88,7 @@ public class AutoCrafterBlockEntity extends PowerReceiverBlockEntity {
 
 	/** Capability: outputs and leftovers out from any side; nothing in (patterns go in by hand). */
 	public IItemHandler getItemHandler(@Nullable Direction side) {
-		return new net.neoforged.neoforge.items.wrapper.RangedWrapper(inv, OUTPUT_OFFSET, 54) {
+		return new RangedWrapper(inv, OUTPUT_OFFSET, 54) {
 			@Override
 			public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
 				return stack;

@@ -12,6 +12,8 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;
+import net.minecraft.world.Clearable;
+import net.minecraft.world.Containers;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
@@ -25,6 +27,7 @@ import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemStackHandler;
 
+import reika.rotarycraft.content.block.BlastFurnaceBlock;
 import reika.rotarycraft.content.block.FermenterBlock;
 import reika.rotarycraft.content.item.CraftingPart;
 import reika.rotarycraft.content.piping.PipeConnector;
@@ -36,6 +39,8 @@ import reika.rotarycraft.registry.RotaryBlockEntities;
 import reika.rotarycraft.registry.RotaryDataMaps;
 import reika.rotarycraft.registry.RotaryItems;
 
+import java.util.function.Predicate;
+
 /**
  * Original: Reika.RotaryCraft.TileEntities.Production.TileEntityFermenter. Without a redstone signal it breeds yeast from sugar and
  * dirt; with one it ferments yeast and plant matter into sludge (amount = the plant's mulch value), 50 mB water per product. Needs
@@ -44,7 +49,7 @@ import reika.rotarycraft.registry.RotaryItems;
  * (water -5, ice -15, fire +50, lava +200 next to it). Slots: 0 sugar/yeast, 1 dirt/plant, 2 output.
  * Not ported: Forestry bee yeast (option "Use Forestry Bees To Produce Yeast"), heat-sink fins, other mods' plant materials.
  */
-public class FermenterBlockEntity extends PowerReceiverBlockEntity implements TemperatureMachine, PipeConnector, net.minecraft.world.Clearable {
+public class FermenterBlockEntity extends PowerReceiverBlockEntity implements TemperatureMachine, PipeConnector, Clearable {
 
 	public static final int MINUSEFULTEMP = 20;
 	public static final int OPTMULTIPLYTEMP = 25;
@@ -249,7 +254,7 @@ public class FermenterBlockEntity extends PowerReceiverBlockEntity implements Te
 		tank.drain(CONSUME_WATER, IFluidHandler.FluidAction.EXECUTE);
 	}
 
-	private static boolean hasAdjacent(Level world, BlockPos pos, java.util.function.Predicate<BlockState> test) {
+	private static boolean hasAdjacent(Level world, BlockPos pos, Predicate<BlockState> test) {
 		for (Direction d : Direction.values())
 			if (test.test(world.getBlockState(pos.relative(d))))
 				return true;
@@ -486,7 +491,7 @@ public class FermenterBlockEntity extends PowerReceiverBlockEntity implements Te
 		if (level != null && !level.isClientSide) {
 			BlockState bs = this.getBlockState();
 			if (bs.hasProperty(FermenterBlock.FACING))
-				level.setBlock(worldPosition, bs.setValue(FermenterBlock.FACING, reika.rotarycraft.content.block.BlastFurnaceBlock.frontFromMeta(meta)), 3);
+				level.setBlock(worldPosition, bs.setValue(FermenterBlock.FACING, BlastFurnaceBlock.frontFromMeta(meta)), 3);
 		}
 	}
 
@@ -527,6 +532,6 @@ public class FermenterBlockEntity extends PowerReceiverBlockEntity implements Te
 	@Override
 	public void onBlockBroken(Level world, BlockPos pos) {
 		for (int i = 0; i < inv.getSlots(); i++)
-			net.minecraft.world.Containers.dropItemStack(world, pos.getX(), pos.getY(), pos.getZ(), inv.getStackInSlot(i).copy());
+			Containers.dropItemStack(world, pos.getX(), pos.getY(), pos.getZ(), inv.getStackInSlot(i).copy());
 	}
 }

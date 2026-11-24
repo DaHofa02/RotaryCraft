@@ -7,6 +7,9 @@ import javax.annotation.Nullable;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.Clearable;
 import net.minecraft.world.Containers;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
@@ -16,6 +19,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemStackHandler;
 
+import reika.rotarycraft.RotaryConfig;
 import reika.rotarycraft.lib.math.ReikaMathLibrary;
 import reika.rotarycraft.registry.RotaryBlockEntities;
 import reika.rotarycraft.registry.RotarySounds;
@@ -27,7 +31,7 @@ import reika.rotarycraft.registry.RotarySounds;
  * line is not free (air or a replaceable block). Not ported: protection checks for the placing player, other mods' immovable blocks, the
  * range config.
  */
-public class LineBuilderBlockEntity extends PowerReceiverBlockEntity implements net.minecraft.world.Clearable {
+public class LineBuilderBlockEntity extends PowerReceiverBlockEntity implements Clearable {
 
 	public static final int MAXRANGE = 64;
 
@@ -125,7 +129,7 @@ public class LineBuilderBlockEntity extends PowerReceiverBlockEntity implements 
 
 	public boolean canShift(Level world) {
 		int r = this.getLineLength()+1;
-		return r > 0 && r <= reika.rotarycraft.RotaryConfig.LINEBUILDER.get() && isSoft(world, worldPosition.relative(dir, r));
+		return r > 0 && r <= RotaryConfig.LINEBUILDER.get() && isSoft(world, worldPosition.relative(dir, r));
 	}
 
 	/** Original getLineLength: the number of solid blocks in front of it, or Integer.MIN_VALUE when it may not push them. */
@@ -134,7 +138,7 @@ public class LineBuilderBlockEntity extends PowerReceiverBlockEntity implements 
 		BlockPos p = worldPosition.relative(dir, i);
 		if (this.isImmovable(p))
 			return Integer.MIN_VALUE;
-		while (!isSoft(level, p) && i <= reika.rotarycraft.RotaryConfig.LINEBUILDER.get()) {
+		while (!isSoft(level, p) && i <= RotaryConfig.LINEBUILDER.get()) {
 			p = worldPosition.relative(dir, ++i);
 			if (this.isImmovable(p))
 				return Integer.MIN_VALUE;
@@ -209,14 +213,14 @@ public class LineBuilderBlockEntity extends PowerReceiverBlockEntity implements 
 	}
 
 	@Override
-	protected void writeSyncTag(net.minecraft.nbt.CompoundTag NBT, net.minecraft.core.HolderLookup.Provider registries) {
+	protected void writeSyncTag(CompoundTag NBT, HolderLookup.Provider registries) {
 		super.writeSyncTag(NBT, registries);
 		NBT.putInt("timer", timer);
 		NBT.put("inv", inv.serializeNBT(registries));
 	}
 
 	@Override
-	protected void readSyncTag(net.minecraft.nbt.CompoundTag NBT, net.minecraft.core.HolderLookup.Provider registries) {
+	protected void readSyncTag(CompoundTag NBT, HolderLookup.Provider registries) {
 		super.readSyncTag(NBT, registries);
 		timer = NBT.getInt("timer");
 		if (NBT.contains("inv"))

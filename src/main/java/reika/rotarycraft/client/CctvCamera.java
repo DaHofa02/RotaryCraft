@@ -4,6 +4,7 @@
 package reika.rotarycraft.client;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.neoforged.api.distmarker.Dist;
@@ -23,7 +24,7 @@ import reika.rotarycraft.network.RotaryNetwork;
 public final class CctvCamera {
 
 	private static Entity camera;
-	private static net.minecraft.core.BlockPos at;
+	private static BlockPos at;
 	private static int grace;
 
 	private CctvCamera() {}

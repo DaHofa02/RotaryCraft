@@ -10,11 +10,15 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.item.component.ItemContainerContents;
 
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.SimpleFluidContent;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 import io.netty.buffer.ByteBuf;
@@ -45,20 +49,20 @@ public final class RotaryComponents {
 			b -> b.persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL));
 
 	/** Fluid in an integrated gearbox upgrade (original: item NBT "lvl" and the fluid name). */
-	public static final Supplier<DataComponentType<net.neoforged.neoforge.fluids.SimpleFluidContent>> GEAR_FLUID = COMPONENTS.registerComponentType("gear_fluid",
-			b -> b.persistent(net.neoforged.neoforge.fluids.SimpleFluidContent.CODEC).networkSynchronized(net.neoforged.neoforge.fluids.SimpleFluidContent.STREAM_CODEC));
+	public static final Supplier<DataComponentType<SimpleFluidContent>> GEAR_FLUID = COMPONENTS.registerComponentType("gear_fluid",
+			b -> b.persistent(SimpleFluidContent.CODEC).networkSynchronized(SimpleFluidContent.STREAM_CODEC));
 
 	/** Crafting pattern (own port of the original's craft pattern item): slots 0-8 the 3x3 grid, slot 9 the recipe's output. */
-	public static final Supplier<DataComponentType<net.minecraft.world.item.component.ItemContainerContents>> CRAFT_PATTERN = COMPONENTS.registerComponentType("craft_pattern",
-			b -> b.persistent(net.minecraft.world.item.component.ItemContainerContents.CODEC).networkSynchronized(net.minecraft.world.item.component.ItemContainerContents.STREAM_CODEC));
+	public static final Supplier<DataComponentType<ItemContainerContents>> CRAFT_PATTERN = COMPONENTS.registerComponentType("craft_pattern",
+			b -> b.persistent(ItemContainerContents.CODEC).networkSynchronized(ItemContainerContents.STREAM_CODEC));
 
 	/** Original TileEntityScaleableChest.writeInventoryToItem: the chest's contents (up to 972 slots, so not vanilla's container component). */
-	public static final Supplier<DataComponentType<net.minecraft.nbt.CompoundTag>> CHEST_CONTENTS = COMPONENTS.registerComponentType("chest_contents",
-			b -> b.persistent(net.minecraft.nbt.CompoundTag.CODEC).networkSynchronized(net.minecraft.network.codec.ByteBufCodecs.COMPOUND_TAG));
+	public static final Supplier<DataComponentType<CompoundTag>> CHEST_CONTENTS = COMPONENTS.registerComponentType("chest_contents",
+			b -> b.persistent(CompoundTag.CODEC).networkSynchronized(ByteBufCodecs.COMPOUND_TAG));
 
 	/** Original TileEntityFluidCompressor.getTagsToWriteToStack: the fluid compressor's contents ("lvl" and the fluid). */
-	public static final Supplier<DataComponentType<net.neoforged.neoforge.fluids.SimpleFluidContent>> TANK_FLUID = COMPONENTS.registerComponentType("tank_fluid",
-			b -> b.persistent(net.neoforged.neoforge.fluids.SimpleFluidContent.CODEC).networkSynchronized(net.neoforged.neoforge.fluids.SimpleFluidContent.STREAM_CODEC));
+	public static final Supplier<DataComponentType<SimpleFluidContent>> TANK_FLUID = COMPONENTS.registerComponentType("tank_fluid",
+			b -> b.persistent(SimpleFluidContent.CODEC).networkSynchronized(SimpleFluidContent.STREAM_CODEC));
 
 	/** Stored energy of a wound coil in kJ, 0-32000 (original: spring item damage). */
 	public static final Supplier<DataComponentType<Integer>> CHARGE = COMPONENTS.registerComponentType("charge",
@@ -67,7 +71,7 @@ public final class RotaryComponents {
 	/** Shaft core magnetization for the AC engine (original: item NBT "magnet"). */
 	/** Original NBT "repairs" of TileEntityGrindstone: how many single repairs a tool still has (2 * max damage at first). */
 	public static final Supplier<DataComponentType<Integer>> GRINDSTONE_REPAIRS = COMPONENTS.registerComponentType("grindstone_repairs",
-			b -> b.persistent(com.mojang.serialization.Codec.INT).networkSynchronized(net.minecraft.network.codec.ByteBufCodecs.VAR_INT));
+			b -> b.persistent(Codec.INT).networkSynchronized(ByteBufCodecs.VAR_INT));
 
 	public static final Supplier<DataComponentType<Integer>> MAGNETIZATION = COMPONENTS.registerComponentType("magnetization",
 			b -> b.persistent(Codec.intRange(0, Integer.MAX_VALUE)).networkSynchronized(ByteBufCodecs.VAR_INT));
@@ -84,25 +88,25 @@ public final class RotaryComponents {
 	public static final Supplier<DataComponentType<ReservoirData>> RESERVOIR_DATA = COMPONENTS.registerComponentType("reservoir_data",
 			b -> b.persistent(ReservoirData.CODEC).networkSynchronized(ReservoirData.STREAM_CODEC));
 
-	public record ReservoirData(net.neoforged.neoforge.fluids.FluidStack fluid, boolean cover) {
+	public record ReservoirData(FluidStack fluid, boolean cover) {
 
 		public static final Codec<ReservoirData> CODEC = RecordCodecBuilder.create(i -> i.group(
-				net.neoforged.neoforge.fluids.FluidStack.OPTIONAL_CODEC.optionalFieldOf("fluid", net.neoforged.neoforge.fluids.FluidStack.EMPTY).forGetter(ReservoirData::fluid),
+				FluidStack.OPTIONAL_CODEC.optionalFieldOf("fluid", FluidStack.EMPTY).forGetter(ReservoirData::fluid),
 				Codec.BOOL.optionalFieldOf("cover", false).forGetter(ReservoirData::cover)).apply(i, ReservoirData::new));
 
 		public static final StreamCodec<RegistryFriendlyByteBuf, ReservoirData> STREAM_CODEC = StreamCodec.composite(
-				net.neoforged.neoforge.fluids.FluidStack.OPTIONAL_STREAM_CODEC, ReservoirData::fluid,
+				FluidStack.OPTIONAL_STREAM_CODEC, ReservoirData::fluid,
 				ByteBufCodecs.BOOL, ReservoirData::cover,
 				ReservoirData::new);
 
 		@Override
 		public boolean equals(Object o) {
-			return o instanceof ReservoirData d && d.cover == cover && net.neoforged.neoforge.fluids.FluidStack.matches(d.fluid, fluid);
+			return o instanceof ReservoirData d && d.cover == cover && FluidStack.matches(d.fluid, fluid);
 		}
 
 		@Override
 		public int hashCode() {
-			return net.neoforged.neoforge.fluids.FluidStack.hashFluidAndComponents(fluid)*31+fluid.getAmount()*2+(cover ? 1 : 0);
+			return FluidStack.hashFluidAndComponents(fluid)*31+fluid.getAmount()*2+(cover ? 1 : 0);
 		}
 	}
 

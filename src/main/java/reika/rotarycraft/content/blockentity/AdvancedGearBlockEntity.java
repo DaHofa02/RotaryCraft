@@ -13,21 +13,31 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
+import net.neoforged.neoforge.items.ItemStackHandler;
 
 import reika.rotarycraft.RotaryConfig;
+import reika.rotarycraft.api.interfaces.ComplexIO;
+import reika.rotarycraft.api.power.PowerGenerator;
+import reika.rotarycraft.api.power.ShaftMerger;
 import reika.rotarycraft.api.power.ShaftPowerEmitter;
+import reika.rotarycraft.content.block.AdvancedGearBlock;
+import reika.rotarycraft.content.item.CraftingPart;
 import reika.rotarycraft.content.piping.PipeConnector;
+import reika.rotarycraft.content.power.PowerSourceList;
+import reika.rotarycraft.content.power.PowerSourceTracker;
 import reika.rotarycraft.content.power.SimpleProvider;
 import reika.rotarycraft.content.piping.PipeType;
 import reika.rotarycraft.lib.math.ReikaMathLibrary;
 import reika.rotarycraft.registry.RotaryBlockEntities;
 import reika.rotarycraft.registry.RotaryFluids;
+import reika.rotarycraft.registry.RotaryItems;
 
 /**
  * The fixed-ratio "advanced gears" of RotaryCraft, written for the port from the original's behaviour:
@@ -50,7 +60,7 @@ import reika.rotarycraft.registry.RotaryFluids;
  * Outputs above the global torque/speed limit are capped, with crit particles and a blaze-hit sound. Input from a shaft, a power provider,
  * a complex IO machine, a shaft power emitter or a splitter that is not splitting; split or cross-shaft inputs give nothing.
  */
-public class AdvancedGearBlockEntity extends OneDTransmitterBlockEntity implements PipeConnector, reika.rotarycraft.api.power.PowerGenerator {
+public class AdvancedGearBlockEntity extends OneDTransmitterBlockEntity implements PipeConnector, PowerGenerator {
 
 	public enum Kind {
 		WORM(64),
@@ -92,9 +102,9 @@ public class AdvancedGearBlockEntity extends OneDTransmitterBlockEntity implemen
 	/** The redstone mode's selectable ratios. */
 	public static final int[] CVT_STATES = {1, 2, 4, 8, 16, 32, -1, -2, -4, -8, -16, -32};
 
-	public final net.neoforged.neoforge.items.ItemStackHandler belts = new net.neoforged.neoforge.items.ItemStackHandler(32) {
+	public final ItemStackHandler belts = new ItemStackHandler(32) {
 		@Override
-		public boolean isItemValid(int slot, net.minecraft.world.item.ItemStack is) {
+		public boolean isItemValid(int slot, ItemStack is) {
 			return kind == Kind.CVT && isBelt(is);
 		}
 
@@ -123,7 +133,7 @@ public class AdvancedGearBlockEntity extends OneDTransmitterBlockEntity implemen
 	private final FluidTank lubricant = new FluidTank(LUBE_CAPACITY, fs -> fs.is(RotaryFluids.LUBRICANT.get()));
 
 	public AdvancedGearBlockEntity(BlockPos pos, BlockState state) {
-		this(pos, state, state.getBlock() instanceof reika.rotarycraft.content.block.AdvancedGearBlock b ? b.kind : Kind.WORM);
+		this(pos, state, state.getBlock() instanceof AdvancedGearBlock b ? b.kind : Kind.WORM);
 	}
 
 	public AdvancedGearBlockEntity(BlockPos pos, BlockState state, Kind kind) {
@@ -170,8 +180,8 @@ public class AdvancedGearBlockEntity extends OneDTransmitterBlockEntity implemen
 
 	// ---- CVT ----
 
-	public static boolean isBelt(net.minecraft.world.item.ItemStack is) {
-		return is.is(reika.rotarycraft.registry.RotaryItems.part(reika.rotarycraft.content.item.CraftingPart.BELT));
+	public static boolean isBelt(ItemStack is) {
+		return is.is(RotaryItems.part(CraftingPart.BELT));
 	}
 
 	public boolean hasRequiredBelt() {
@@ -382,8 +392,8 @@ public class AdvancedGearBlockEntity extends OneDTransmitterBlockEntity implemen
 	}
 
 	@Override
-	public reika.rotarycraft.content.power.PowerSourceList getPowerSources(reika.rotarycraft.content.power.PowerSourceTracker io, reika.rotarycraft.api.power.ShaftMerger caller) {
-		return kind.storesEnergy() ? new reika.rotarycraft.content.power.PowerSourceList().addSource(this) : super.getPowerSources(io, caller);
+	public PowerSourceList getPowerSources(PowerSourceTracker io, ShaftMerger caller) {
+		return kind.storesEnergy() ? new PowerSourceList().addSource(this) : super.getPowerSources(io, caller);
 	}
 
 	private void readInput() {
@@ -405,7 +415,7 @@ public class AdvancedGearBlockEntity extends OneDTransmitterBlockEntity implemen
 		}
 		else if (te instanceof SimpleProvider)
 			this.copyStandardPower(te);
-		else if (te instanceof reika.rotarycraft.api.interfaces.ComplexIO pwr) {
+		else if (te instanceof ComplexIO pwr) {
 			Direction dir = read.getOpposite();
 			omegain = pwr.getSpeedToSide(dir);
 			torquein = pwr.getTorqueToSide(dir);

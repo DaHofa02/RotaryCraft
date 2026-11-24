@@ -7,6 +7,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BaseFireBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
@@ -144,7 +145,7 @@ public final class TemperatureEnvironment {
 		for (Direction d : Direction.values()) {
 			BlockPos n = p.relative(d);
 			if (world.getBlockState(n).isAir())
-				world.setBlockAndUpdate(n, net.minecraft.world.level.block.BaseFireBlock.getState(world, n));
+				world.setBlockAndUpdate(n, BaseFireBlock.getState(world, n));
 		}
 	}
 }

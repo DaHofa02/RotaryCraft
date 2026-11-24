@@ -17,6 +17,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LightBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
+import reika.rotarycraft.RotaryConfig;
 import reika.rotarycraft.api.interfaces.Screwdriverable;
 import reika.rotarycraft.content.item.CraftingPart;
 import reika.rotarycraft.registry.RotaryBlockEntities;
@@ -162,7 +163,7 @@ public class FloodlightBlockEntity extends PowerReceiverBlockEntity implements U
 	}
 
 	public int getMaxRange() {
-		return fresnel ? FRESNEL_RANGE : reika.rotarycraft.RotaryConfig.FLOODLIGHTRANGE.get();
+		return fresnel ? FRESNEL_RANGE : RotaryConfig.FLOODLIGHTRANGE.get();
 	}
 
 	public static boolean isLens(ItemStack is) {

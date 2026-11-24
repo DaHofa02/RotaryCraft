@@ -18,18 +18,20 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
 import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 
+import reika.rotarycraft.content.piping.FluidPipeView;
 import reika.rotarycraft.content.piping.PipingBlockEntity;
 
 /**
  * Original: PipeBodyRenderer.renderLiquid (render pass 1). The fluid fills the pipe's core, 0.01 inside the frame, and runs out
  * to the block edge on every connected side; luminous fluids are drawn full-bright. The pipe body itself is the block model.
  */
-public class PipeFluidRenderer<T extends net.minecraft.world.level.block.entity.BlockEntity & reika.rotarycraft.content.piping.FluidPipeView> implements BlockEntityRenderer<T> {
+public class PipeFluidRenderer<T extends BlockEntity & FluidPipeView> implements BlockEntityRenderer<T> {
 
 	private static final float size = 0.75F/2F;
 	private static final float in = 0.5F+size-0.01F;

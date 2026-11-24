@@ -11,6 +11,7 @@ import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.AABB;
@@ -50,7 +51,7 @@ public class MobHarvesterTests {
 	private static SimPlayer onlinePlayer(GameTestHelper h) {
 		SimPlayer p = new SimPlayer(h, GameType.SURVIVAL);
 		p.join();
-		p.give(new net.minecraft.world.item.ItemStack(RotaryBlocks.MOB_HARVESTER.get(), 2));
+		p.give(new ItemStack(RotaryBlocks.MOB_HARVESTER.get(), 2));
 		return p;
 	}
 

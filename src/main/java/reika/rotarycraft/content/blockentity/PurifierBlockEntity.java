@@ -27,6 +27,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemStackHandler;
+import net.neoforged.neoforge.items.wrapper.RangedWrapper;
 
 import reika.rotarycraft.content.item.CraftingPart;
 import reika.rotarycraft.lib.math.ReikaMathLibrary;
@@ -89,7 +90,7 @@ public class PurifierBlockEntity extends PowerReceiverBlockEntity {
 
 	/** Gunpowder, sand and steel go in from any side; only the output comes out. */
 	public IItemHandler getItemHandler(@Nullable Direction side) {
-		return new net.neoforged.neoforge.items.wrapper.RangedWrapper(inv, 0, 8) {
+		return new RangedWrapper(inv, 0, 8) {
 			@Override
 			public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
 				return slot == 6 ? stack : super.insertItem(slot, stack, simulate);

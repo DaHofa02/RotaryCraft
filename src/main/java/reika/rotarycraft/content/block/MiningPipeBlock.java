@@ -13,6 +13,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -92,7 +93,7 @@ public class MiningPipeBlock extends Block {
 
 	/** Original onBlockDestroyedByPlayer: removes the pipes on the line up to 64 blocks either way (break sound at each). */
 	@Override
-	public void destroy(net.minecraft.world.level.LevelAccessor world, BlockPos pos, BlockState state) {
+	public void destroy(LevelAccessor world, BlockPos pos, BlockState state) {
 		super.destroy(world, pos, state);
 		Direction dir = getDirection(state);
 		if (dir == null || world.isClientSide())

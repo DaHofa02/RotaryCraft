@@ -11,6 +11,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.Clearable;
 import net.minecraft.world.Containers;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -33,7 +34,7 @@ import reika.rotarycraft.registry.RotaryItems;
  * a tungsten one, up to omega/2 uT (RecipesMagnetizer: 2 rad/s per uT). Only single cores go in. The lodestone upgrade (2026-11-18, own item) halves the cycle time and counts the speed double for the magnetization cap. Not ported: the lodestone upgrade's
  * and the magnetostatic engine upgrade recipe (neither item exists in the port).
  */
-public class MagnetizerBlockEntity extends PowerReceiverBlockEntity implements UpgradeableMachine, net.minecraft.world.Clearable {
+public class MagnetizerBlockEntity extends PowerReceiverBlockEntity implements UpgradeableMachine, Clearable {
 
 	/** Original RecipesMagnetizer: {minSpeed, speedPeruT, timeFactor}. */
 	private record Recipe(int minSpeed, int speedPeruT, int timeFactor) {}

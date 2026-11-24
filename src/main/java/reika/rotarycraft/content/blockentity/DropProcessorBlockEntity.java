@@ -24,6 +24,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemStackHandler;
+import net.neoforged.neoforge.items.wrapper.RangedWrapper;
 
 import reika.rotarycraft.lib.math.ReikaMathLibrary;
 import reika.rotarycraft.registry.RotaryBlockEntities;
@@ -78,7 +79,7 @@ public class DropProcessorBlockEntity extends PowerReceiverBlockEntity {
 
 	/** Input from any side, output only from the output slot. */
 	public IItemHandler getItemHandler(@Nullable Direction side) {
-		return new net.neoforged.neoforge.items.wrapper.RangedWrapper(inv, 0, 2) {
+		return new RangedWrapper(inv, 0, 2) {
 			@Override
 			public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
 				return slot == 0 ? super.insertItem(slot, stack, simulate) : stack;

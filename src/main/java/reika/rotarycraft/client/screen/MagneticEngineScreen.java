@@ -10,6 +10,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 
 import reika.rotarycraft.content.blockentity.MagneticEngineBlockEntity;
+import reika.rotarycraft.content.blockentity.SteamTurbineBlockEntity;
 import reika.rotarycraft.content.menu.MagneticEngineMenu;
 
 /** Own layout (drawn): tier, speed setting with -/+ buttons, redstone mode, energy and coolant bars, temperature. */
@@ -57,7 +58,7 @@ public class MagneticEngineScreen extends AbstractContainerScreen<MagneticEngine
 		g.drawString(font, "Tier "+te.getTier()+(te.isEfficient() ? " (efficient)" : ""), 8, 20, 0xff202020, false);
 		int s = te.getTargetSpeed();
 		g.drawString(font, s > 0 ? s+" rad/s" : "Off", 34, 46, 0xff202020, false);
-		g.drawString(font, MagneticEngineBlockEntity.torqueOf(te.getTier())+" Nm, "+te.getConsumption()+(te instanceof reika.rotarycraft.content.blockentity.SteamTurbineBlockEntity ? " mB/t" : " FE/t"), 8, 66, 0xff202020, false);
+		g.drawString(font, MagneticEngineBlockEntity.torqueOf(te.getTier())+" Nm, "+te.getConsumption()+(te instanceof SteamTurbineBlockEntity ? " mB/t" : " FE/t"), 8, 66, 0xff202020, false);
 		g.drawString(font, switch (te.getRedstoneMode()) { case IGNORE -> "Always"; case ON_SIGNAL -> "With signal"; case WITHOUT_SIGNAL -> "Without signal"; }, 82, 86, 0xff202020, false);
 		g.drawString(font, te.getTemperature()+"C", 112, 6, 0xff202020, false);
 	}

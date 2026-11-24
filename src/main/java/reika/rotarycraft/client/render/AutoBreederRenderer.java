@@ -7,10 +7,16 @@ import com.mojang.blaze3d.vertex.PoseStack;
 
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 
 import reika.rotarycraft.client.RotaryModelLayers;
 import reika.rotarycraft.client.model.ModelBreeder;
 import reika.rotarycraft.content.blockentity.AutoBreederBlockEntity;
+
+import java.util.List;
+import java.util.function.Predicate;
 
 /** Original: Reika.RotaryCraft.Renders.MI.RenderBreeder - breedertex.png while it holds wheat, else emptybreedertex.png. */
 public class AutoBreederRenderer extends MachineRenderer<AutoBreederBlockEntity> {
@@ -21,7 +27,7 @@ public class AutoBreederRenderer extends MachineRenderer<AutoBreederBlockEntity>
 		model = new ModelBreeder(ctx.bakeLayer(RotaryModelLayers.AUTO_BREEDER));
 	}
 
-	private static boolean has(AutoBreederBlockEntity te, java.util.function.Predicate<net.minecraft.world.item.ItemStack> food) {
+	private static boolean has(AutoBreederBlockEntity te, Predicate<ItemStack> food) {
 		for (int i = 0; i < te.getInventory().getSlots(); i++)
 			if (food.test(te.getInventory().getStackInSlot(i)))
 				return true;
@@ -29,13 +35,13 @@ public class AutoBreederRenderer extends MachineRenderer<AutoBreederBlockEntity>
 	}
 
 	private static boolean hasWheat(AutoBreederBlockEntity te) {
-		return has(te, is -> is.is(net.minecraft.world.item.Items.WHEAT));
+		return has(te, is -> is.is(Items.WHEAT));
 	}
 
 	/** The foods the model shows in its trough: wheat, carrots, meat, fish, seeds. */
-	private static java.util.List<Boolean> foods(AutoBreederBlockEntity te) {
-		return java.util.List.of(hasWheat(te), has(te, is -> is.is(net.minecraft.world.item.Items.CARROT)), has(te, is -> is.is(net.minecraft.tags.ItemTags.MEAT)),
-				has(te, is -> is.is(net.minecraft.tags.ItemTags.FISHES)), has(te, is -> is.is(net.minecraft.tags.ItemTags.CHICKEN_FOOD)));
+	private static List<Boolean> foods(AutoBreederBlockEntity te) {
+		return List.of(hasWheat(te), has(te, is -> is.is(Items.CARROT)), has(te, is -> is.is(ItemTags.MEAT)),
+				has(te, is -> is.is(ItemTags.FISHES)), has(te, is -> is.is(ItemTags.CHICKEN_FOOD)));
 	}
 
 	@Override

@@ -4,6 +4,7 @@
 package reika.rotarycraft.client.screen;
 
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -39,7 +40,7 @@ public class VacuumScreen extends AbstractContainerScreen<VacuumMenu> {
 	@Override
 	protected void init() {
 		super.init();
-		this.addRenderableWidget(net.minecraft.client.gui.components.Button.builder(Component.literal("Get XP"), b -> minecraft.gameMode.handleInventoryButtonClick(menu.containerId, 0))
+		this.addRenderableWidget(Button.builder(Component.literal("Get XP"), b -> minecraft.gameMode.handleInventoryButtonClick(menu.containerId, 0))
 				.bounds(leftPos+imageWidth-1, topPos+32, 43, 20).build());
 	}
 

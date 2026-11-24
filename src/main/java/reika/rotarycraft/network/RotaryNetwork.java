@@ -16,11 +16,17 @@ import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
 import reika.rotarycraft.RotaryCraft;
+import reika.rotarycraft.client.CctvCamera;
+import reika.rotarycraft.content.blockentity.AimedCannonBlockEntity;
 import reika.rotarycraft.content.blockentity.BevelGearBlockEntity;
 import reika.rotarycraft.content.blockentity.BlastFurnaceBlockEntity;
+import reika.rotarycraft.content.blockentity.ItemCannonBlockEntity;
 import reika.rotarycraft.content.blockentity.RotaryCraftBlockEntity;
 import reika.rotarycraft.content.blockentity.SplitterBlockEntity;
+import reika.rotarycraft.content.blockentity.WinderBlockEntity;
 import reika.rotarycraft.content.blockentity.engine.JetEngineBlockEntity;
+
+import java.util.Arrays;
 
 /**
  * Original: Reika.RotaryCraft.PacketHandlerCore / Registry.PacketRegistry. Only the packets of the ported GUIs exist so far
@@ -126,7 +132,7 @@ public final class RotaryNetwork {
 		r.playToServer(BlastLeaveOne.TYPE, BlastLeaveOne.CODEC, RotaryNetwork::onBlastLeaveOne);
 		r.playToServer(WinderToggle.TYPE, WinderToggle.CODEC, RotaryNetwork::onWinderToggle);
 		r.playToServer(CannonTarget.TYPE, CannonTarget.CODEC, RotaryNetwork::onCannonTarget);
-		r.playToClient(CctvView.TYPE, CctvView.CODEC, (msg, ctx) -> ctx.enqueueWork(() -> reika.rotarycraft.client.CctvCamera.handle(msg)));
+		r.playToClient(CctvView.TYPE, CctvView.CODEC, (msg, ctx) -> ctx.enqueueWork(() -> CctvCamera.handle(msg)));
 	}
 
 	private static <T extends RotaryCraftBlockEntity> T machine(IPayloadContext ctx, BlockPos pos, Class<T> cls) {
@@ -137,7 +143,7 @@ public final class RotaryNetwork {
 
 	private static void onSplitterMode(SplitterMode msg, IPayloadContext ctx) {
 		SplitterBlockEntity spl = machine(ctx, msg.pos(), SplitterBlockEntity.class);
-		if (spl != null && java.util.Arrays.stream(MODES).anyMatch(m -> m == msg.mode()))
+		if (spl != null && Arrays.stream(MODES).anyMatch(m -> m == msg.mode()))
 			spl.setMode(msg.mode());
 	}
 
@@ -154,7 +160,7 @@ public final class RotaryNetwork {
 	}
 
 	private static void onWinderToggle(WinderToggle msg, IPayloadContext ctx) {
-		reika.rotarycraft.content.blockentity.WinderBlockEntity te = machine(ctx, msg.pos(), reika.rotarycraft.content.blockentity.WinderBlockEntity.class);
+		WinderBlockEntity te = machine(ctx, msg.pos(), WinderBlockEntity.class);
 		if (te != null)
 			te.toggleMode();
 	}
@@ -172,12 +178,12 @@ public final class RotaryNetwork {
 
 	/** Public for the factory zone, whose simulated player cannot type into the client's fields. */
 	public static void applyCannonTarget(ServerPlayer sp, CannonTarget msg) {
-		if (sp.level().isLoaded(msg.pos()) && sp.level().getBlockEntity(msg.pos()) instanceof reika.rotarycraft.content.blockentity.AimedCannonBlockEntity ac && ac.isPlayerAccessible(sp)) {
+		if (sp.level().isLoaded(msg.pos()) && sp.level().getBlockEntity(msg.pos()) instanceof AimedCannonBlockEntity ac && ac.isPlayerAccessible(sp)) {
 			ac.setTarget(msg.target()); //TNT and block cannon: same dimension only
 			return;
 		}
-		if (!sp.level().isLoaded(msg.pos()) || !(sp.level().getBlockEntity(msg.pos()) instanceof reika.rotarycraft.content.blockentity.ItemCannonBlockEntity te) || !te.isPlayerAccessible(sp))
+		if (!sp.level().isLoaded(msg.pos()) || !(sp.level().getBlockEntity(msg.pos()) instanceof ItemCannonBlockEntity te) || !te.isPlayerAccessible(sp))
 			return;
-		te.setTarget(reika.rotarycraft.content.blockentity.ItemCannonBlockEntity.dimension(msg.dim()), msg.target());
+		te.setTarget(ItemCannonBlockEntity.dimension(msg.dim()), msg.target());
 	}
 }

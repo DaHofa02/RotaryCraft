@@ -9,11 +9,13 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.Containers;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
 
+import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
@@ -97,7 +99,7 @@ public class ExtractorBlockEntity extends PowerReceiverBlockEntity {
 		bedrock = true;
 		ItemStack old = inv.getStackInSlot(9);
 		if (!old.isEmpty())
-			net.minecraft.world.Containers.dropItemStack(world, worldPosition.getX()+0.5, worldPosition.getY()+0.5, worldPosition.getZ()+0.5, old.copy());
+			Containers.dropItemStack(world, worldPosition.getX()+0.5, worldPosition.getY()+0.5, worldPosition.getZ()+0.5, old.copy());
 		inv.setStackInSlot(9, new ItemStack(RotaryItems.part(CraftingPart.BEDROCKDRILL)));
 		this.syncAllData();
 		return true;
@@ -322,7 +324,7 @@ public class ExtractorBlockEntity extends PowerReceiverBlockEntity {
 		if (slot == 9)
 			return !bedrock && RotaryConfig.EXTRACTORMAINTAIN.get() && is.is(RotaryItems.part(CraftingPart.DRILL));
 		if (slot == 0)
-			return is.is(net.neoforged.neoforge.common.Tags.Items.ORES); //original ReikaBlockHelper.isOre (ore dictionary "ore*")
+			return is.is(Tags.Items.ORES); //original ReikaBlockHelper.isOre (ore dictionary "ore*")
 		return ExtractorOres.getInputStage(is) == slot;
 	}
 
@@ -479,7 +481,7 @@ public class ExtractorBlockEntity extends PowerReceiverBlockEntity {
 	@Override
 	public void onBlockBroken(Level world, BlockPos pos) {
 		for (int i = 0; i < inv.getSlots(); i++) //original BlockTEBase.breakBlock: the whole inventory, including the drill slot
-			net.minecraft.world.Containers.dropItemStack(world, pos.getX(), pos.getY(), pos.getZ(), inv.getStackInSlot(i).copy());
+			Containers.dropItemStack(world, pos.getX(), pos.getY(), pos.getZ(), inv.getStackInSlot(i).copy());
 	}
 
 	@Override

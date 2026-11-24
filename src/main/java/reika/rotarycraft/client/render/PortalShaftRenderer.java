@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 
 import reika.rotarycraft.RotaryCraft;
+import reika.rotarycraft.client.OriginalModels;
 import reika.rotarycraft.client.RotaryModelLayers;
 import reika.rotarycraft.client.model.ModelPortalShaft;
 import reika.rotarycraft.client.model.TechneModel;
@@ -33,7 +34,7 @@ public class PortalShaftRenderer extends MachineRenderer<PortalShaftBlockEntity>
 		pose.scale(1.0F, -1.0F, -1.0F);
 		pose.translate(0.5F, 0.5F, 0.5F);
 		int meta = tile.hasLevel() ? tile.getBlockMetadata() : 2;
-		if (reika.rotarycraft.client.OriginalModels.renderFacing("portal_shaft", meta, tile.hasLevel(), pose, buf, light, overlay)) { //private original-models pack
+		if (OriginalModels.renderFacing("portal_shaft", meta, tile.hasLevel(), pose, buf, light, overlay)) { //private original-models pack
 			pose.popPose();
 			return;
 		}

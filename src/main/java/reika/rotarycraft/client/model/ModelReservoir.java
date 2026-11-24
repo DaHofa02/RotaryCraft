@@ -17,6 +17,7 @@ import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
+import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
 @SuppressWarnings("unused")
@@ -62,7 +63,7 @@ public class ModelReservoir extends TechneModel {
 		bottom.render(pose, vc, light, overlay);
 	}
 
-	public void renderSide(PoseStack pose, VertexConsumer vc, int light, int overlay, BlockEntity te, net.minecraft.core.Direction dir) {
+	public void renderSide(PoseStack pose, VertexConsumer vc, int light, int overlay, BlockEntity te, Direction dir) {
 
 		switch(dir) {
 		case DOWN:

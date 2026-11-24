@@ -25,6 +25,7 @@ import reika.rotarycraft.content.blockentity.ShaftBlockEntity;
 import reika.rotarycraft.content.item.CraftingPart;
 import reika.rotarycraft.registry.MaterialRegistry;
 import reika.rotarycraft.registry.RotaryBlockEntities;
+import reika.rotarycraft.registry.RotaryBlocks;
 import reika.rotarycraft.registry.RotaryComponents;
 import reika.rotarycraft.registry.RotaryItems;
 
@@ -78,7 +79,7 @@ public class ShaftBlock extends MachineBlock {
 	}
 
 	public static ItemStack shaftItem(MaterialRegistry mat, boolean cross) {
-		ItemStack is = new ItemStack(reika.rotarycraft.registry.RotaryBlocks.SHAFT.get());
+		ItemStack is = new ItemStack(RotaryBlocks.SHAFT.get());
 		is.set(RotaryComponents.SHAFT_MATERIAL.get(), mat);
 		if (cross)
 			is.set(RotaryComponents.SHAFT_CROSS.get(), true);

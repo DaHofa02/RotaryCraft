@@ -13,6 +13,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
+import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.SimpleFluidContent;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
@@ -65,7 +66,7 @@ public class FluidCompressorBlockEntity extends PowerReceiverBlockEntity impleme
 	 * a fluid lighter than air.
 	 */
 	public static boolean isGaseous(Fluid f) {
-		return f.is(net.neoforged.neoforge.common.Tags.Fluids.GASEOUS) || f.getFluidType().isLighterThanAir();
+		return f.is(Tags.Fluids.GASEOUS) || f.getFluidType().isLighterThanAir();
 	}
 
 	public int getCapacity() {

@@ -9,6 +9,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.Clearable;
+import net.minecraft.world.Containers;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -37,7 +39,7 @@ import reika.rotarycraft.registry.RotaryItems;
  * (0), which gets 4*log2(omega) mB per tick of a fluid it accepts; once full it goes to the output slot (2). Fluid comes in from fuel
  * lines, pipes and hoses on every side except the bottom, where it can be drained. Comparator: 15 when it cannot fill.
  */
-public class FillingStationBlockEntity extends PowerReceiverBlockEntity implements PipeConnector, net.minecraft.world.Clearable {
+public class FillingStationBlockEntity extends PowerReceiverBlockEntity implements PipeConnector, Clearable {
 
 	public static final int CAPACITY = 32000;
 
@@ -151,7 +153,7 @@ public class FillingStationBlockEntity extends PowerReceiverBlockEntity implemen
 		if (is.isEmpty())
 			inv.setStackInSlot(FUEL_SLOT, rest);
 		else if (!rest.isEmpty())
-			net.minecraft.world.Containers.dropItemStack(level, worldPosition.getX()+0.5, worldPosition.getY()+1, worldPosition.getZ()+0.5, rest);
+			Containers.dropItemStack(level, worldPosition.getX()+0.5, worldPosition.getY()+1, worldPosition.getZ()+0.5, rest);
 	}
 
 	private void fill() {
@@ -339,7 +341,7 @@ public class FillingStationBlockEntity extends PowerReceiverBlockEntity implemen
 	@Override
 	public void onBlockBroken(Level world, BlockPos pos) {
 		for (int i = 0; i < inv.getSlots(); i++)
-			net.minecraft.world.Containers.dropItemStack(world, pos.getX(), pos.getY(), pos.getZ(), inv.getStackInSlot(i).copy());
+			Containers.dropItemStack(world, pos.getX(), pos.getY(), pos.getZ(), inv.getStackInSlot(i).copy());
 	}
 
 	@Override

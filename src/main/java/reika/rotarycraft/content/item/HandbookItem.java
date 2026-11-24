@@ -10,6 +10,9 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
+import reika.rotarycraft.RotaryCraft;
+import reika.rotarycraft.client.HandbookClient;
+
 /**
  * A mod's handbook (the port's own text, not the original's): a right click opens it, at the entry of the machine you are looking at if it
  * is one of that mod's. RotaryCraft, ReactorCraft and ElectriCraft each register one with their mod id.
@@ -19,7 +22,7 @@ public class HandbookItem extends Item {
 	private final String mod;
 
 	public HandbookItem(Properties props) {
-		this(props, reika.rotarycraft.RotaryCraft.MOD_ID);
+		this(props, RotaryCraft.MOD_ID);
 	}
 
 	public HandbookItem(Properties props, String mod) {
@@ -30,7 +33,7 @@ public class HandbookItem extends Item {
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level world, Player ep, InteractionHand hand) {
 		if (world.isClientSide)
-			reika.rotarycraft.client.HandbookClient.open(mod);
+			HandbookClient.open(mod);
 		return InteractionResultHolder.sidedSuccess(ep.getItemInHand(hand), world.isClientSide);
 	}
 }

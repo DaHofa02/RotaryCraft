@@ -6,8 +6,11 @@ package reika.rotarycraft.gametest;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.nbt.TagParser;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -43,8 +46,8 @@ public class DryingBedTests {
 		h.setBlock(new BlockPos(4, 1, 4), RotaryBlocks.DRYING_BED.get());
 		DryingBedBlockEntity te = (DryingBedBlockEntity)h.getBlockEntity(new BlockPos(4, 1, 4));
 		h.assertTrue(te.fill(Direction.DOWN, new FluidStack(Fluids.WATER, 100), IFluidHandler.FluidAction.SIMULATE) == 0, "filled from below");
-		h.assertTrue(te.fill(Direction.UP, new FluidStack(net.minecraft.core.registries.BuiltInRegistries.FLUID.get(
-				net.minecraft.resources.ResourceLocation.fromNamespaceAndPath("rotarycraft", "lubricant")), 100), IFluidHandler.FluidAction.SIMULATE) == 0, "took lubricant");
+		h.assertTrue(te.fill(Direction.UP, new FluidStack(BuiltInRegistries.FLUID.get(
+				ResourceLocation.fromNamespaceAndPath("rotarycraft", "lubricant")), 100), IFluidHandler.FluidAction.SIMULATE) == 0, "took lubricant");
 		Player ep = h.makeMockPlayer(GameType.SURVIVAL);
 		ep.moveTo(Vec3.atBottomCenterOf(h.absolutePos(new BlockPos(4, 1, 2))));
 		ItemStack bucket = new ItemStack(Items.WATER_BUCKET, 4);
@@ -89,7 +92,7 @@ public class DryingBedTests {
 	public static void loadsFromNbt(GameTestHelper h) throws Exception {
 		h.setBlock(new BlockPos(4, 1, 4), RotaryBlocks.DRYING_BED.get());
 		DryingBedBlockEntity te = (DryingBedBlockEntity)h.getBlockEntity(new BlockPos(4, 1, 4));
-		te.loadWithComponents(net.minecraft.nbt.TagParser.parseTag("{tank:{Fluid:{id:\"minecraft:water\",amount:1500}},inv:{Size:1,Items:[{Slot:0,id:\"rotarycraft:salt\",count:12}]},progress:100}"),
+		te.loadWithComponents(TagParser.parseTag("{tank:{Fluid:{id:\"minecraft:water\",amount:1500}},inv:{Size:1,Items:[{Slot:0,id:\"rotarycraft:salt\",count:12}]},progress:100}"),
 				h.getLevel().registryAccess());
 		h.assertTrue(te.getTank().getFluidAmount() == 1500 && te.getInventory().getStackInSlot(0).getCount() == 12 && te.progress == 100,
 				"tank "+te.getTank().getFluidAmount()+", inv "+te.getInventory().getStackInSlot(0)+", progress "+te.progress);

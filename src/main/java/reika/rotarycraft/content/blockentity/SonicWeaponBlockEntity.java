@@ -20,6 +20,8 @@ import net.minecraft.world.phys.Vec3;
 import reika.rotarycraft.RotaryConfig;
 import reika.rotarycraft.registry.RotaryBlockEntities;
 
+import net.neoforged.neoforge.common.Tags;
+
 /**
  * The sonic weapon, written for the port from the original's behaviour: with at least 262144 W from below it sends out sound of volume
  * 381.47 * torque (the original's units), every 10 ticks, to everything living within 16 blocks. The sound falls off with the square of the
@@ -93,7 +95,7 @@ public class SonicWeaponBlockEntity extends PowerReceiverBlockEntity {
 			for (int i = 0; i < r; i++) {
 				BlockPos p = pos.offset(world.random.nextInt(2*r+1)-r, world.random.nextInt(2*r+1)-r, world.random.nextInt(2*r+1)-r);
 				BlockState s = world.getBlockState(p);
-				if (s.is(BlockTags.IMPERMEABLE) || s.is(Blocks.GLASS_PANE) || s.is(net.neoforged.neoforge.common.Tags.Blocks.GLASS_PANES)) {
+				if (s.is(BlockTags.IMPERMEABLE) || s.is(Blocks.GLASS_PANE) || s.is(Tags.Blocks.GLASS_PANES)) {
 					world.destroyBlock(p, false);
 					shattered++;
 				}

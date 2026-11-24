@@ -11,7 +11,9 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
+import reika.rotarycraft.api.interfaces.Screwdriverable;
 import reika.rotarycraft.content.blockentity.BevelGearBlockEntity;
+import reika.rotarycraft.content.blockentity.CctvBlockEntity;
 import reika.rotarycraft.content.blockentity.ClutchBlockEntity;
 import reika.rotarycraft.content.blockentity.BlastFurnaceBlockEntity;
 import reika.rotarycraft.content.blockentity.DynamometerBlockEntity;
@@ -49,7 +51,7 @@ public class ScrewdriverItem extends Item {
 		boolean sneak = ep.isShiftKeyDown();
 		if (te instanceof IOMachineBlockEntity io)
 			io.iotick = 512;
-		if (te instanceof reika.rotarycraft.api.interfaces.Screwdriverable sc) {
+		if (te instanceof Screwdriverable sc) {
 			boolean flag = sneak ? sc.onShiftRightClick(world, ctx.getClickedPos(), ctx.getClickedFace()) : sc.onRightClick(world, ctx.getClickedPos(), ctx.getClickedFace());
 			if (flag)
 				return InteractionResult.SUCCESS;
@@ -68,7 +70,7 @@ public class ScrewdriverItem extends Item {
 		else if (te instanceof GearboxBlockEntity gbx) {
 			gbx.reduction = !gbx.reduction;
 		}
-		else if (te instanceof reika.rotarycraft.content.blockentity.CctvBlockEntity cam) {
+		else if (te instanceof CctvBlockEntity cam) {
 			cam.turn(sneak);
 		}
 		else if (te instanceof AdvancedGearBlockEntity adv && sneak && adv.kind == AdvancedGearBlockEntity.Kind.HIGH) {

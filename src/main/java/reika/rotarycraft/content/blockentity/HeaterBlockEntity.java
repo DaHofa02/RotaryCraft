@@ -11,6 +11,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.Clearable;
 import net.minecraft.world.Containers;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -39,7 +40,7 @@ import reika.rotarycraft.registry.RotaryItems;
  * sets mobs on it on fire from 240 deg C and blows up into lava above 2000 deg C. Every second it loses 1/200 of its difference to
  * the ambient temperature (at least 1 deg C). Fuel only goes in; signals 15 while idle (set temperature reached or no usable fuel).
  */
-public class HeaterBlockEntity extends PowerReceiverBlockEntity implements TemperatureMachine, net.minecraft.world.Clearable {
+public class HeaterBlockEntity extends PowerReceiverBlockEntity implements TemperatureMachine, Clearable {
 
 	public static final int MAXTEMP = 2000;
 

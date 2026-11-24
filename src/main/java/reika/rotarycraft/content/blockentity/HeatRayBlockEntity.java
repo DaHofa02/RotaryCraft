@@ -12,6 +12,7 @@ import javax.annotation.Nullable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
@@ -211,7 +212,7 @@ public class HeatRayBlockEntity extends PowerReceiverBlockEntity {
 		for (Entity caught : world.getEntitiesOfClass(Entity.class, zone)) {
 			if (!(caught instanceof ItemEntity)) //Do not burn drops
 				caught.igniteForSeconds(this.getBurnTime());
-			if (caught instanceof PrimedTnt && world instanceof net.minecraft.server.level.ServerLevel sl)
+			if (caught instanceof PrimedTnt && world instanceof ServerLevel sl)
 				sl.sendParticles(ParticleTypes.LAVA, caught.getX()+rand.nextFloat(), caught.getY()+rand.nextFloat(), caught.getZ()+rand.nextFloat(), 1, 0, 0, 0, 0);
 			if (caught instanceof Laserable l)
 				l.whenInBeam(world, caught.blockPosition(), power, step);
@@ -305,7 +306,7 @@ public class HeatRayBlockEntity extends PowerReceiverBlockEntity {
 		@Override
 		public boolean doEffect(Level world, BlockPos p, long power, int range, HeatRayBlockEntity te) {
 			world.setBlock(p, liquid.defaultBlockState(), 3);
-			if (liquid == Blocks.LAVA && world instanceof net.minecraft.server.level.ServerLevel sl)
+			if (liquid == Blocks.LAVA && world instanceof ServerLevel sl)
 				sl.sendParticles(ParticleTypes.LAVA, p.getX()+rand.nextFloat(), p.getY()+rand.nextFloat(), p.getZ()+rand.nextFloat(), 1, 0, 0, 0, 0);
 			fizz(world, p);
 			return false;

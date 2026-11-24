@@ -15,6 +15,8 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.tags.FluidTags;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.Clearable;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EntityType;
@@ -33,15 +35,18 @@ import net.minecraft.world.entity.monster.Slime;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
 import net.neoforged.neoforge.items.ItemStackHandler;
 
+import reika.rotarycraft.RotaryConfig;
 import reika.rotarycraft.registry.RotaryBlockEntities;
 
 /**
@@ -51,7 +56,7 @@ import reika.rotarycraft.registry.RotaryBlockEntities;
  * With an egg in it, water next to it and at least 32768 W, it hatches a chicken now and then (or, with lava next to it too, makes a
  * cooked chicken). Baits as in the original table (1.7.10 items by their 1.21 names). Not ported: Forestry butterflies.
  */
-public class BaitBoxBlockEntity extends PowerReceiverBlockEntity implements net.minecraft.world.Clearable {
+public class BaitBoxBlockEntity extends PowerReceiverBlockEntity implements Clearable {
 
 	public static final int MAXRANGE = 24;
 
@@ -71,7 +76,7 @@ public class BaitBoxBlockEntity extends PowerReceiverBlockEntity implements net.
 					MobBait.of(EntityType.CREEPER, Items.TNT, Items.OBSIDIAN),
 					MobBait.of(EntityType.ENDERMAN, Items.GRASS_BLOCK, Items.SOUL_SAND),
 					new MobBait(EntityType.ZOMBIE, is -> is.is(Items.GOLDEN_APPLE), is -> is.is(Items.POTION)
-							&& is.getOrDefault(DataComponents.POTION_CONTENTS, net.minecraft.world.item.alchemy.PotionContents.EMPTY).is(Potions.HEALING)),
+							&& is.getOrDefault(DataComponents.POTION_CONTENTS, PotionContents.EMPTY).is(Potions.HEALING)),
 					MobBait.of(EntityType.SKELETON, Items.SADDLE, Items.GLOWSTONE),
 					MobBait.of(EntityType.SPIDER, Items.COCOA_BEANS, Items.OAK_FENCE),
 					MobBait.of(EntityType.SLIME, Items.DIAMOND, Items.ICE),
@@ -125,7 +130,7 @@ public class BaitBoxBlockEntity extends PowerReceiverBlockEntity implements net.
 	}
 
 	public int getRange() {
-		return (int)Math.min(reika.rotarycraft.RotaryConfig.BAITRANGE.get(), 8+(power-MINPOWER)/4096);
+		return (int)Math.min(RotaryConfig.BAITRANGE.get(), 8+(power-MINPOWER)/4096);
 	}
 
 	private boolean has(Predicate<ItemStack> p) {
@@ -169,7 +174,7 @@ public class BaitBoxBlockEntity extends PowerReceiverBlockEntity implements net.
 			this.doEggIncubation(world, pos);
 	}
 
-	private boolean nextTo(Level world, BlockPos pos, net.minecraft.tags.TagKey<net.minecraft.world.level.material.Fluid> tag) {
+	private boolean nextTo(Level world, BlockPos pos, TagKey<Fluid> tag) {
 		for (Direction d : Direction.values())
 			if (world.getFluidState(pos.relative(d)).is(tag))
 				return true;

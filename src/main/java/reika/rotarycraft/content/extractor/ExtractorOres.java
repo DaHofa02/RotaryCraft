@@ -8,6 +8,7 @@ import javax.annotation.Nullable;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -116,7 +117,7 @@ public final class ExtractorOres {
 		}
 
 		/** Original doBonus: 1 in (int)(1/probability). */
-		public boolean doBonus(net.minecraft.util.RandomSource rand) {
+		public boolean doBonus(RandomSource rand) {
 			int chance = (int)(1F/probability);
 			return rand.nextInt(chance) == 0;
 		}

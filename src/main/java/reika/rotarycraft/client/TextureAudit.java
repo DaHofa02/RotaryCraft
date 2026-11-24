@@ -9,6 +9,7 @@ package reika.rotarycraft.client;
 import java.util.Set;
 import java.util.TreeSet;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.BlockModelShaper;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
@@ -56,8 +57,8 @@ public final class TextureAudit {
 		var models = e.getModels();
 		BakedModel missing = models.get(ModelBakery.MISSING_MODEL_VARIANT);
 		Set<String> bad = new TreeSet<>();
-		var vanilla = net.minecraft.client.Minecraft.getInstance().getItemRenderer() != null
-				? net.minecraft.client.Minecraft.getInstance().getItemRenderer().getBlockEntityRenderer() : null;
+		var vanilla = Minecraft.getInstance().getItemRenderer() != null
+				? Minecraft.getInstance().getItemRenderer().getBlockEntityRenderer() : null;
 		int items = 0, custom = 0;
 		for (Item i : BuiltInRegistries.ITEM) {
 			ResourceLocation id = BuiltInRegistries.ITEM.getKey(i);

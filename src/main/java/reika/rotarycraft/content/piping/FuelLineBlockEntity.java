@@ -7,6 +7,8 @@ import javax.annotation.Nullable;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
@@ -77,7 +79,7 @@ public class FuelLineBlockEntity extends PipingBlockEntity {
 	 * thorium core only takes from a fuel line on its top). Looked up by registry id, as RotaryCraft does not depend on ReactorCraft.
 	 */
 	private static boolean isLiFBeFuel(Fluid f) {
-		net.minecraft.resources.ResourceLocation id = net.minecraft.core.registries.BuiltInRegistries.FLUID.getKey(f);
+		ResourceLocation id = BuiltInRegistries.FLUID.getKey(f);
 		return id.getNamespace().equals("reactorcraft") && (id.getPath().equals("lifbe_fuel") || id.getPath().equals("lifbe_fuel_preheat"));
 	}
 

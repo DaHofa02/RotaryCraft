@@ -19,8 +19,11 @@ import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.SlotItemHandler;
 
 import reika.rotarycraft.content.blockentity.BlockFillerBlockEntity;
+import reika.rotarycraft.content.blockentity.GrindstoneBlockEntity;
+import reika.rotarycraft.content.blockentity.MagnetizerBlockEntity;
 import reika.rotarycraft.content.blockentity.RotaryCraftBlockEntity;
 import reika.rotarycraft.content.blockentity.SpringPoweredBlockEntity;
+import reika.rotarycraft.content.blockentity.WetterBlockEntity;
 import reika.rotarycraft.content.blockentity.engine.EngineBlockEntity;
 
 /**
@@ -58,8 +61,8 @@ public class MachineMenu extends AbstractContainerMenu {
 		super(type, id);
 		this.layout = layout;
 		this.tile = tile;
-		IItemHandler handler = tile instanceof EngineBlockEntity e ? e.getInventory() : tile instanceof SpringPoweredBlockEntity sp ? sp.getInventory() : tile instanceof BlockFillerBlockEntity f ? f.getInventory() : tile instanceof reika.rotarycraft.content.blockentity.WetterBlockEntity w ? w.getInventory() : tile instanceof reika.rotarycraft.content.blockentity.MagnetizerBlockEntity m ? m.getInventory()
-				: tile instanceof reika.rotarycraft.content.blockentity.GrindstoneBlockEntity gs ? gs.getInventory() : null;
+		IItemHandler handler = tile instanceof EngineBlockEntity e ? e.getInventory() : tile instanceof SpringPoweredBlockEntity sp ? sp.getInventory() : tile instanceof BlockFillerBlockEntity f ? f.getInventory() : tile instanceof WetterBlockEntity w ? w.getInventory() : tile instanceof MagnetizerBlockEntity m ? m.getInventory()
+				: tile instanceof GrindstoneBlockEntity gs ? gs.getInventory() : null;
 		int n = 0;
 		for (int i = 0; i+1 < layout.slots.length; i += 2) {
 			if (handler != null)

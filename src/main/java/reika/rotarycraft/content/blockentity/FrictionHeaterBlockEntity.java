@@ -17,6 +17,7 @@ import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.AbstractCookingRecipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.AbstractFurnaceBlock;
@@ -24,6 +25,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.FurnaceBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 
 import reika.rotarycraft.RotaryConfig;
 import reika.rotarycraft.content.recipe.FrictionHeaterRecipe;
@@ -42,6 +44,9 @@ import reika.rotarycraft.registry.RotarySounds;
  * Thaumic Tinkerer transvectors) and the heat-ripple shader.
  */
 public class FrictionHeaterBlockEntity extends PowerReceiverBlockEntity implements TemperatureMachine {
+
+	/** Remembers the last matching recipe, like vanilla furnaces, instead of searching all recipes every tick. */
+	private final RecipeManager.CachedCheck<SingleRecipeInput, FrictionHeaterRecipe> recipeCheck = RecipeManager.createCheck(RotaryRecipeTypes.FRICTION.get());
 
 	public static final int MAXTEMP = 2000;
 
@@ -170,7 +175,7 @@ public class FrictionHeaterBlockEntity extends PowerReceiverBlockEntity implemen
 
 	@Nullable
 	private FrictionHeaterRecipe getSmelting(Level world, ItemStack in) {
-		Optional<RecipeHolder<FrictionHeaterRecipe>> o = world.getRecipeManager().getRecipeFor(RotaryRecipeTypes.FRICTION.get(), new SingleRecipeInput(in), world);
+		Optional<RecipeHolder<FrictionHeaterRecipe>> o = recipeCheck.getRecipeFor(new SingleRecipeInput(in), world);
 		return o.isPresent() && temperature >= o.get().value().temperature() ? o.get().value() : null;
 	}
 
@@ -217,7 +222,7 @@ public class FrictionHeaterBlockEntity extends PowerReceiverBlockEntity implemen
 						xp = 1;
 					}
 					if (xp > 0 && RotaryConfig.FRICTIONXP.get() && world instanceof ServerLevel sl) {
-						ExperienceOrb.award(sl, net.minecraft.world.phys.Vec3.atLowerCornerWithOffset(f, 0.5, 0.6, 0.5), xp);
+						ExperienceOrb.award(sl, Vec3.atLowerCornerWithOffset(f, 0.5, 0.6, 0.5), xp);
 					}
 					tile.setChanged();
 					smeltTime = 0;

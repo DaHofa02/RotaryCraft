@@ -11,9 +11,11 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.Containers;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -32,6 +34,7 @@ import com.mojang.authlib.GameProfile;
 import reika.rotarycraft.RotaryConfig;
 import reika.rotarycraft.content.block.BedrockSliceBlock;
 import reika.rotarycraft.content.item.CraftingPart;
+import reika.rotarycraft.lib.data.InventoryHelper;
 import reika.rotarycraft.lib.math.ReikaMathLibrary;
 import reika.rotarycraft.registry.DifficultyEffects;
 import reika.rotarycraft.registry.RotaryBlockEntities;
@@ -222,7 +225,7 @@ public class BedrockBreakerBlockEntity extends PowerReceiverBlockEntity {
 						if (this.isInventoryFull())
 							world.addFreshEntity(new ItemEntity(world, dropx, dropy, dropz, is));
 						else
-							reika.rotarycraft.lib.data.InventoryHelper.addOrSetStack(is, inv, 0);
+							InventoryHelper.addOrSetStack(is, inv, 0);
 					}
 				}
 			}
@@ -230,7 +233,7 @@ public class BedrockBreakerBlockEntity extends PowerReceiverBlockEntity {
 		else {
 			BlockState b = world.getBlockState(p);
 			if (!b.isAir() && b.getDestroySpeed(world, p) >= 0) {
-				world.levelEvent(2001, p, net.minecraft.world.level.block.Block.getId(b)); //break sound and particles
+				world.levelEvent(2001, p, Block.getId(b)); //break sound and particles
 				world.setBlockAndUpdate(p, Blocks.AIR.defaultBlockState());
 			}
 			this.incrementStep(world, m);
@@ -341,7 +344,7 @@ public class BedrockBreakerBlockEntity extends PowerReceiverBlockEntity {
 
 	@Override
 	public void onBlockBroken(Level world, BlockPos pos) {
-		net.minecraft.world.Containers.dropItemStack(world, pos.getX(), pos.getY(), pos.getZ(), inv.getStackInSlot(0).copy());
+		Containers.dropItemStack(world, pos.getX(), pos.getY(), pos.getZ(), inv.getStackInSlot(0).copy());
 	}
 
 	public int getStep() {

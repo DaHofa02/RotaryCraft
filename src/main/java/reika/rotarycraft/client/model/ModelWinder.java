@@ -6,6 +6,7 @@
 package reika.rotarycraft.client.model;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -120,7 +121,7 @@ public class ModelWinder extends TechneModel {
 		//original: mirrored with glFrontFace(GL_CW); here drawn without face culling (second consumer, fetched only now: fetching it
 		//earlier would end the first one's buffer)
 		@SuppressWarnings("unchecked")
-		VertexConsumer vc2 = li.size() > 1 ? ((java.util.function.Supplier<VertexConsumer>)li.get(1)).get() : vc;
+		VertexConsumer vc2 = li.size() > 1 ? ((Supplier<VertexConsumer>)li.get(1)).get() : vc;
 		pose.scale(-1, 1, 1);
 		Shape6.render(pose, vc2, light, overlay);
 		Shape6a.render(pose, vc2, light, overlay);

@@ -23,6 +23,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemStackHandler;
 
@@ -120,7 +121,7 @@ public class ScaleableChestBlockEntity extends PowerReceiverBlockEntity {
 		}
 		if (!world.isClientSide) {
 			int n = 0;
-			for (Player ep : world.getEntitiesOfClass(Player.class, new net.minecraft.world.phys.AABB(pos).inflate(5)))
+			for (Player ep : world.getEntitiesOfClass(Player.class, new AABB(pos).inflate(5)))
 				if (ep.containerMenu instanceof ScaleableChestMenu m && m.tile == this)
 					n++;
 			if (n != numUsingPlayers) {

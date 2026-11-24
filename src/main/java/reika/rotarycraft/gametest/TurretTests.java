@@ -10,6 +10,7 @@ import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
@@ -102,7 +103,7 @@ public class TurretTests {
 		TurretBlockEntity t = rig(h, RotaryBlocks.MULTI_CANNON.get(), TurretBlockEntity.class, 5, 7);
 		t.getInventory().setStackInSlot(0, new ItemStack(RotaryItems.part(CraftingPart.BALLBEARING)));
 		var zb = target(h, EntityType.HUSK, 7.5, 3, 4.5);
-		zb.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.MAX_HEALTH).setBaseValue(100);
+		zb.getAttribute(Attributes.MAX_HEALTH).setBaseValue(100);
 		zb.setHealth(100);
 		h.succeedWhen(() -> {
 			h.assertTrue(t.shots == 10 && zb.getHealth() == 70 && t.getInventory().getStackInSlot(0).isEmpty(), "multi-cannon shots "+t.shots+", zombie "+zb.getHealth());

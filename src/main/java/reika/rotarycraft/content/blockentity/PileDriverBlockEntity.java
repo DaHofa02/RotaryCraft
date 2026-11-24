@@ -16,6 +16,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.world.Containers;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -30,6 +31,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FallingBlock;
+import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.AABB;
@@ -151,7 +153,7 @@ public class PileDriverBlockEntity extends PowerReceiverBlockEntity {
 			BlockPos p = pos.below(step2+1);
 			FluidState f = world.getFluidState(p);
 			if (world instanceof ServerLevel sl && !f.isEmpty()) {
-				boolean lava = f.is(net.minecraft.tags.FluidTags.LAVA);
+				boolean lava = f.is(FluidTags.LAVA);
 				sl.sendParticles(lava ? ParticleTypes.LAVA : ParticleTypes.SPLASH, p.getX()+0.5, p.getY()+2, p.getZ()+0.5, 18, 0.5, 0.1, 0.5, 0.2);
 				world.playSound(null, p, lava ? SoundEvents.LAVA_EXTINGUISH : SoundEvents.GENERIC_SPLASH, SoundSource.BLOCKS, 1, 1);
 			}
@@ -230,7 +232,7 @@ public class PileDriverBlockEntity extends PowerReceiverBlockEntity {
 
 	/** Original BLOCK_CONVERSION (anything not listed becomes air; liquids stay). */
 	private BlockState getBlockProduct(BlockState id) {
-		if (!id.getFluidState().isEmpty() && id.getBlock() instanceof net.minecraft.world.level.block.LiquidBlock)
+		if (!id.getFluidState().isEmpty() && id.getBlock() instanceof LiquidBlock)
 			return id;
 		if (id.is(Blocks.BEDROCK) || id.is(RotaryBlocks.SHIELD_BLOCK.get()))
 			return id;

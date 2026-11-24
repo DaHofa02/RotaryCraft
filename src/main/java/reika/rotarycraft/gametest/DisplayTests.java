@@ -4,6 +4,7 @@
  ******************************************************************************/
 package reika.rotarycraft.gametest;
 
+import java.util.Arrays;
 import java.util.List;
 
 import net.minecraft.core.BlockPos;
@@ -33,7 +34,7 @@ public class DisplayTests {
 
 	public static WrittenBookContent book(String... pages) {
 		return new WrittenBookContent(Filterable.passThrough("Notes"), "Tester", 0,
-				java.util.Arrays.stream(pages).map(p -> Filterable.<Component>passThrough(Component.literal(p))).toList(), true);
+				Arrays.stream(pages).map(p -> Filterable.<Component>passThrough(Component.literal(p))).toList(), true);
 	}
 
 	/** Pages are joined with a space unless a page already ends in one. */
@@ -53,9 +54,9 @@ public class DisplayTests {
 		BlockPos pos = new BlockPos(4, 2, 4);
 		h.setBlock(pos, RotaryBlocks.DISPLAY.get());
 		DisplayBlockEntity te = (DisplayBlockEntity)h.getBlockEntity(pos);
-		h.assertTrue(java.util.Arrays.equals(te.getScreenColor(), new int[] {0, 128, 255}) && te.isArgonBlue(), "not argon blue");
+		h.assertTrue(Arrays.equals(te.getScreenColor(), new int[] {0, 128, 255}) && te.isArgonBlue(), "not argon blue");
 		te.setDyeColor(DyeColor.RED);
-		h.assertTrue(java.util.Arrays.equals(te.getScreenColor(), new int[] {0x99, 0x33, 0x33}), "red is "+java.util.Arrays.toString(te.getScreenColor()));
+		h.assertTrue(Arrays.equals(te.getScreenColor(), new int[] {0x99, 0x33, 0x33}), "red is "+Arrays.toString(te.getScreenColor()));
 		te.getInventory().setStackInSlot(0, CoilItem.withCharge(new ItemStack(RotaryItems.SPRING.get()), 2));
 		te.setMessage("Test");
 		h.runAtTickTime(70, () -> {

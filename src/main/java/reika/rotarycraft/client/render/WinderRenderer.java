@@ -4,8 +4,10 @@
 package reika.rotarycraft.client.render;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -51,7 +53,7 @@ public class WinderRenderer extends MachineRenderer<WinderBlockEntity> {
 		}
 		boolean hasSpring = tile.getInventory().getStackInSlot(0).getItem() instanceof CoilItem;
 		model.renderAll(pose, consumer(buf, tex("windertex.png")), light, overlay, tile,
-				List.of(hasSpring, (java.util.function.Supplier<com.mojang.blaze3d.vertex.VertexConsumer>)() -> buf.getBuffer(RenderType.entityCutoutNoCull(tex("windertex.png")))), -tile.phi, 0);
+				List.of(hasSpring, (Supplier<VertexConsumer>)() -> buf.getBuffer(RenderType.entityCutoutNoCull(tex("windertex.png")))), -tile.phi, 0);
 		pose.popPose();
 	}
 }

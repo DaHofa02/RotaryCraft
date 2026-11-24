@@ -11,6 +11,7 @@ import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
@@ -41,7 +42,7 @@ public class VacuumTests {
 		return cls.cast(be);
 	}
 
-	private static int count(VacuumBlockEntity te, net.minecraft.world.item.Item item) {
+	private static int count(VacuumBlockEntity te, Item item) {
 		int n = 0;
 		for (int i = 0; i < 54; i++)
 			if (te.getInventory().getStackInSlot(i).is(item))

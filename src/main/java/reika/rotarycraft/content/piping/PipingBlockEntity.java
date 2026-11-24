@@ -30,6 +30,8 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 
 import reika.rotarycraft.RotaryConfig;
+import reika.rotarycraft.api.interfaces.PumpablePipe;
+import reika.rotarycraft.content.blockentity.PumpBlockEntity;
 import reika.rotarycraft.content.blockentity.RotaryCraftBlockEntity;
 
 /**
@@ -43,7 +45,7 @@ import reika.rotarycraft.content.blockentity.RotaryCraftBlockEntity;
  * {@link PipeBlock#PROPERTY_BY_DIRECTION}), so the block model draws them. Fluid moves on the server only; the original also
  * simulated it on the client. ChromatiCraft rifts and the pipe pump (PumpablePipe) are not ported.
  */
-public abstract class PipingBlockEntity extends RotaryCraftBlockEntity implements FluidPipeView, reika.rotarycraft.api.interfaces.PumpablePipe {
+public abstract class PipingBlockEntity extends RotaryCraftBlockEntity implements FluidPipeView, PumpablePipe {
 
 	private static final Map<Class<?>, Boolean> interactableClasses = new HashMap<>();
 
@@ -306,11 +308,11 @@ public abstract class PipingBlockEntity extends RotaryCraftBlockEntity implement
 				PipeConnector.Flow flow = pc.getFlowForSide(dir.getOpposite());
 				if (flow.canOutput) {
 					//original: a pump only pushes into pipes holding less than its back pressure
-					if (pc instanceof reika.rotarycraft.content.blockentity.PumpBlockEntity pump && pump.getMaxBackPressure() <= this.getFluidLevel())
+					if (pc instanceof PumpBlockEntity pump && pump.getMaxBackPressure() <= this.getFluidLevel())
 						continue;
 					FluidStack fs = pc.drain(dir.getOpposite(), Integer.MAX_VALUE, IFluidHandler.FluidAction.SIMULATE);
 					if (!fs.isEmpty()) {
-						int todrain = pc instanceof reika.rotarycraft.content.blockentity.PumpBlockEntity ? this.getPipeIntake(fs.getAmount()-this.getFluidLevel())
+						int todrain = pc instanceof PumpBlockEntity ? this.getPipeIntake(fs.getAmount()-this.getFluidLevel())
 								: this.getTankIntake(fs.getFluid(), fs.getAmount());
 						if (todrain > 0 && this.canIntakeFluid(fs.getFluid())) {
 							FluidStack got = pc.drain(dir.getOpposite(), todrain, IFluidHandler.FluidAction.EXECUTE);
@@ -388,13 +390,13 @@ public abstract class PipingBlockEntity extends RotaryCraftBlockEntity implement
 
 	/** Original TileEntityPiping.canTransferTo (pipe pump): only into a pipe connected to this one both ways. */
 	@Override
-	public final boolean canTransferTo(reika.rotarycraft.api.interfaces.PumpablePipe p, Direction dir) {
+	public final boolean canTransferTo(PumpablePipe p, Direction dir) {
 		return p instanceof PipingBlockEntity te && this.hasReciprocalConnectivity(te, dir);
 	}
 
 	/** Original TileEntityPiping.transferFrom (pipe pump). */
 	@Override
-	public final void transferFrom(reika.rotarycraft.api.interfaces.PumpablePipe from, int amt) {
+	public final void transferFrom(PumpablePipe from, int amt) {
 		PipingBlockEntity te = (PipingBlockEntity)from;
 		this.setLevel(this.getFluidLevel()+amt);
 		this.setFluid(te.getFluidType());

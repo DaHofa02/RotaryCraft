@@ -8,6 +8,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
@@ -86,7 +87,7 @@ public class FluidMachineTests {
 				default -> {
 					FuelEngineBlockEntity.allowOverheat = true;
 					h.assertTrue(e.getGenOmega() == 106, "hot speed "+e.getGenOmega()+" at "+e.getTemperature());
-					h.setBlock(new BlockPos(4, 2, 4), net.minecraft.world.level.block.Blocks.AIR);
+					h.setBlock(new BlockPos(4, 2, 4), Blocks.AIR);
 				}
 			}
 		});

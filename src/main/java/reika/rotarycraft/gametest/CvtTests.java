@@ -7,6 +7,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.neoforge.gametest.GameTestHolder;
@@ -55,7 +56,7 @@ public class CvtTests {
 		belts(te, 31);
 		te.setTargetTorque(100);
 		h.assertTrue(te.autoRatio(150) == 1 && te.autoRatio(1000) == 10 && te.autoRatio(10) == -10, "auto "+te.autoRatio(150)+" "+te.autoRatio(1000)+" "+te.autoRatio(10));
-		h.assertFalse(te.belts.isItemValid(0, new ItemStack(net.minecraft.world.item.Items.STONE)), "stone as a belt");
+		h.assertFalse(te.belts.isItemValid(0, new ItemStack(Items.STONE)), "stone as a belt");
 		h.succeed();
 	}
 

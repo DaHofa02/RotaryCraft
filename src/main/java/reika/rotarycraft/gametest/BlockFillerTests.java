@@ -8,6 +8,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
@@ -92,7 +93,7 @@ public class BlockFillerTests {
 		BlockFillerBlockEntity f = rig(h, false);
 		Object[][] cases = {{Items.TORCH, 512L}, {Items.DIRT, 1024L}, {Items.OAK_PLANKS, 1024L}, {Items.STONE, 2048L}, {Items.IRON_BLOCK, 4096L}};
 		for (Object[] c : cases) {
-			f.getInventory().setStackInSlot(0, new ItemStack((net.minecraft.world.item.Item)c[0]));
+			f.getInventory().setStackInSlot(0, new ItemStack((Item)c[0]));
 			h.assertTrue(f.getRequiredPower() == (Long)c[1], c[0]+" needs "+f.getRequiredPower()+" W");
 		}
 		f.getInventory().setStackInSlot(0, new ItemStack(Items.STONE, 64));

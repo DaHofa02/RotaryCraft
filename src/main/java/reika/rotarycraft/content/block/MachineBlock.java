@@ -4,6 +4,7 @@
 package reika.rotarycraft.content.block;
 
 import java.util.List;
+import java.util.Set;
 import java.util.function.BiPredicate;
 import java.util.function.Supplier;
 
@@ -12,6 +13,8 @@ import javax.annotation.Nullable;
 import com.mojang.serialization.MapCodec;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -22,8 +25,11 @@ import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.RenderShape;
@@ -34,21 +40,32 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 
 import reika.rotarycraft.content.blockentity.BevelGearBlockEntity;
 import reika.rotarycraft.content.blockentity.BlockFillerBlockEntity;
+import reika.rotarycraft.content.blockentity.FuelEnhancerBlockEntity;
 import reika.rotarycraft.content.blockentity.GearboxBlockEntity;
+import reika.rotarycraft.content.blockentity.GrindstoneBlockEntity;
+import reika.rotarycraft.content.blockentity.MagnetizerBlockEntity;
 import reika.rotarycraft.content.blockentity.RotaryCraftBlockEntity;
 import reika.rotarycraft.content.blockentity.SplitterBlockEntity;
 import reika.rotarycraft.content.blockentity.SpringPoweredBlockEntity;
+import reika.rotarycraft.content.blockentity.WetterBlockEntity;
 import reika.rotarycraft.content.blockentity.engine.EngineBlockEntity;
 import reika.rotarycraft.content.item.EngineUpgradeItem;
 import reika.rotarycraft.content.item.MeterItem;
 import reika.rotarycraft.content.item.ScrewdriverItem;
 import reika.rotarycraft.content.menu.MachineMenu;
+import reika.rotarycraft.registry.GearboxTypes;
+import reika.rotarycraft.registry.RotaryComponents;
+import reika.rotarycraft.registry.RotaryItems;
 import reika.rotarycraft.registry.RotaryMenus;
 import reika.rotarycraft.content.blockentity.TemperatureMachine;
 import reika.rotarycraft.lib.world.AmbientTemperature;
+
+import net.neoforged.neoforge.fluids.FluidUtil;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 
 /**
  * Original: Reika.RotaryCraft.Base.BlockBasicMultiTE / BlockModelledMultiTE and the machine placer items.
@@ -177,17 +194,17 @@ public class MachineBlock extends BaseEntityBlock {
 				yield m < 4 ? m^1 : m;
 			}
 			case SIDE_ATTACHED -> {
-				net.minecraft.core.Direction face = CLICKED_FACE.get();
+				Direction face = CLICKED_FACE.get();
 				yield face == null ? 0 : new int[]{1, 0, 4, 2, 5, 3}[face.ordinal()];
 			}
 		};
 	}
 
 	/** The face clicked when placing (only known in getStateForPlacement), for SIDE_ATTACHED machines. */
-	private static final ThreadLocal<net.minecraft.core.Direction> CLICKED_FACE = new ThreadLocal<>();
+	private static final ThreadLocal<Direction> CLICKED_FACE = new ThreadLocal<>();
 
 	@Override
-	public BlockState getStateForPlacement(net.minecraft.world.item.context.BlockPlaceContext ctx) {
+	public BlockState getStateForPlacement(BlockPlaceContext ctx) {
 		CLICKED_FACE.set(ctx.getClickedFace());
 		return super.getStateForPlacement(ctx);
 	}
@@ -224,16 +241,16 @@ public class MachineBlock extends BaseEntityBlock {
 	}
 
 	/** Item data that is the machine's contents or wear, not its variant: not part of a middle-click pick (vanilla copies it on Ctrl). */
-	private static final java.util.Set<java.util.function.Supplier<? extends net.minecraft.core.component.DataComponentType<?>>> CONTENTS = java.util.Set.of(
-			reika.rotarycraft.registry.RotaryComponents.GEARBOX_DATA, reika.rotarycraft.registry.RotaryComponents.RESERVOIR_DATA, reika.rotarycraft.registry.RotaryComponents.TANK_FLUID, reika.rotarycraft.registry.RotaryComponents.CHEST_CONTENTS,
-			reika.rotarycraft.registry.RotaryComponents.JET_DAMAGE);
+	private static final Set<Supplier<? extends DataComponentType<?>>> CONTENTS = Set.of(
+			RotaryComponents.GEARBOX_DATA, RotaryComponents.RESERVOIR_DATA, RotaryComponents.TANK_FLUID, RotaryComponents.CHEST_CONTENTS,
+			RotaryComponents.JET_DAMAGE);
 
 	/**
 	 * Original getPickBlock: the machine as crafted - its variant (gearbox material and ratio, shaft material, flywheel type, bedrock
 	 * versions ...), without contents or wear.
 	 */
 	@Override
-	public ItemStack getCloneItemStack(BlockState state, net.minecraft.world.phys.HitResult target, net.minecraft.world.level.LevelReader level,
+	public ItemStack getCloneItemStack(BlockState state, HitResult target, LevelReader level,
 			BlockPos pos, Player player) {
 		ItemStack is = super.getCloneItemStack(state, target, level, pos, player);
 		if (!is.is(this.asItem()) || !(level.getBlockEntity(pos) instanceof RotaryCraftBlockEntity te))
@@ -282,9 +299,9 @@ public class MachineBlock extends BaseEntityBlock {
 				default -> null;
 			};
 		}
-		if (te instanceof BlockFillerBlockEntity || te instanceof SpringPoweredBlockEntity || te instanceof reika.rotarycraft.content.blockentity.WetterBlockEntity
-				|| te instanceof reika.rotarycraft.content.blockentity.MagnetizerBlockEntity
-				|| te instanceof reika.rotarycraft.content.blockentity.GrindstoneBlockEntity)
+		if (te instanceof BlockFillerBlockEntity || te instanceof SpringPoweredBlockEntity || te instanceof WetterBlockEntity
+				|| te instanceof MagnetizerBlockEntity
+				|| te instanceof GrindstoneBlockEntity)
 			return MachineMenu.Layout.ONE_SLOT;
 		if (te instanceof GearboxBlockEntity)
 			return MachineMenu.Layout.GEARBOX;
@@ -316,7 +333,7 @@ public class MachineBlock extends BaseEntityBlock {
 			return ItemInteractionResult.SKIP_DEFAULT_BLOCK_INTERACTION;
 		//Original BlockBasicMultiTE.onBlockActivated: a bedrock 2:1 gear unit turns a shaft junction into a bedrock junction
 		if (world.getBlockEntity(pos) instanceof SplitterBlockEntity spl && !spl.isBedrock()
-				&& held.is(reika.rotarycraft.registry.RotaryItems.gearPart(reika.rotarycraft.registry.GearboxTypes.BEDROCK, reika.rotarycraft.registry.GearboxTypes.GearPart.UNIT2))) {
+				&& held.is(RotaryItems.gearPart(GearboxTypes.BEDROCK, GearboxTypes.GearPart.UNIT2))) {
 			if (!world.isClientSide) {
 				spl.setBedrock();
 				if (!ep.isCreative())
@@ -326,15 +343,15 @@ public class MachineBlock extends BaseEntityBlock {
 			return ItemInteractionResult.sidedSuccess(world.isClientSide);
 		}
 		//Original BlockBasicMultiTE.onBlockActivated: a fluid container is emptied into the fuel enhancer if it all fits (creative: always)
-		if (world.getBlockEntity(pos) instanceof reika.rotarycraft.content.blockentity.FuelEnhancerBlockEntity tf) {
-			var liq = net.neoforged.neoforge.fluids.FluidUtil.getFluidContained(held);
+		if (world.getBlockEntity(pos) instanceof FuelEnhancerBlockEntity tf) {
+			var liq = FluidUtil.getFluidContained(held);
 			if (liq.isPresent()) {
 				if (!world.isClientSide) {
-					int amt = tf.fill(net.minecraft.core.Direction.UP, liq.get(), net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction.SIMULATE);
+					int amt = tf.fill(Direction.UP, liq.get(), IFluidHandler.FluidAction.SIMULATE);
 					if (amt >= liq.get().getAmount() || ep.isCreative()) {
-						tf.fill(net.minecraft.core.Direction.UP, liq.get(), net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction.EXECUTE);
+						tf.fill(Direction.UP, liq.get(), IFluidHandler.FluidAction.EXECUTE);
 						if (!ep.isCreative())
-							ep.setItemInHand(hand, held.getCraftingRemainingItem().isEmpty() ? new ItemStack(net.minecraft.world.item.Items.BUCKET) : held.getCraftingRemainingItem());
+							ep.setItemInHand(hand, held.getCraftingRemainingItem().isEmpty() ? new ItemStack(Items.BUCKET) : held.getCraftingRemainingItem());
 						tf.syncAllData();
 					}
 				}

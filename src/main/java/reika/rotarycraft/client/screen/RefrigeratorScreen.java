@@ -13,6 +13,9 @@ import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.content.blockentity.RefrigeratorBlockEntity;
 import reika.rotarycraft.content.menu.RefrigeratorMenu;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Original: GuiFridge (fridgegui.png, 176x188) - the frost progress overlay (145x67), the LN2 column (16x72) with level/capacity and
  * the fluid name on hover, and its own taller power tab.
@@ -64,7 +67,7 @@ public class RefrigeratorScreen extends AbstractContainerScreen<RefrigeratorMenu
 		int j = leftPos, k = topPos;
 		if (mx >= j+152 && mx <= j+167 && my >= k+18 && my <= k+89) {
 			RefrigeratorBlockEntity te = menu.tile;
-			java.util.List<Component> li = new java.util.ArrayList<>();
+			List<Component> li = new ArrayList<>();
 			li.add(Component.literal(String.format("%d/%d", te.getTank().getFluidAmount(), RefrigeratorBlockEntity.CAPACITY)));
 			if (!te.getTank().isEmpty())
 				li.add(te.getTank().getFluid().getHoverName());
